@@ -26,9 +26,12 @@ TCP::TCP()
 	header_ = new struct my_tcp;
 }
 
-TCP::TCP( const uint8_t *packet )
+TCP::TCP( const uint8_t *packet, int size )
 {
 	header_ = new struct my_tcp;
+	int headerSize = sizeof( header_ );
+	if( size < headerSize )
+	  throw std::runtime_error( "Packet capture too small to make packet" );
 	*header_ = *((struct my_tcp*)packet);
 }
 

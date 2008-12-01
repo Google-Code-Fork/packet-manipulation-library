@@ -1,4 +1,4 @@
-OBJS=ip.o
+OBJS=ipv4.o
 
 all: $(OBJS)
 

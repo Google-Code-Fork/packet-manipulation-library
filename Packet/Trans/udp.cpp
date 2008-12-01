@@ -20,15 +20,19 @@
 
 
 #include "udp.h"
+#include <stdexcept>
 
 UDP::UDP()
 {
 	header_ = new struct my_udp;
 }
 
-UDP::UDP( const uint8_t *packet )
+UDP::UDP( const uint8_t *packet, int size )
 {
 	header_ = new struct my_udp;
+	int headerSize = sizeof( header_ );
+	if( size < headerSize )
+	  throw std::runtime_error( "Packet capture too small" );
 	*header_ = *((struct my_udp*)packet);
 }
 

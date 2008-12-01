@@ -88,6 +88,7 @@ class Ethernet : public LinkData
 
   public:
     Ethernet();
+    Ethernet( const uint8_t* buff, int size );
     Ethernet( const std::vector< uint8_t > data );
     Ethernet( const Ethernet& n );
     Ethernet& operator =( const Ethernet &n);
@@ -109,7 +110,7 @@ class Ethernet : public LinkData
     VlanTag vlanTag_;
 };
 
-
+template <> bool Ethernet::LinkData::is<Ethernet>() { return true; }
 
 
 #endif 

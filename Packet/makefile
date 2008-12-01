@@ -5,7 +5,7 @@ APPDIR=App
 
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
 
-OBJS=packetBuffer.o
+OBJS=packetBuffer.o packet.o
 
 all: $(OBJS)
 	@echo

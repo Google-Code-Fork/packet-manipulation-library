@@ -38,6 +38,23 @@ Ethernet::Ethernet( const Ethernet& n )
 	vlanTag_ = n.vlanTag_;
 }
 
+Ethernet::Ethernet( const uint8_t* buff, int size )
+{
+  if( size < EthernetSize )
+    throw std::runtime_error( "Not enough to generate ethernet header" );
+  header_ = *((EthernetHeader*)buff);
+  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+  {
+    //check to make sure the buff is big enough
+    if( size < (EthernetSize + Dot1QSize) )
+    {
+      throw std::runtime_error( "Not enough buffer for Dot1Q packet" );
+    }
+    const uint8_t* ptr = buff + EthernetSize;
+    vlanTag_ = *((VlanTag*)ptr);
+  }
+}
+
 Ethernet& Ethernet::operator =( const Ethernet &n )
 {
   header_ = n.header_;
@@ -106,3 +123,4 @@ std::vector< uint8_t > Ethernet::makePacket()
   tmp = MACAddress( header_.destination ).makePacket();
   packet.insert( packet.end(), tmp.begin(), tmp.end() ); 
 }
+

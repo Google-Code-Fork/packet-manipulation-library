@@ -54,7 +54,7 @@ class TCP : public TransData
   static const int TCPStructSize=20; //size of the above struct
 	public:
 		TCP();
-		TCP( const uint8_t *packet );
+		TCP( const uint8_t *packet, int size );
 		TCP( const TCP &n );
 		TCP& operator =( const TCP &n );
 

@@ -42,7 +42,7 @@ class UDP : public TransData
 
   public:
     UDP();
-    UDP( const uint8_t *packet );
+    UDP( const uint8_t *packet, int size );
     UDP( const UDP &n );
     UDP& operator =( const UDP &n );
 

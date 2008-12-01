@@ -19,7 +19,7 @@
  * */
 
 #include <stdexcept>
-#include "ip.h"
+#include "ipv4.h"
 #include <arpa/inet.h>
 #include <iostream>
 #include <iomanip>
@@ -29,9 +29,12 @@ IPv4::IPv4( )
 	header_ = new struct IPv4Header;
 }
 
-IPv4::IPv4( const uint8_t *packet )
+IPv4::IPv4( const uint8_t *packet, int size )
 {
 	header_ = new struct IPv4Header;
+	int headerSize = sizeof( header_ );
+	if( size < headerSize )
+	  throw std::runtime_error( "packet capture too small to make packet" );
 	*header_ = *((struct IPv4Header*)packet);
 }
 

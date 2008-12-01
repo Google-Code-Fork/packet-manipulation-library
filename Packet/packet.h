@@ -2,38 +2,71 @@
 #define PACKET_H
 
 #include "encapsulateable.h"
-#include "Link/link.h"
-#include "App/app.h"
-#include "Inet/inet.h"
-#include "Trans/trans.h"
+#include "Link/linkData.h"
+#include "App/appData.h"
+#include "Inet/inetData.h"
+#include "Trans/transData.h"
+#include <vector>
+#include <stdexcept>
 
-template< class T > class Packet : public Encapsulateable
+class Packet : public Encapsulateable
 {
   public:
     Packet();
-    Packet( std::vector< uint8_t > data );
-    Packet~();
+//    Packet( PacketBuffer packet );
+//    Packet( std::vector< uint8_t > data );
+    Packet( const Packet &n );
+    Packet& operator=( const Packet &n );
+    ~Packet();
+    Packet& operator+=( const Packet &n );
 
     std::vector< uint8_t > makePacket();
-    void pushBackLink( Link l );
-    void pushBackInet( Inet i );
-    void pushBackTrans( Trans t );
-    void pushBackApp( App a );
+    void pushBackLink( LinkData l );
+    void pushBackInet( InetData i );
+    void pushBackTrans( TransData t );
+    void pushBackApp( AppData a );
 
     int linkSize( );
-    int InetSize( );
-    int TransSize( );
-    int AppSize( );
+    int inetSize( );
+    int transSize( );
+    int appSize( );
 
-    Link getLink( int i );
-    Inet getInet( int i );
-    Trans getTrans( int i );
-    App getApp( int i );
+    template < class T > T getLink( int i ) 
+    { 
+      LinkData l = linkLayer_.at( i );
+      if(!( l.is< T >()) )
+	throw std::runtime_error( "not the right type" );
+      return static_cast< T >( l );
+    }
+    
+    template < class T > T getInet( int i )
+    { 
+      InetData l = inetLayer_.at( i );
+      if(!( l.is< T >()) )
+	throw std::runtime_error( "not the right type" );
+      return static_cast< T >( l );
+    }
+    
+    template < class T > T getTrans( int i )
+    { 
+      TransData l = transLayer_.at( i );
+      if(!( l.is< T >()) )
+	throw std::runtime_error( "not the right type" );
+      return static_cast< T >( l );
+    }
+    
+    template < class T > T getApp( int i )
+    { 
+      AppData l = appLayer_.at( i );
+      if(!( l.is< T >()) )
+	throw std::runtime_error( "not the right type" );
+      return static_cast< T >( l );
+    }
 
   private:
-    std::vector< Link > linkLayer;
-    std::vector< Inet > inetLayer;
-    std::vector< Trans > transLayer;
-    std::vector< App > appLayer;
-}
+    std::vector< LinkData > linkLayer_;
+    std::vector< InetData > inetLayer_;
+    std::vector< TransData > transLayer_;
+    std::vector< AppData > appLayer_;
+};
 #endif
