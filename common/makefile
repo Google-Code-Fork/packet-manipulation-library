@@ -8,6 +8,4 @@ all: $(OBJS)
 clean:
 	 -rm -f *.o
 
-#test: $(OBJS) $(TESTOBJS)
-#	g++ $(OBJS) $(TESTOBJS) -o $@
 
