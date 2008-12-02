@@ -20,16 +20,16 @@
 #include "injector.h"
 
 
-Injector::Injector(String deviceName)
+Injector::Injector(std::string deviceName)
 {
-	dev = deviceName;
-	handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
-	if (handle == NULL) {
-		std::cout << "Couldn't open device " << devs[0] << std::endl;
+	dev.setDevice(deviceName, 1);
+	handle = pcap_open_live(dev.getDevice().c_str(), BUFSIZ, 1, 1000, errbuf);
+	if (handle == NULL)
+	{
+		std::cout << "Couldn't open device " << dev.getDevice() << std::endl;
 		exit(2);
 	}
-	errbuf = NULL;	
-	someArray = "someArray";
+	strcpy(someArray, "someArray");
 }
 
 
@@ -43,7 +43,6 @@ int Injector::inject()
 Injector::~Injector()
 {
 	pcap_close(handle);
-	delete handle;
-	delete errbuf;
-	delete someArray;
+//	delete[] errbuf;
+//	delete[] someArray;
 }

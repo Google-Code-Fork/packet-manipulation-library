@@ -28,21 +28,20 @@
 #include <iostream>
 #include <stdlib.h>
 //#include "packet.h"
-#include "devicesLookup.h"
+#include "device.h"
 
 
 class Injector
 {
 	public:
-		Injector(String deviceName);		/* default 
-constructor for first detected device */
+		Injector(std::string deviceName);
 		int inject();
 		~Injector();
 	private:
 		Device::Device dev;
 		pcap_t *handle;		/* session handle */
-		char *errbuf;
-		char *someArray;
+		char errbuf[PCAP_ERRBUF_SIZE];
+		char someArray[100];
 };
 
 #endif
