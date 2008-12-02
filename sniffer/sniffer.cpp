@@ -1,4 +1,5 @@
 /**
+#include "clientCommData.h"
  * * INAV - Interactive Network Active-traffic Visualization
  * * Copyright © 2007  Nathan Robinson, Jeff Scaparra
  * *
@@ -37,7 +38,6 @@
 #include"sniffer.h"
 #include"snifferData.h"
 #include"filterData.h"
-#include"packet.h"
 #include"constants.h"
 #include"../common/parseCommas.h"
 
@@ -51,6 +51,7 @@ Packet sniffer::popPacket()
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
 {
+	std::cout<<"\n callback called";
 	FilterData* filterData = (FilterData*)args;
 	if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
 	{
@@ -58,7 +59,8 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 	}
 	try
 	{
-		Packet packet( packetCapture, pkthdr );
+		PacketBuilder pb;
+		Packet packet = pb.buildPacket<Ethernet>(PacketBuffer(packetCapture, pkthdr->caplen));
 		filterData->pushPacket( packet );
 	}
 	catch( std::runtime_error e )
@@ -68,6 +70,33 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 		else
 			throw e;
 	}
+/*	if(filterData->size())
+	{
+		Packet packet = filterData->popPacket();
+		time_t mytime = time(0);
+		std::cout<<"\n"<<asctime(localtime(&mytime));
+		if(packet.isIP())
+		{
+			std::cout<<"IP ==> ";
+			std::cout<<packet.getSourceMAC()<<" / ";
+			std::cout<<packet.getDestinationMAC()<<" / ";
+			std::cout<<packet.getType()<<" / ";
+			std::cout<<packet.getIPVersion()<<" / ";
+			std::cout<<packet.getProtocol()<<" / ";
+		}
+		if(packet.isTCP())
+		{
+			std::cout<<"\nTCP ==> ";
+			std::cout<<packet.getTCPSourcePort()<<" / ";
+			std::cout<<packet.getTCPDestinationPort()<<" / ";
+			std::cout<<packet.getType()<<" / ";
+			std::cout<<packet.getIPVersion()<<" / ";
+			std::cout<<packet.getIPIdentification()<<" / ";
+			std::cout<<packet.getProtocol()<<" / ";
+			std::cout<<(sniffer::iptos(packet.getSourceAddress())).c_str()<<" / ";
+			std::cout<<(sniffer::iptos(packet.getDestinationAddress())).c_str()<<" / ";
+		}
+	}*/
 }
 
 

@@ -26,6 +26,12 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 void* run_devSniffer(void* data);
 void* run_offlineSniffer(void* data);
 
+/*typedef struct SnifferDataHolder
+{
+	SnifferData* snifferData;
+	FilterData* filterData;
+}SnifferDataHolder;
+*/
 class sniffer
 {
 	public:
@@ -45,7 +51,7 @@ class sniffer
 	}
 
 		void printDevices();
-		std::string iptos(u_long in);
+		static std::string iptos(u_long in);
 		void setDevice( std::string device );
 		std::string getDevice();
 		void log( std::string );
