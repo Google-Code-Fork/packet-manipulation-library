@@ -1,10 +1,11 @@
 #ifndef LINK_H
 #define LINK_H
 #include <stdexcept>
+#include "../encapsulateable.h"
 #include "linkData.h"
 #include "ethernet.h"
 
-class Link 
+class Link : public Encapsulateable
 {
   public:
     Link( )
@@ -60,6 +61,16 @@ class Link
 	delete header_;
       header_ = new T;
       *header_ = e;
+    }
+
+    PacketBuffer makePacket() const
+    {
+      return header_->makePacket();
+    }
+
+    int getSize() const
+    {
+      return header_->getSize();
     }
 
   private:

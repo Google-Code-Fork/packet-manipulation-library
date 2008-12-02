@@ -22,7 +22,6 @@
 
 #include <string>
 #include "mac.h"
-#include "../encapsulateable.h"
 
 typedef struct VlanTag 
 {
@@ -80,7 +79,7 @@ namespace ethernetProtocol
 }
 
 
-class Ethernet : public LinkData, public Encapsulateable
+class Ethernet : public LinkData
 {
   public: //constants
   static const int EthernetSize = 14;
