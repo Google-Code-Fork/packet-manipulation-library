@@ -5,7 +5,7 @@ APPDIR=App
 
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
 
-OBJS=packetBuffer.o packet.o
+OBJS=packetBuilder.o packetBuffer.o packet.o
 TESTOBJS=test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/udp.o Trans/trans.o App/raw.o App/app.o
 
 CFLAGS=-ggdb
