@@ -26,6 +26,8 @@
 #include <pcap.h>
 #include <netinet/in.h>
 #include "inetData.h"
+#include "../encapsulateable.h"
+
 /* Structure of an internet header, naked of options.
  *
  * Taken from tcpdump source (thanks tcpdump people).
@@ -49,7 +51,7 @@ typedef struct IPv4Header
 	struct  in_addr ip_src,ip_dst;  /* source and dest address */
 }IPv4Header;
 
-namespace IPProtocols
+namespace ipProtocols
 {
     const uint8_t IPPROTO_IP = 0;	   /* Dummy protocol for TCP.  */
     const uint8_t IPPROTO_HOPOPTS = 0;   /* IPv6 Hop-by-Hop options.  */
@@ -80,7 +82,7 @@ namespace IPProtocols
     const uint8_t IPPROTO_RAW = 255;	   /* Raw IP packets.  */
 }
 
-class IPv4 : public InetData
+class IPv4 : public InetData, public Encapsulateable
 {
 	public:
 		IPv4();
@@ -89,34 +91,35 @@ class IPv4 : public InetData
 		IPv4& operator =( const IPv4 &n );
 		~IPv4();
 
-		uint8_t getVersion();
+		uint8_t getVersion() const;
 		void setVersion( uint8_t );
-		uint8_t getHeaderLength();
+		uint8_t getHeaderLength() const;
 		void setHeaderLength( uint8_t );
-		uint16_t getTotalLength();
+		uint16_t getTotalLength() const;
 		void setTotalLength( uint16_t );
-		uint16_t getIdentifaction();
+		uint16_t getIdentifaction() const;
 		void setIdentifaction( uint16_t );
-		bool getFlagsNoFragment();
+		bool getFlagsNoFragment() const;
 		void setFlagsNoFragment( bool );
 		void setFlagsNoFragment( ); // == setFlagsNoFragment( true );
-		bool getFlagsMoreFragments();
+		bool getFlagsMoreFragments() const;
 		void setFlagsMoreFragments( bool );
 		void setFlagsMoreFragments( ); // == setFlagsMoreFragments( true );
-		uint16_t getFragmentOffset();
+		uint16_t getFragmentOffset() const;
 		void setFragmentOffset( uint16_t );
-		uint8_t getTTL();
+		uint8_t getTTL() const;
 		void setTTL( uint8_t );
-		uint8_t getProtocol();
+		uint8_t getProtocol() const;
 		void setProtocol( uint8_t ); 
-		uint16_t getChecksum();
+		uint16_t getChecksum() const;
 		void setChecksum( uint16_t );
-		uint32_t getSourceAddress();
+		uint32_t getSourceAddress() const;
 		void setSourceAddress( uint32_t );
-		uint32_t getDestinationAddress();
+		uint32_t getDestinationAddress()const;
 		void setDestinationAddress( uint32_t );
-		std::vector< uint8_t > makePacket();
-		int getSize();
+		PacketBuffer makePacket() const;
+		int getSize() const;
+		bool isIPv4() const {return true;}
 
 	private:
 		IPv4Header *header_;

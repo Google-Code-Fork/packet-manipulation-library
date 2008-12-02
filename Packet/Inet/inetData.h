@@ -1,16 +1,15 @@
 #ifndef INETDATA_H
 #define INETDATA_H
 
-#include "../encapsulateable.h"
+#include "../packetBuffer.h"
 
-class InetData : public Encapsulateable
+class InetData
 {
   public:
     InetData() {}
-    virtual ~InetData();
-    template <class T>bool is() { return false; }
-    //virtual std::vector< uint8_t > makePacket() = 0;
-    //virtual int getSize() = 0;
+    virtual ~InetData() {}
+    virtual bool isIPv4() const { return false; }
+    virtual bool isIPv6() const { return false; }
 };
 
 #endif
