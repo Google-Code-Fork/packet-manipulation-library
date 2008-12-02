@@ -2,6 +2,7 @@
 #define PACKET_H
 
 #include "encapsulateable.h"
+#include "packetBuffer.h"
 #include "Link/linkData.h"
 #include "App/appData.h"
 #include "Inet/inetData.h"
@@ -20,26 +21,39 @@ class Packet : public Encapsulateable
     ~Packet();
     Packet& operator+=( const Packet &n );
 
-    std::vector< uint8_t > makePacket();
-    void pushBackLink( LinkData l );
-    void pushBackInet( InetData i );
-    void pushBackTrans( TransData t );
-    void pushBackApp( AppData a );
+    PacketBuffer makePacket() const;
+    template<class T> void pushBackLink( T l )
+    {
+      linkLayer_.push_back( l );
+    }
 
-    int linkSize( );
-    int inetSize( );
-    int transSize( );
-    int appSize( );
+    template<class T> void pushBackInet( T i )
+    {
+      inetLayer_.push_back( i );
+    }
 
-    template < class T > T getLink( int i ) 
+    template<class T > void pushBackTrans( T t )
+    {
+      transLayer_.push_back( t );
+    }
+
+    template < class T > void pushBackApp( T a )
+    {
+      appLayer_.push_back( a );
+    }
+
+    int linkSize( ) const;
+    int inetSize( ) const;
+    int transSize( )const;
+    int appSize( ) const;
+
+    template < class T > T getLink( int i ) const 
     { 
-      LinkData l = linkLayer_.at( i );
-      if(!( l.is< T >()) )
-	throw std::runtime_error( "not the right type" );
-      return static_cast< T >( l );
+      Link l = linkLayer_.at( i );
+      return l.get<T>();
     }
     
-    template < class T > T getInet( int i )
+    template < class T > T getInet( int i ) const
     { 
       InetData l = inetLayer_.at( i );
       if(!( l.is< T >()) )
@@ -47,7 +61,7 @@ class Packet : public Encapsulateable
       return static_cast< T >( l );
     }
     
-    template < class T > T getTrans( int i )
+    template < class T > T getTrans( int i ) const
     { 
       TransData l = transLayer_.at( i );
       if(!( l.is< T >()) )
@@ -55,7 +69,7 @@ class Packet : public Encapsulateable
       return static_cast< T >( l );
     }
     
-    template < class T > T getApp( int i )
+    template < class T > T getApp( int i ) const
     { 
       AppData l = appLayer_.at( i );
       if(!( l.is< T >()) )
@@ -64,9 +78,9 @@ class Packet : public Encapsulateable
     }
 
   private:
-    std::vector< LinkData > linkLayer_;
-    std::vector< InetData > inetLayer_;
-    std::vector< TransData > transLayer_;
-    std::vector< AppData > appLayer_;
+    std::vector< Link > linkLayer_;
+    std::vector< InetData* > inetLayer_;
+    std::vector< TransData* > transLayer_;
+    std::vector< AppData* > appLayer_;
 };
 #endif

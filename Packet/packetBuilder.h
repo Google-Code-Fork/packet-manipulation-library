@@ -55,10 +55,10 @@ template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size )
   
   switch( static_cast<uint16_t>( ip.getProtocol() ) )
   {
-    case IPProtocols::IPPROTO_TCP:
+    case ipProtocols::IPPROTO_TCP:
       p2 = build< TCP >( newbuff, newsize );
       break;
-    case IPProtocols::IPPROTO_UDP:
+    case ipProtocols::IPPROTO_UDP:
       p2 = build< TCP >( newbuff, newsize );
       break;
     default:

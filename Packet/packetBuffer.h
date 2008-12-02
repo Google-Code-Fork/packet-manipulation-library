@@ -10,6 +10,9 @@ class PacketBuffer
   PacketBuffer( std::vector< uint8_t > );
   PacketBuffer( uint8_t* buff, int size );
   ~PacketBuffer();
+  PacketBuffer( const PacketBuffer& n );
+  PacketBuffer& operator=( const PacketBuffer &n );
+  PacketBuffer& operator+=( const PacketBuffer &n );
   void setBuffer( std::vector< uint8_t > buff );
   void setBuffer( uint8_t* buff, int size );
   uint8_t* getBuffer();

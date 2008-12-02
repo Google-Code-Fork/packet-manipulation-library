@@ -28,10 +28,10 @@ Packet& Packet::operator=( const Packet &p )
 
 Packet& Packet::operator+=( const Packet &n )
 {
-  std::vector< LinkData >::const_iterator litr;
-  std::vector< InetData >::const_iterator iitr;
-  std::vector< TransData >::const_iterator titr;
-  std::vector< AppData >::const_iterator aitr;
+  std::vector< Link >::const_iterator litr;
+  std::vector< Inet >::const_iterator iitr;
+  std::vector< Trans >::const_iterator titr;
+  std::vector< App >::const_iterator aitr;
   for( litr = n.linkLayer_.begin(); litr != n.linkLayer_.end(); ++litr )
   {
     linkLayer_.push_back( *litr );
@@ -59,49 +59,50 @@ Packet operator+( const Packet &l, const Packet &r )
   return tmp;
 }
 
-std::vector< uint8_t > Packet::makePacket()
+PacketBuffer Packet::makePacket() const
 {
+  PacketBuffer pb;
   std::vector< uint8_t > packet;
-  //TODO
-  return packet;
+  std::vector< LinkData >::const_iterator litr;
+  std::vector< InetData >::const_iterator iitr;
+  std::vector< TransData >::const_iterator titr;
+  std::vector< AppData >::const_iterator aitr;
+  for( litr = linkLayer_.begin(); litr != linkLayer_.end(); ++litr )
+  {
+    pb += litr->makePacket( );
+  }
+  for( iitr = inetLayer_.begin(); iitr != inetLayer_.end(); ++iitr )
+  {
+    pb += iitr->makePacket( );
+  }
+  for( titr = transLayer_.begin(); titr != transLayer_.end(); ++titr )
+  {
+    pb += titr->makePacket( );
+  }
+  for( aitr = appLayer_.begin(); aitr != appLayer_.end(); ++aitr )
+  {
+    pb += aitr->makePacket( );
+  }
+  
+  return pb;
 }
 
-void Packet::pushBackLink( LinkData l )
-{
-  linkLayer_.push_back( l );
-}
-
-void Packet::pushBackInet( InetData i )
-{
-  inetLayer_.push_back( i );
-}
-
-void Packet::pushBackApp( AppData a ) 
-{
-  appLayer_.push_back( a );
-}
-
-void Packet::pushBackTrans( TransData t )
-{
-  transLayer_.push_back( t );
-}
-
-int Packet::linkSize()
+int Packet::linkSize() const
 {
   return linkLayer_.size();
 }
 
-int Packet::inetSize()
+int Packet::inetSize() const
 {
   return inetLayer_.size();
 }
 
-int Packet::transSize()
+int Packet::transSize() const
 {
   return transLayer_.size();
 }
 
-int Packet::appSize()
+int Packet::appSize() const
 {
   return appLayer_.size();
 }
