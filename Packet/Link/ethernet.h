@@ -17,13 +17,12 @@
  * * You should have received a copy of the GNU General Public License
  * * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-
-
 #ifndef ETHERNET_H
 #define ETHERNET_H
 
 #include <string>
 #include "mac.h"
+#include "../encapsulateable.h"
 
 typedef struct VlanTag 
 {
@@ -80,7 +79,8 @@ namespace ethernetProtocol
   const uint16_t ETH_P_TIPC = 0x88CA; //TIPC 		
 }
 
-class Ethernet : public LinkData
+
+class Ethernet : public LinkData, public Encapsulateable
 {
   public: //constants
   static const int EthernetSize = 14;
@@ -102,15 +102,14 @@ class Ethernet : public LinkData
     void setType( uint16_t );
     uint16_t getDot1QType();
     void setDot1QType( uint16_t );
-    std::vector<uint8_t> makePacket();
-    int getSize();
+    PacketBuffer makePacket() const;
+    int getSize() const;
+    bool isEthernet() const;
 
   private:
     EthernetHeader header_;
     VlanTag vlanTag_;
 };
-
-template <> bool Ethernet::LinkData::is<Ethernet>() { return true; }
 
 
 #endif 

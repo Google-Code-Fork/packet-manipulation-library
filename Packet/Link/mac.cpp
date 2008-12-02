@@ -46,14 +46,14 @@ void MACAddress::setMACAddress( std::vector< uint8_t > mac )
   mac_ = mac;
 }
 
-int MACAddress::getSize()
+int MACAddress::getSize() const
 {
   return MACAddressSize;
 }
 
-std::vector< uint8_t > MACAddress::makePacket(  )
+PacketBuffer MACAddress::makePacket(  ) const
 {
-  return mac_;
+  return PacketBuffer( mac_ );
 }
 
 void MACAddress::getMAC( uint8_t (&macPtr)[MACAddressSize] )
@@ -64,4 +64,9 @@ void MACAddress::getMAC( uint8_t (&macPtr)[MACAddressSize] )
   macPtr[3] = mac_[3];
   macPtr[4] = mac_[4];
   macPtr[5] = mac_[5];
+}
+
+bool MACAddress::isMac() const
+{
+  return true;
 }

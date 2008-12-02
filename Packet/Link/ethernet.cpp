@@ -109,18 +109,27 @@ void Ethernet::setDot1QType( uint16_t type )
   vlanTag_.type = type;
 }
 
-int Ethernet::getSize()
+int Ethernet::getSize() const
 {
   if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
     return EthernetSize + Dot1QSize;
   return EthernetSize;
 }
 
-std::vector< uint8_t > Ethernet::makePacket()
+PacketBuffer Ethernet::makePacket() const
 {
-  std::vector< uint8_t > packet;
-  std::vector< uint8_t > tmp;
-  tmp = MACAddress( header_.destination ).makePacket();
-  packet.insert( packet.end(), tmp.begin(), tmp.end() ); 
+  int size = EthernetSize;
+  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+    size += Dot1QSize;
+  uint8_t* buff = new uint8_t[size];
+  *((EthernetHeader*)buff) = header_;
+  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+    *((VlanTag*)(buff+EthernetSize)) = vlanTag_;
+  
+  return PacketBuffer( buff, size );
 }
 
+bool Ethernet::isEthernet() const
+{
+  return true;
+}

@@ -21,10 +21,11 @@ class MACAddress : public LinkData
 
     void setMACAddress( std::vector< uint8_t > mac );
     //void setMACAddress( std::string mac );
-    int getSize();
-    std::vector< uint8_t > makePacket();
+    int getSize() const;
+    PacketBuffer makePacket() const;
     void getMAC( uint8_t (&mac)[MACAddressSize]);//puts the mac address in the memory mac
     //TODO LATER: std::string getMAC();
+    bool isMac() const;
 
   private:
     std::vector< uint8_t > mac_;

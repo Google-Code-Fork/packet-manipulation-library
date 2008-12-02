@@ -1,34 +1,93 @@
 #ifndef LINK_H
 #define LINK_H
-
+#include <stdexcept>
 #include "linkData.h"
 #include "ethernet.h"
-
-namespace LinkTypes
-{
-  const uint16_t Ethernet = 1;
-  const uint16_t 802_11 = 2;
-  const uint16_t Arp = 3;
-  const uint16_t Packet = 4;
-}
 
 class Link 
 {
   public:
-    Link( Ethernet e );
-    Link~();
+    Link( )
+    {
+      header_ = NULL;
+    }
 
-    bool isEthernet( );
-    //Should I make the below a reference?
-    Ethernet getEthernet( ); //throws exception if not ethernet
-    void setEthernet( Ethernet e );//throws exception if not ethernet;
+    Link( Ethernet e )
+    {
+      header_ = new Ethernet;
+      *header_ = e;
+    }
 
+    Link( MACAddress m )
+    {
+      header_ = new MACAddress;
+      *header_ = m;
+    }
 
+    Link( const Link &n )
+    {
+      copy( n );
+    }
+
+    Link& operator=( const Link &n )
+    {
+      if( header_ )
+	delete header_;
+      copy( n );
+      return *this;
+    }
+    
+    virtual ~Link() 
+    {
+      //if( header_ )
+      delete header_;
+    }
+
+    template< class T >bool is( ){ return false; }
+    
+    template< class T > T get( ) 
+    {
+      if( !( is<T>() ) )
+      {
+	throw std::runtime_error("wrong type");
+      }
+      return T(*((T*)header_));
+    }
+
+    template< class T > void set( T e )
+    {
+      if( header_ )
+	delete header_;
+      header_ = new T;
+      *header_ = e;
+    }
 
   private:
-    LinkData* header_;
-    uint16_t linkType;
+   
+    void copy( const Link &n )
+    {
+      if( n.header_ == NULL )
+      {
+	header_ = NULL;
+      }
+      else if( n.header_->isEthernet() )
+      {
+	header_ = new Ethernet( *((Ethernet*)n.header_) );
+      }
+      else if( n.header_->isMac() )
+      {
+	header_ = new MACAddress( *((MACAddress*)n.header_) );
+      }
+      else
+	header_ = NULL;
+    }
 
+    LinkData* header_;
+};
+
+template<> bool Link::is<Ethernet>( )
+{
+  return header_->isEthernet();
 }
 
 #endif
