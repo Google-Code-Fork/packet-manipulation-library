@@ -8,7 +8,7 @@ class PacketBuffer
   public:
   PacketBuffer();
   PacketBuffer( std::vector< uint8_t > );
-  PacketBuffer( uint8_t* buff, int size );
+  PacketBuffer( const uint8_t* buff, int size );
   ~PacketBuffer();
   PacketBuffer( const PacketBuffer& n );
   PacketBuffer& operator=( const PacketBuffer &n );

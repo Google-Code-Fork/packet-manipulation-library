@@ -23,7 +23,7 @@ PacketBuffer::PacketBuffer( std::vector< uint8_t > buff )
   }
 }
 
-PacketBuffer::PacketBuffer( uint8_t* buff, int size )
+PacketBuffer::PacketBuffer( const uint8_t* buff, int size )
 {
   size_ = size;
   buff_= new uint8_t[ size ];
