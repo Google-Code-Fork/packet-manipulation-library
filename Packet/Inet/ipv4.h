@@ -82,7 +82,7 @@ namespace ipProtocols
     const uint8_t IPPROTO_RAW = 255;	   /* Raw IP packets.  */
 }
 
-class IPv4 : public InetData, public Encapsulateable
+class IPv4 : public InetData
 {
 	public:
 		IPv4();

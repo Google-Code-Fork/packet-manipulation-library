@@ -4,8 +4,9 @@
 #include "transData.h"
 #include "tcp.h"
 #include "udp.h"
+#include "../encapsulateable.h"
 
-class Trans 
+class Trans : public Encapsulateable
 {
   public:
     Trans( )
@@ -61,6 +62,17 @@ class Trans
       *header_ = e;
     }
 
+    int getSize() const 
+    {
+      return header_->getSize();
+    }
+
+    PacketBuffer makePacket() const 
+    {
+      return header_->makePacket();
+    }
+
+
   private:
    
     void copy( const Trans &n )
@@ -84,15 +96,9 @@ class Trans
     TransData* header_;
 };
 
-template<> bool Trans::is<UDP>( )
-{
-  return header_->isUDP();
-}
+template<> bool Trans::is<UDP>( );
 
-template<> bool Trans::is<TCP>( )
-{
-  return header_->isTCP();
-}
+template<> bool Trans::is<TCP>( );
 
 
 

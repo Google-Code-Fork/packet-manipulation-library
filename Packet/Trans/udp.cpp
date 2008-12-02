@@ -52,7 +52,7 @@ UDP::~UDP()
 	delete header_;
 }
 
-uint16_t UDP::getSourcePort()
+uint16_t UDP::getSourcePort() const
 {
 	return ntohs( header_->sport );
 }
@@ -62,7 +62,7 @@ void UDP::setSourcePort( uint16_t port )
 	header_->sport = htons( port );
 }
 
-uint16_t UDP::getDestinationPort()
+uint16_t UDP::getDestinationPort() const
 {
 	return ntohs( header_->dport );
 }
@@ -72,7 +72,7 @@ void UDP::setDestinationPort( uint16_t port )
 	header_->dport = htons( port );
 }
 
-uint16_t UDP::getChecksum()
+uint16_t UDP::getChecksum() const
 {
 	return ntohs( header_->checksum );
 }
@@ -82,7 +82,7 @@ void UDP::setChecksum( uint16_t checksum )
 	header_->checksum = htons( checksum );
 }
 
-uint16_t UDP::getLength()
+uint16_t UDP::getLength() const
 {
 	return ntohs( header_->length );
 }
@@ -92,15 +92,16 @@ void UDP::setLength( uint16_t length )
 	header_->length = htons( length );
 }
 
-int UDP::getSize()
+int UDP::getSize() const
 {
   return UDPSize;
 }
 
-std::vector< uint8_t > UDP::makePacket()
+PacketBuffer UDP::makePacket() const
 {
   std::vector< uint8_t > packet;
   uint8_t* ptr = (uint8_t*) header_;
   for( int i = 0; i < UDPSize; ++i )
     packet.push_back( ptr[i] );
+  return PacketBuffer( packet );
 }

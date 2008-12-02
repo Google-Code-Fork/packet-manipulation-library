@@ -51,7 +51,7 @@ struct my_tcp {
 
 class TCP : public TransData
 {
-  static const int TCPStructSize=20; //size of the above struct
+  static const uint8_t TCPStructSize=20; //size of the above struct
 	public:
 		TCP();
 		TCP( const uint8_t *packet, int size );
@@ -60,48 +60,48 @@ class TCP : public TransData
 
 		~TCP();
 
-		uint16_t getSourcePort();
+		uint16_t getSourcePort() const;
 		void setSourcePort( uint16_t );
-		uint16_t getDestinationPort();
+		uint16_t getDestinationPort() const;
 		void setDestinationPort( uint16_t );
-		uint32_t getSequenceNumber();
+		uint32_t getSequenceNumber() const;
 		void setSequenceNumber( uint32_t );
-		uint32_t getAcknowledgementNumber();
+		uint32_t getAcknowledgementNumber() const;
 		void setAcknowledgementNumber( uint32_t );
-		uint8_t getDataOffset();
+		uint8_t getDataOffset() const;
 		void setDataOffset( uint8_t );
-		bool getFlagsCWR();
+		bool getFlagsCWR() const;
 		void setFlagsCWR( bool );
 		void setFlagsCWR( ); // ==setFlagsCWR( true );
-		bool getFlagsECE();
+		bool getFlagsECE() const;
 		void setFlagsECE( bool );
 		void setFlagsECE( ); // == setFlagsECE( true );
-		bool getFlagsURG();
+		bool getFlagsURG() const;
 		void setFlagsURG( bool );
 		void setFlagsURG( ); // == setFlagsURG( true );
-		bool getFlagsACK();
+		bool getFlagsACK() const;
 		void setFlagsACK( bool );
 		void setFlagsACK( ); // == setFlagsACK( true );
-		bool getFlagsPSH();
+		bool getFlagsPSH() const;
 		void setFlagsPSH( bool );
 		void setFlagsPSH( ); // == setFlagsPSH( true );
-		bool getFlagsRST();
+		bool getFlagsRST() const;
 		void setFlagsRST( bool );
 		void setFlagsRST( ); // == setFlagsRST( true );
-		bool getFlagsSYN();
+		bool getFlagsSYN() const;
 		void setFlagsSYN( bool );
 		void setFlagsSYN( ); // == setFlagsSYN( true );
-		bool getFlagsFIN();
+		bool getFlagsFIN() const;
 		void setFlagsFIN( bool );
 		void setFlagsFIN( ); // == setFlagsFIN( true );
-		uint16_t getWindow();
+		uint16_t getWindow() const;
 		void setWindow( uint16_t ); 
-		uint16_t getChecksum();
+		uint16_t getChecksum() const;
 		void setChecksum( uint16_t ); 
-		uint16_t getUrgentPointer();
+		uint16_t getUrgentPointer() const;
 		void setUrgentPointer( uint16_t );
-		int getSize();
-		std::vector< uint8_t > makePacket();
+		int getSize() const;
+		PacketBuffer makePacket() const;
 		bool isTCP() const { return true; }
 
 	private:

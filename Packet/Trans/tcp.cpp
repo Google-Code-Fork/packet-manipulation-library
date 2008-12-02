@@ -20,249 +20,254 @@
 
 #include <stdexcept>
 #include "tcp.h"
+#include <iostream>
 
 TCP::TCP()
 {
-	header_ = new struct my_tcp;
+  header_ = new struct my_tcp;
+  setDataOffset( TCPStructSize );
+//  std::cerr << "TCP SIZE: " << static_cast<uint16_t>(getDataOffset()) << std::endl;
 }
 
 TCP::TCP( const uint8_t *packet, int size )
 {
-	header_ = new struct my_tcp;
-	int headerSize = sizeof( header_ );
-	if( size < headerSize )
-	  throw std::runtime_error( "Packet capture too small to make packet" );
-	*header_ = *((struct my_tcp*)packet);
+  header_ = new struct my_tcp;
+  int headerSize = TCPStructSize;
+  if( size < headerSize )
+    throw std::runtime_error( "Packet capture too small to make packet" );
+  *header_ = *((struct my_tcp*)packet);
 }
 
 TCP::TCP( const TCP &n )
 {
-	header_ = new struct my_tcp;
-	*header_ = *(n.header_);
+  header_ = new struct my_tcp;
+  *header_ = *(n.header_);
 }
 
 TCP& TCP::operator =( const TCP &n )
 {
-	*header_ = *(n.header_);
+  *header_ = *(n.header_);
 }
 
 TCP::~TCP()
 {
-	delete header_;
+  delete header_;
 }
 
-uint16_t TCP::getSourcePort()
+uint16_t TCP::getSourcePort() const
 {
-	return ntohs( header_->sport );
+  return ntohs( header_->sport );
 }
 
 void TCP::setSourcePort( uint16_t port )
 {
-	header_->sport = htons( port );
+  header_->sport = htons( port );
 }
 
-uint16_t TCP::getDestinationPort()
+uint16_t TCP::getDestinationPort() const
 {
-	return ntohs( header_->dport );
+  return ntohs( header_->dport );
 }
 
 void TCP::setDestinationPort( uint16_t port )
 {
-	header_->dport = htons( port );
+  header_->dport = htons( port );
 }
 
-uint32_t TCP::getSequenceNumber()
+uint32_t TCP::getSequenceNumber() const
 {
-	return ntohl( header_->sequenceNumber );
+  return ntohl( header_->sequenceNumber );
 }
 
 void TCP::setSequenceNumber( uint32_t num )
 {
-	header_->sequenceNumber = htonl( num );
+  header_->sequenceNumber = htonl( num );
 }
 
-uint32_t TCP::getAcknowledgementNumber()
+uint32_t TCP::getAcknowledgementNumber() const
 {
-	return ntohl( header_->ackNumber );
+  return ntohl( header_->ackNumber );
 }
 
 void TCP::setAcknowledgementNumber( uint32_t ackNum )
 {
-	header_->ackNumber = htonl( ackNum );
+  header_->ackNumber = htonl( ackNum );
 }
 
-uint8_t TCP::getDataOffset()
+uint8_t TCP::getDataOffset() const
 {
-	return OFFSET( header_ ) * 4;
+  return OFFSET( header_ ) * 4;
 }
 
 void TCP::setDataOffset( uint8_t dataOffset )
 {
-	if( dataOffset &0xF0 )
-		throw std::runtime_error( "Invalid DataOffset" );
-	header_->dataOffset &= 0xF;
-	header_->dataOffset |= dataOffset << 4;
+  dataOffset /= 4;
+  if( dataOffset &0xF0 )
+    throw std::runtime_error( "Invalid DataOffset" );
+  header_->dataOffset &= 0xF;
+  header_->dataOffset |= dataOffset << 4;
 }
 
-bool TCP::getFlagsCWR()
+bool TCP::getFlagsCWR() const
 {
-	return (( 0 < ( header_->flags & TCP_CWR ) ) );
+  return (( 0 < ( header_->flags & TCP_CWR ) ) );
 }
 
 void TCP::setFlagsCWR()
 {
-	setFlagsCWR( true );
+  setFlagsCWR( true );
 }
 
 void TCP::setFlagsCWR( bool set )
 {
-	set ? header_->flags |= TCP_CWR : header_->flags & (TCP_CWR ^ 0xFF);
+  set ? header_->flags |= TCP_CWR : header_->flags & (TCP_CWR ^ 0xFF);
 }
 
-bool TCP::getFlagsECE()
+bool TCP::getFlagsECE() const
 {
-	return ( 0 < ( header_->flags & TCP_ECE ) );
+  return ( 0 < ( header_->flags & TCP_ECE ) );
 }
 
 void TCP::setFlagsECE()
 {
-	setFlagsECE( true );
+  setFlagsECE( true );
 }
 
 void TCP::setFlagsECE( bool set )
 {
-	set ? header_->flags |= TCP_ECE : header_->flags & (TCP_ECE ^ 0xFF);
+  set ? header_->flags |= TCP_ECE : header_->flags & (TCP_ECE ^ 0xFF);
 }
 
-bool TCP::getFlagsURG()
+bool TCP::getFlagsURG() const
 {
-	return ( 0 < ( header_->flags & TCP_URG ) );
+  return ( 0 < ( header_->flags & TCP_URG ) );
 }
 
 void TCP::setFlagsURG()
 {
-	setFlagsURG( true );
+  setFlagsURG( true );
 }
 
 void TCP::setFlagsURG( bool set )
 {
-	set ? header_->flags |= TCP_URG : header_->flags & (TCP_URG ^ 0xFF);
+  set ? header_->flags |= TCP_URG : header_->flags & (TCP_URG ^ 0xFF);
 }
 
-bool TCP::getFlagsACK()
+bool TCP::getFlagsACK() const
 {
-	return ( 0 < ( header_->flags & TCP_ACK ) );
+  return ( 0 < ( header_->flags & TCP_ACK ) );
 }
 
 void TCP::setFlagsACK()
 {
-	setFlagsACK( true );
+  setFlagsACK( true );
 }
 
 void TCP::setFlagsACK( bool set )
 {
-	set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
+  set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
 }
 
-bool TCP::getFlagsPSH()
+bool TCP::getFlagsPSH() const
 {
-	return ( 0 < ( header_->flags & TCP_PSH ) );
+  return ( 0 < ( header_->flags & TCP_PSH ) );
 }
 
 void TCP::setFlagsPSH( )
 {
-	setFlagsPSH( true );
+  setFlagsPSH( true );
 }
 
 void TCP::setFlagsPSH( bool set )
 {
-	set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
+  set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
 }
 
-bool TCP::getFlagsRST()
+bool TCP::getFlagsRST() const
 {
-	return ( 0 < ( header_->flags & TCP_RST ) );
+  return ( 0 < ( header_->flags & TCP_RST ) );
 }
 
 void TCP::setFlagsRST( )
 {
-	setFlagsRST( true );
+  setFlagsRST( true );
 }
 
 void TCP::setFlagsRST( bool set )
 {
-	set ? header_->flags |= TCP_RST : header_->flags & (TCP_RST ^ 0xFF);
+  set ? header_->flags |= TCP_RST : header_->flags & (TCP_RST ^ 0xFF);
 }
 
-bool TCP::getFlagsSYN()
+bool TCP::getFlagsSYN() const
 {
-	return ( 0 < ( header_->flags & TCP_SYN ) );
+  return ( 0 < ( header_->flags & TCP_SYN ) );
 }
 
 void TCP::setFlagsSYN( )
 {
-	setFlagsSYN( true );
+  setFlagsSYN( true );
 }
 
 void TCP::setFlagsSYN( bool set )
 {
-	set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
+  set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
 }
 
-bool TCP::getFlagsFIN()
+bool TCP::getFlagsFIN() const
 {
-	return ( 0 < ( header_->flags & TCP_FIN ) );
+  return ( 0 < ( header_->flags & TCP_FIN ) );
 }
 
 void TCP::setFlagsFIN( )
 {
-	setFlagsFIN( true );
+  setFlagsFIN( true );
 }
 
 void TCP::setFlagsFIN( bool set )
 {
-	set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
+  set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
 }
 
-uint16_t TCP::getWindow()
+uint16_t TCP::getWindow() const
 {
-	return ntohs( header_->window );
+  return ntohs( header_->window );
 }
 
 void TCP::setWindow( uint16_t windowSize )
 {
-	header_->window = htons( windowSize );
+  header_->window = htons( windowSize );
 }
 
-uint16_t TCP::getChecksum()
+uint16_t TCP::getChecksum() const
 {
-	return ntohs( header_->checksum );
+  return ntohs( header_->checksum );
 }
 
 void TCP::setChecksum( uint16_t checksum )
 {
-	header_->checksum = htons( checksum );
+  header_->checksum = htons( checksum );
 }
 
-uint16_t TCP::getUrgentPointer()
+uint16_t TCP::getUrgentPointer() const
 {
-	return ntohs( header_->urgentPointer );
+  return ntohs( header_->urgentPointer );
 }
 
 void TCP::setUrgentPointer( uint16_t urgentPointer )
 {
-	header_->urgentPointer = htons( urgentPointer );
+  header_->urgentPointer = htons( urgentPointer );
 }
 
-int TCP::getSize()
+int TCP::getSize() const 
 {
   return static_cast<int>( getDataOffset() );
 }
 
-std::vector< uint8_t > TCP::makePacket()
+PacketBuffer TCP::makePacket() const 
 {
   std::vector< uint8_t > packet;
   int bytes = getSize();
+  std::cerr << "SIZE: " << bytes << std::endl;
   uint8_t* ptr = (uint8_t*) header_;
   int sizeToCopy = bytes < TCPStructSize ? bytes : TCPStructSize;
   for( int i = 0; i < sizeToCopy; ++i )
@@ -271,5 +276,5 @@ std::vector< uint8_t > TCP::makePacket()
   }
   for( int i = 0; i < bytes-TCPStructSize; ++i )
     packet.push_back( 0 );
-  return packet;
+  return PacketBuffer( packet );
 }

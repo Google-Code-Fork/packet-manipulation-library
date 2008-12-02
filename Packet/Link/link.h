@@ -96,9 +96,6 @@ class Link : public Encapsulateable
     LinkData* header_;
 };
 
-template<> bool Link::is<Ethernet>( )
-{
-  return header_->isEthernet();
-}
+template<> bool Link::is<Ethernet>( );
 
 #endif

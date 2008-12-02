@@ -3,8 +3,9 @@
 #include <stdexcept>
 #include "appData.h"
 #include "raw.h"
+#include "../encapsulateable.h"
 
-class App 
+class App : public Encapsulateable
 {
   public:
     App( )
@@ -55,6 +56,16 @@ class App
       *header_ = e;
     }
 
+    int getSize() const 
+    {
+      return header_->getSize();
+    }
+
+    PacketBuffer makePacket() const 
+    {
+      return header_->makePacket();
+    }
+
   private:
    
     void copy( const App &n )
@@ -74,11 +85,6 @@ class App
     AppData* header_;
 };
 
-template<> bool App::is<Raw>( )
-{
-  return header_->isRaw();
-}
-
-
+template<> bool App::is<Raw>( );
 
 #endif

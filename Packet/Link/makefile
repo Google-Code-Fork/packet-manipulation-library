@@ -1,4 +1,4 @@
-OBJS=mac.o ethernet.o
+OBJS=mac.o ethernet.o link.o
 TESTOBJS=../packetBuffer.o
 
 all: $(OBJS) test

@@ -12,10 +12,10 @@ class Raw : public AppData
     Raw( const Raw &n );
     Raw& operator=( const Raw &n );
     virtual ~Raw();
-    std::vector< uint8_t > makePacket();
-    int getSize();
+    PacketBuffer makePacket() const;
+    int getSize() const;
     void setData( std::vector< uint8_t > data );
-    std::vector< uint8_t > getData();
+    std::vector< uint8_t > getData() const;
     bool isRaw() const {return true;}
 
   private:

@@ -52,6 +52,32 @@ Packet& Packet::operator+=( const Packet &n )
   return *this;
 }
 
+int Packet::getSize() const
+{
+  int size = 0;
+  std::vector< Link >::const_iterator litr;
+  std::vector< Inet >::const_iterator iitr;
+  std::vector< Trans >::const_iterator titr;
+  std::vector< App >::const_iterator aitr;
+  for( litr = linkLayer_.begin(); litr != linkLayer_.end(); ++litr )
+  {
+    size += litr->getSize();
+  }
+  for( iitr = inetLayer_.begin(); iitr != inetLayer_.end(); ++iitr )
+  {
+    size += iitr->getSize();
+  }
+  for( titr = transLayer_.begin(); titr != transLayer_.end(); ++titr )
+  {
+    size += titr->getSize();
+  }
+  for( aitr = appLayer_.begin(); aitr != appLayer_.end(); ++aitr )
+  {
+    size += aitr->getSize();
+  }
+  return size;
+}
+
 Packet operator+( const Packet &l, const Packet &r )
 {
   Packet tmp( l );
@@ -63,10 +89,10 @@ PacketBuffer Packet::makePacket() const
 {
   PacketBuffer pb;
   std::vector< uint8_t > packet;
-  std::vector< LinkData >::const_iterator litr;
-  std::vector< InetData >::const_iterator iitr;
-  std::vector< TransData >::const_iterator titr;
-  std::vector< AppData >::const_iterator aitr;
+  std::vector< Link >::const_iterator litr;
+  std::vector< Inet >::const_iterator iitr;
+  std::vector< Trans >::const_iterator titr;
+  std::vector< App >::const_iterator aitr;
   for( litr = linkLayer_.begin(); litr != linkLayer_.end(); ++litr )
   {
     pb += litr->makePacket( );
@@ -83,7 +109,6 @@ PacketBuffer Packet::makePacket() const
   {
     pb += aitr->makePacket( );
   }
-  
   return pb;
 }
 

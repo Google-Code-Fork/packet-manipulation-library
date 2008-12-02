@@ -27,12 +27,12 @@ Raw::~Raw()
 {
 }
 
-std::vector< uint8_t > Raw::makePacket()
+PacketBuffer Raw::makePacket() const
 {
-  return data_;
+  return PacketBuffer( data_ );
 }
 
-int Raw::getSize()
+int Raw::getSize() const
 {
   return data_.size();
 }
@@ -42,7 +42,7 @@ void Raw::setData( std::vector< uint8_t > data )
   data_ = data;
 }
 
-std::vector< uint8_t > Raw::getData()
+std::vector< uint8_t > Raw::getData() const
 {
   return data_;
 }

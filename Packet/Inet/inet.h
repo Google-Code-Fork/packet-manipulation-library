@@ -3,8 +3,9 @@
 #include <stdexcept>
 #include "inetData.h"
 #include "ipv4.h"
+#include "../encapsulateable.h"
 
-class Inet 
+class Inet : public Encapsulateable 
 {
   public:
     Inet( )
@@ -55,6 +56,16 @@ class Inet
       *header_ = e;
     }
 
+    PacketBuffer makePacket() const 
+    {
+      return header_->makePacket();
+    }
+
+    int getSize() const
+    {
+      return header_->getSize();
+    }
+
   private:
    
     void copy( const Inet &n )
@@ -74,11 +85,6 @@ class Inet
     InetData* header_;
 };
 
-template<> bool Inet::is<IPv4>( )
-{
-  return header_->isIPv4();
-}
-
-
+template<> bool Inet::is<IPv4>( );
 
 #endif

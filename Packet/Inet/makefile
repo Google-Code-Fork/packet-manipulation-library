@@ -1,4 +1,4 @@
-OBJS=ipv4.o
+OBJS=ipv4.o inet.o
 TESTOBJS=test.o ../packetBuffer.o
 
 CFLAGS=-ggdb

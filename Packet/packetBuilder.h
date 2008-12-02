@@ -8,36 +8,46 @@
 #include "Trans/udp.h"
 #include "App/raw.h"
 
-template <class T > class PacketBuilder
+class PacketBuilder
 {
+  public:
   PacketBuilder(  ) {}
-  virtual ~PacketBuilder();
+  virtual ~PacketBuilder(){}
 
-  Packet buildPacket( PacketBuffer pb ) { return build< T >( pb.getBuffer(), pb.size() ); }
+  template <class T> Packet buildPacket( PacketBuffer pb ) { return build< T >( pb.getBuffer(), pb.size() ); }
   template <class K> Packet build( const uint8_t* buff, int size );
-}
+};
 
+template <> Packet PacketBuilder::build<Raw>( const  uint8_t* buff, int size );
+template <> Packet PacketBuilder::build<UDP>( const  uint8_t* buff, int size );
+template <> Packet PacketBuilder::build<TCP>( const  uint8_t* buff, int size );
+template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size );
+template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size );
 //template specialization must go outside of class def
 template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size )
 {
   Ethernet e( buff, size );
   Packet p;
   p.pushBackLink( e );
-  uint8_t* newbuff = buff + e.getSize();
+  const uint8_t* newbuff = buff + e.getSize();
   int newsize = size - e.getSize();
   Packet p2;
   switch( e.getType() )
   {
     case ethernetProtocol::ETH_P_IP:
+      //std::cerr << "IP" << std::endl;
       p2 = build< IPv4 >( newbuff, newsize );
       break;
     case ethernetProtocol::ETH_P_IPV6:
+      //std::cerr << "IPv6" << std::endl;
       //placeholder
       //break;
     case ethernetProtocol::ETH_P_ARP:
+      //std::cerr << "ARP" << std::endl;
       //placeholder
       //break;
     default:
+      //std::cerr << "RAW" << std::endl;
       p2 = build< Raw >( newbuff, newsize );
       break;
   }
@@ -50,7 +60,7 @@ template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size )
   Packet p; 
   p.pushBackInet( ip );
   Packet p2;
-  uint8_t* newbuff = buff + p.getSize();
+  const uint8_t* newbuff = buff + p.getSize();
   int newsize = size - p.getSize();
   
   switch( static_cast<uint16_t>( ip.getProtocol() ) )
@@ -74,7 +84,7 @@ template <> Packet PacketBuilder::build<TCP>( const  uint8_t* buff, int size )
   Packet p; 
   p.pushBackTrans( tcp );
   Packet p2;
-  uint8_t* newbuff = buff + tcp.getSize();
+  const uint8_t* newbuff = buff + tcp.getSize();
   int newsize = size - tcp.getSize();
 
   //NO TCP APPLICATION LAYER SUPPORTED ATM
@@ -89,7 +99,7 @@ template <> Packet PacketBuilder::build<UDP>( const  uint8_t* buff, int size )
   Packet p; 
   p.pushBackTrans( udp );
   Packet p2;
-  uint8_t* newbuff = buff + udp.getSize();
+  const uint8_t* newbuff = buff + udp.getSize();
   int newsize = size - udp.getSize();
 
   //NO UDP APPLICATION LAYER SUPPORTED ATM

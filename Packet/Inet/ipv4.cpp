@@ -27,12 +27,13 @@
 IPv4::IPv4( )
 {
 	header_ = new struct IPv4Header;
+	setHeaderLength( 20 );
 }
 
 IPv4::IPv4( const uint8_t *packet, int size )
 {
 	header_ = new struct IPv4Header;
-	int headerSize = sizeof( header_ );
+	int headerSize = 20;
 	if( size < headerSize )
 	  throw std::runtime_error( "packet capture too small to make packet" );
 	*header_ = *((struct IPv4Header*)packet);
@@ -196,7 +197,7 @@ void IPv4::setDestinationAddress( uint32_t ip )
 PacketBuffer IPv4::makePacket( ) const
 {
   std::vector< uint8_t > packet;
-  int bytes = IP_HL( header_ );
+  int bytes = getHeaderLength();
   uint8_t* ptr = (uint8_t*)( header_ );
   for( int i = 0; i < bytes; ++i )
   {

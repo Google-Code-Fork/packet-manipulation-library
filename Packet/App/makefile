@@ -1,4 +1,4 @@
-OBJS=raw.o
+OBJS=raw.o app.o
 TESTOBJS=test.o ../packetBuffer.o
 
 CFLAGS=-ggdb

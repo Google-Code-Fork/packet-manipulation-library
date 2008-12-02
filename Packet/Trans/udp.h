@@ -49,16 +49,16 @@ class UDP : public TransData
     ~UDP();
 
 
-    uint16_t getSourcePort();
+    uint16_t getSourcePort() const;
     void setSourcePort( uint16_t );
-    uint16_t getDestinationPort();
+    uint16_t getDestinationPort() const;
     void setDestinationPort( uint16_t );
-    uint16_t getChecksum();
+    uint16_t getChecksum() const;
     void setChecksum( uint16_t );
-    uint16_t getLength();
+    uint16_t getLength() const;
     void setLength( uint16_t );
-    int getSize();
-    std::vector< uint8_t > makePacket();
+    int getSize() const;
+    PacketBuffer makePacket() const;
     bool isUDP() const { return true; }
 
   private:
