@@ -26,12 +26,6 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 void* run_devSniffer(void* data);
 void* run_offlineSniffer(void* data);
 
-typedef struct SnifferDataHolder
-{
-	SnifferData* snifferData;
-	FilterData* filterData;
-}SnifferDataHolder;
-
 class sniffer
 {
 	public:
