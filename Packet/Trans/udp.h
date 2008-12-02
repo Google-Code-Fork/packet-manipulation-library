@@ -59,12 +59,10 @@ class UDP : public TransData
     void setLength( uint16_t );
     int getSize();
     std::vector< uint8_t > makePacket();
+    bool isUDP() const { return true; }
 
   private:
     struct my_udp *header_;
 };
-
-
-
 
 #endif 

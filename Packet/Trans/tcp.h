@@ -102,6 +102,7 @@ class TCP : public TransData
 		void setUrgentPointer( uint16_t );
 		int getSize();
 		std::vector< uint8_t > makePacket();
+		bool isTCP() const { return true; }
 
 	private:
 		struct my_tcp *header_;
