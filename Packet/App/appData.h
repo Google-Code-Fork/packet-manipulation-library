@@ -1,16 +1,14 @@
 #ifndef APPDATA_H
 #define APPDATA_H
 
-#include "../encapsulateable.h"
+#include "../packetBuffer.h"
 
-class AppData : public Encapsulateable
+class AppData
 {
   public:
-    AppData();
-    virtual ~AppData();
-    template <class T>bool is() { return false; }
-    //virtual std::vector< uint8_t > makePacket() = 0;
-    //virtual int getSize() = 0;
+    AppData() {}
+    virtual ~AppData() {}
+    virtual bool isRaw() const {return false;}
 };
 
 #endif

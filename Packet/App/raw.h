@@ -16,6 +16,7 @@ class Raw : public AppData
     int getSize();
     void setData( std::vector< uint8_t > data );
     std::vector< uint8_t > getData();
+    bool isRaw() const {return true;}
 
   private:
     std::vector<uint8_t> data_;
