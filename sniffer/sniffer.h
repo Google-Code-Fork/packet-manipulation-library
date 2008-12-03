@@ -23,41 +23,38 @@
 #include "filterData.h"
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
-void* run_devSniffer(void* data);
-void* run_offlineSniffer(void* data);
+void* run_sniffer(void* data);
 
-/*typedef struct SnifferDataHolder
-{
-	SnifferData* snifferData;
-	FilterData* filterData;
-}SnifferDataHolder;
-*/
 class sniffer
 {
-	public:
+	private:
 		static const std::string logFile;
 		bool DEBUG;
 
 		static std::ofstream log_stream;
 		Mutex coutMutex;
 		Mutex logMutex;
+		std::string outPcapFile_;
+		std::string inPcapFile_;
+		std::string filter_;
 
 		FilterData *filterData;
 		SnifferData snifferData;
-		sniffer():snifferData( coutMutex, logMutex, &log_stream )
-	{
-		DEBUG = false;
-		filterData = new FilterData ( coutMutex, logMutex, &log_stream );
-	}
 
+	public:
+		sniffer();
 		void printDevices();
 		static std::string iptos(u_long in);
 		void setDevice( std::string device );
 		std::string getDevice();
 		void log( std::string );
 		void setDebug(bool value);
-		void *devSniffer();
-		void *offlineSniffer();
+		void *packetSniffer();
 		Packet popPacket();
+		void setOutPcapFile(std::string);
+		std::string getOutputPcapFile( );
+		void setInputPcapFile(std::string);
+		std::string getInputPcapFile();
+		void setFilter(std::string filter);
 };
 
