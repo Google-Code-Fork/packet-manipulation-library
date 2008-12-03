@@ -28,9 +28,6 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
-//#include<netinet/if_ether.h>
-//#include<net/ethernet.h>
-//#include<netinet/ether.h>
 #include<unistd.h>
 #include<netinet/ip.h>
 #include<algorithm>
@@ -42,74 +39,45 @@
 #include"../common/parseCommas.h"
 
 std::ofstream sniffer::log_stream(logFile.c_str(), std::ios::out|std::ios::app);
-const std::string sniffer::logFile = "./inavd.log";
+const std::string sniffer::logFile = "./sniffer.log";
+
+sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
+{
+	DEBUG = false;
+	filterData = new FilterData ( coutMutex, logMutex, &log_stream );
+	inPcapFile_ = std::string("");
+	outPcapFile_ = std::string("");
+
+}
 
 Packet sniffer::popPacket()
 {
 	return filterData->popPacket();
 }
 
-void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
+void sniffer::setInputPcapFile(std::string pcapFile)
 {
-	std::cout<<"\n callback called";
-	FilterData* filterData = (FilterData*)args;
-	if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
-	{
-		pcap_breakloop( filterData->getPcapPointer() );
-	}
-	try
-	{
-		PacketBuilder pb;
-		Packet packet = pb.buildPacket<Ethernet>(PacketBuffer(packetCapture, pkthdr->caplen));
-		filterData->pushPacket( packet );
-	}
-	catch( std::runtime_error e )
-	{
-		if( (std::string)e.what() == "Malformed Packet" )
-			return;
-		else
-			throw e;
-	}
-/*	if(filterData->size())
-	{
-		Packet packet = filterData->popPacket();
-		time_t mytime = time(0);
-		std::cout<<"\n"<<asctime(localtime(&mytime));
-		if(packet.isIP())
-		{
-			std::cout<<"IP ==> ";
-			std::cout<<packet.getSourceMAC()<<" / ";
-			std::cout<<packet.getDestinationMAC()<<" / ";
-			std::cout<<packet.getType()<<" / ";
-			std::cout<<packet.getIPVersion()<<" / ";
-			std::cout<<packet.getProtocol()<<" / ";
-		}
-		if(packet.isTCP())
-		{
-			std::cout<<"\nTCP ==> ";
-			std::cout<<packet.getTCPSourcePort()<<" / ";
-			std::cout<<packet.getTCPDestinationPort()<<" / ";
-			std::cout<<packet.getType()<<" / ";
-			std::cout<<packet.getIPVersion()<<" / ";
-			std::cout<<packet.getIPIdentification()<<" / ";
-			std::cout<<packet.getProtocol()<<" / ";
-			std::cout<<(sniffer::iptos(packet.getSourceAddress())).c_str()<<" / ";
-			std::cout<<(sniffer::iptos(packet.getDestinationAddress())).c_str()<<" / ";
-		}
-	}*/
+	inPcapFile_ = pcapFile;
 }
 
-
-void* run_devSniffer(void* data)
+std::string sniffer::getInputPcapFile( )
 {
-	sniffer *tempSniffer = (sniffer*) data;
-	tempSniffer->devSniffer();
+	return inPcapFile_;
 }
 
-void* run_offlineSniffer(void* data)
+void sniffer::setOutPcapFile(std::string pcapFile)
 {
-	sniffer *tempSniffer = (sniffer*) data;
-	tempSniffer->offlineSniffer();
+	outPcapFile_ = pcapFile;
+}
+
+std::string sniffer::getOutputPcapFile( )
+{
+	return outPcapFile_;
+}
+
+void sniffer::setFilter(std::string filter)
+{
+	filter_ = filter;
 }
 
 void sniffer::setDebug(bool value)
@@ -134,8 +102,36 @@ std::string sniffer::getDevice()
 	snifferData.getDevice();
 }
 
-/* Sniffing pcap -file */
-void* sniffer::offlineSniffer()
+void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
+{
+	std::cout<<"\n callback called";
+	FilterData* filterData = (FilterData*)args;
+	if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
+	{
+		pcap_breakloop( filterData->getPcapPointer() );
+	}
+	try
+	{
+		PacketBuilder pb;
+		Packet packet = pb.buildPacket<Ethernet>(PacketBuffer(packetCapture, pkthdr->caplen));
+		filterData->pushPacket( packet );
+	}
+	catch( std::runtime_error e )
+	{
+		if( (std::string)e.what() == "Malformed Packet" )
+			return;
+		else
+			throw e;
+	}
+}
+
+void* run_sniffer(void* data)
+{
+	sniffer *tempSniffer = (sniffer*) data;
+	tempSniffer->packetSniffer();
+}
+
+void* sniffer::packetSniffer()
 {
 	char errbuf[PCAP_ERRBUF_SIZE];
 
@@ -145,78 +141,88 @@ void* sniffer::offlineSniffer()
 	snifferData.log( "Opening File: " + snifferData.getDevice() );
 
 	// 65535 from pcap man page...
-	pcap_t* descr;
-	if( snifferData.getDevice() == "any" )
-	{
-		descr = pcap_open_live( "any", 65535, 1, -1, errbuf );
-	}
+	pcap_t* pcap_ptr;
+	if(inPcapFile_.size())
+		pcap_ptr = pcap_open_offline( inPcapFile_.c_str(), errbuf );
 	else
 	{
-		descr = pcap_open_offline( snifferData.getDevice().c_str(), errbuf );
-	}
-	if ( descr == NULL )
-	{
-		snifferData.log( (std::string)"SnifferOffline ERROR: " + (std::string)errbuf );
-		std::cerr << "SnifferOffline ERROR: " << errbuf << std::endl;
-		exit(-1);
+		if( snifferData.getDevice() == "any" )
+			pcap_ptr = pcap_open_live( "any", 65535, 1, -1, errbuf );
+		else
+			pcap_ptr = pcap_open_live( snifferData.getDevice().c_str(), 500, 1, 40, errbuf );
 	}
 
-	int err = -2;//this is the return value of pcap_loop if stoped with pcap_breakloop()
-
-	filterData->setPcapPointer( descr );
-
-	while( err == -2 )
-	{
-		snifferData.log( "Sniffer processing packets" );
-		err = pcap_loop( descr, -1, my_callback, args );
-		snifferData.log( "Sniffer had to stop processing packets" );
-		usleep(1);
-	}
-
-	snifferData.log( "SnifferOffline Stopping!" );
-	pthread_exit(NULL);
-}
-
-/*pcap sniffer*/
-void* sniffer::devSniffer()
-{
-	char errbuf[PCAP_ERRBUF_SIZE];
-
-	uint8_t* args = (uint8_t*)filterData;
-	snifferData.log( "Sniffer Started!" ); 
-	snifferData.log( "Opening Device: " + snifferData.getDevice() );
-
-	// 65535 from pcap man page...
-	pcap_t* descr;
-	if( snifferData.getDevice() == "any" )
-	{
-		descr = pcap_open_live( "any", 65535, 1, -1, errbuf );
-	}
-	else
-	{
-		//descr = pcap_open_live( snifferData.getDevice().c_str(), 65535, 1, -1, errbuf );
-		descr = pcap_open_live( snifferData.getDevice().c_str(), 500, 1, 40, errbuf );
-	}
-	if ( descr == NULL )
+	if ( pcap_ptr == NULL )
 	{
 		snifferData.log( (std::string)"Sniffer ERROR: " + (std::string)errbuf );
 		std::cerr << "Sniffer ERROR: " << errbuf << std::endl;
 		exit(-1);
 	}
 
-	int err = -2;//this is the return value of pcap_loop if stoped with pcap_breakloop()
 
-	filterData->setPcapPointer( descr );
-
-	while( err == -2 )
+	if (filter_.size())
 	{
-		snifferData.log( "Sniffer processing packets" );
-		err = pcap_loop( descr, -1, my_callback, args );
-		snifferData.log( "Sniffer had to stop processing packets" );
-		usleep(1);
+		struct bpf_program fcode;
+		bpf_u_int32 NetMask;
+		NetMask=0xffffff;
+
+		//compile the filter
+		if(pcap_compile(pcap_ptr, &fcode, filter_.c_str(), 1, NetMask) < 0)
+		{
+			fprintf(stderr,"\nError compiling filter: wrong syntax.\n");
+			exit(1);
+		}
+
+		//set the filter
+		if(pcap_setfilter(pcap_ptr, &fcode)<0)
+		{
+			fprintf(stderr,"\nError setting the filter\n");
+			exit(1);
+		}
 	}
 
-	snifferData.log( "Sniffer Stopping!" );
+	if (outPcapFile_.size() != 0)
+	{
+		pcap_dumper_t *dumpfile; 
+		struct pcap_pkthdr *header;
+		const u_char *pkt_data;
+		dumpfile= pcap_dump_open(pcap_ptr, outPcapFile_.c_str());
+		//dumpfile= pcap_dump_open(fp, "-");
+
+		if (dumpfile == NULL)
+		{
+			fprintf(stderr,"\nError opening output file\n");
+			return NULL;
+		}
+
+		int res;
+		while((res = pcap_next_ex( pcap_ptr, &header, &pkt_data)) >= 0)
+		{
+
+			if(res == 0)
+				continue;  	/* Timeout elapsed */
+
+			//save the packet on the dump file
+			pcap_dump((unsigned char *) dumpfile, header, pkt_data);
+
+		}
+	}
+	else
+	{
+		int err = -2;//this is the return value of pcap_loop if stoped with pcap_breakloop()
+
+		filterData->setPcapPointer( pcap_ptr );
+
+		while( err == -2 )
+		{
+			snifferData.log( "Sniffer processing packets" );
+			err = pcap_loop( pcap_ptr, -1, my_callback, args );
+			snifferData.log( "Sniffer had to stop processing packets" );
+			usleep(1);
+		}
+	}
+
+	snifferData.log( "SnifferOffline Stopping!" );
 	pthread_exit(NULL);
 }
 
