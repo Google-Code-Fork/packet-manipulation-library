@@ -124,11 +124,11 @@ class options
 				{
 					case 'a':
 						printf("Usage: %s <options>\n\n", argv[0]);
-						printf("--help\t\t- print search usage\n");
-						printf("\nMandatory Arguments ----\n");
-						printf("--pcapDev\t<config file>\t\t- Searcher config\n");
-						printf("--inputPcapFile\t<thread count>\t\t- Number of threads\n");
-						printf("--outputPcapFile\t\t<ListenPort>\t\t- Port to execute the binary on\n");
+						printf("--help\t\t- print tcpDump options\n");
+						printf("--pcapDev\t<pcap device name>\n");
+						printf("--filter\t<expression for filtering packets>\n");
+						printf("--inputPcapFile\t<pcap file path>\n");
+						printf("--outputPcapFile\t\t<ouput pcap file pathListenPort>\n");
 						exit(0);
 						break;
 
