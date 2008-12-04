@@ -80,30 +80,25 @@ test is needed to ensure that the data is what a user thinks that it is. Below
 is an example of a test to see if the first header in the linklayer of the
 packet is Ethernet.
 
-Example: 
+  Example: 
 
+  void checkEthernet( Packet p )
+  {
+    std::cout << "p is ";
+    std::cout <<  (p.linkIs<Ethernet>( 0 ) ? "Ethernet" : "Not Ethernet" );
+    std::cout << std::endl; 
+  }
 
+We also may want to pull out the headers so we can do analysis on them or modify
+them and build another packet
 
-Packet<>(); //will create a packet that can then be added to like:
+  Example: 
 
-Ethernet e;
-IPv4 ip;
-Tcp tcp;
-Raw data;
-Packet<> p;
-p.pushBackLink( e );
-p.pushBackInet( ip );
-p.pushBackTrans( tcp );
-p.pushBackApp( data );
+  void inspectEthernet( Packet p )
+  {
+    Ethernet e = p.getLink<Ethernet>( 0 ); //This will throw an exception if the
+					   //link layer requested is not ethernet 
+    MACAddress source = e.getSourceMAC();
+    //check the source, etc...
+  }
 
-*** If we wanted to encapsulated this in an ipv6 packet
-
-Ethernet e2;
-IPv6 ip6;
-Packet<> p2;
-p2.pushBackLink( e2 );
-p2.pushBackInet( ip6 );
-p2.pushBackInet( p );
-
-Because different queues are used for each of the layers only the order that
-things get pushed on in each layer matters. The order of the layers does not.
