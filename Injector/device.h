@@ -21,13 +21,13 @@
 #define DEVICE_H
 
 #include <sstream>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netinet/if_ether.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
+//#include <netinet/if_ether.h>
 #include <iostream>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <pcap.h>
 //#include "packet.h"
 #include "devicesLookup.h"

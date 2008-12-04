@@ -20,16 +20,16 @@
 #ifndef INJECTOR_H
 #define INJECTOR_H
 
+#include "../Packet/packetBuffer.h"
+#include "../Packet/packet.h"
 #include <sstream>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netinet/if_ether.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
+//#include <netinet/if_ether.h>
 #include <iostream>
 #include <stdlib.h>
 #include "device.h"
-#include "../Packet/packetBuffer.h"
-#include "../Packet/packet.h"
 
 
 class Injector
