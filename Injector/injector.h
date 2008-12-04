@@ -31,6 +31,7 @@
 class Injector
 {
 	public:
+		Injector();
 		Injector(std::string deviceName, Packet::Packet packet);
 		Injector(std::string deviceName, PacketBuffer::PacketBuffer packetBuffer);
 		int inject();

@@ -19,6 +19,9 @@
 
 #include "injector.h"
 
+Injector::Injector()
+{
+}
 
 Injector::Injector(std::string deviceName, Packet::Packet packet)
 {
