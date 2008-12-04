@@ -1,24 +1,3 @@
-/**
-#include "clientCommData.h"
- * * INAV - Interactive Network Active-traffic Visualization
- * * Copyright © 2007  Nathan Robinson, Jeff Scaparra
- * *
- * * This file is a part of INAV.
- * *
- * * This program is free software: you can redistribute it and/or modify
- * * it under the terms of the GNU General Public License as published by
- * * the Free Software Foundation, either version 3 of the License, or
- * * (at your option) any later version.
- * *
- * * This program is distributed in the hope that it will be useful,
- * * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * * GNU General Public License for more details.
- * *
- * * You should have received a copy of the GNU General Public License
- * * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * */
-
 
 #include<iostream>
 #include<string>
@@ -43,11 +22,9 @@ const std::string sniffer::logFile = "./sniffer.log";
 
 sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
 {
-	DEBUG = false;
 	filterData = new FilterData ( coutMutex, logMutex, &log_stream );
 	inPcapFile_ = std::string("");
 	outPcapFile_ = std::string("");
-
 }
 
 Packet sniffer::popPacket()
@@ -80,11 +57,6 @@ void sniffer::setFilter(std::string filter)
 	filter_ = filter;
 }
 
-void sniffer::setDebug(bool value)
-{
-	DEBUG = value;
-}
-
 void sniffer::log( std::string message )
 {
 	logMutex.lock();
@@ -104,7 +76,6 @@ std::string sniffer::getDevice()
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
 {
-	std::cout<<"\n callback called";
 	FilterData* filterData = (FilterData*)args;
 	if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
 	{
@@ -223,7 +194,7 @@ void* sniffer::packetSniffer()
 	}
 
 	snifferData.log( "SnifferOffline Stopping!" );
-	pthread_exit(NULL);
+//	pthread_exit(NULL);
 }
 
 void sniffer::printDevices()
@@ -287,8 +258,6 @@ void sniffer::printDevices()
 
 	pcap_freealldevs(alldevs);
 } 
-
-
 
 std::string sniffer::iptos(u_long in)
 {
