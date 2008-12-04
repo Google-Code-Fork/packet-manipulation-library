@@ -22,6 +22,7 @@
 
 #include <string>
 #include "mac.h"
+#include "stdint.h"
 
 typedef struct VlanTag 
 {
