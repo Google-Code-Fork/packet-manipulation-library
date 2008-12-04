@@ -33,6 +33,18 @@ Injector::Injector(std::string deviceName, Packet::Packet packet)
 	this->packetBuffer = packet.makePacket();
 }
 
+Injector::Injector(std::string deviceName, PacketBuffer::PacketBuffer packetBuffer)
+{
+	dev.setDevice(deviceName, 1);
+	handle = pcap_open_live(dev.getDevice().c_str(), BUFSIZ, 1, 1000, errbuf);
+	if (handle == NULL)
+	{
+		std::cout << "Couldn't open device " << dev.getDevice() << std::endl;
+		exit(2);
+	}
+	this->packetBuffer = packetBuffer;
+}
+
 
 int Injector::inject()
 {

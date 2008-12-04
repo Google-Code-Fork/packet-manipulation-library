@@ -5,12 +5,12 @@
 int main( int argc, char **argv )
 {
 	char sameArray[] = "sameArrayssssss";
-	PacketBuffer::PacketBuffer packet((uint8_t*) sameArray, 15);
-	Injector::Injector injector("wmaster0", packet);
+	PacketBuffer::PacketBuffer packetBuffer((uint8_t*) sameArray, 15);
+	Injector::Injector injector("wmaster0", packetBuffer);
 	injector.inject();
 	char aVar[] = "aVar";
-	PacketBuffer::PacketBuffer aPacket((uint8_t*) aVar, 4);
-	Injector::Injector anInjector("wmaster0", aPacket);
+	PacketBuffer::PacketBuffer aPacketBuffer((uint8_t*) aVar, 4);
+	Injector::Injector anInjector("wmaster0", aPacketBuffer);
 	anInjector.inject();
 	DevicesLookup::DevicesLookup devs; // = new Devices::Devices();
 	pcap_t *handle;

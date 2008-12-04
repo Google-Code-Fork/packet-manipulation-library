@@ -23,10 +23,6 @@
 #include "../Packet/packetBuffer.h"
 #include "../Packet/packet.h"
 #include <sstream>
-//#include <sys/socket.h>
-//#include <netinet/in.h>
-//#include <arpa/inet.h>
-//#include <netinet/if_ether.h>
 #include <iostream>
 #include <stdlib.h>
 #include "device.h"
@@ -35,8 +31,8 @@
 class Injector
 {
 	public:
-		Injector(std::string deviceName, 
-Packet::Packet packet);
+		Injector(std::string deviceName, Packet::Packet packet);
+		Injector(std::string deviceName, PacketBuffer::PacketBuffer packetBuffer);
 		int inject();
 		~Injector();
 	private:
