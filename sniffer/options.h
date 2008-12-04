@@ -20,7 +20,6 @@ class options
         bool is_inputPcapFile;
         bool is_outputPcapFile;
         bool is_filter;
-		bool is_debug;
 		bool is_ls;
         options()
 		{
@@ -28,7 +27,6 @@ class options
 			is_inputPcapFile = false;
 			is_outputPcapFile = false;
 			is_filter = false;
-			is_debug = false;
 			is_ls = false;
 		}
 
@@ -109,14 +107,13 @@ class options
 				{"inputPcapFile",        1, 0, 'c'},
 				{"outputPcapFile",      1, 0, 'd'},
 				{"filter",   1, 0, 'e'},
-				{"debug",   2, 0, 'f'},
-				{"ls",   2, 0, 'g'},
+				{"ls",   2, 0, 'f'},
 				{0, 0, 0, 0}
 			};
 
 			while (1)
 			{
-				c = getopt_long(argc, argv, "abcdefg", long_options, &option_index);
+				c = getopt_long(argc, argv, "abcdef", long_options, &option_index);
 				if (c == -1)
 					break;
 
@@ -129,6 +126,7 @@ class options
 						printf("--filter\t<expression for filtering packets>\n");
 						printf("--inputPcapFile\t<pcap file path>\n");
 						printf("--outputPcapFile\t\t<ouput pcap file pathListenPort>\n");
+						printf("--ls\t\t<to print all the available devices>\n");
 						exit(0);
 						break;
 
@@ -153,10 +151,6 @@ class options
 						break;
 
 					case 'f':
-						is_debug = true;
-						break;
-
-					case 'g':
 						is_ls = true;
 						break;
 
