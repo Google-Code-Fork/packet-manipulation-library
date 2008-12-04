@@ -157,7 +157,6 @@ void* sniffer::packetSniffer()
 		struct pcap_pkthdr *header;
 		const u_char *pkt_data;
 		dumpfile= pcap_dump_open(pcap_ptr, outPcapFile_.c_str());
-		//dumpfile= pcap_dump_open(fp, "-");
 
 		if (dumpfile == NULL)
 		{
@@ -193,7 +192,6 @@ void* sniffer::packetSniffer()
 	}
 
 	snifferData.log( "SnifferOffline Stopping!" );
-//	pthread_exit(NULL);
 }
 
 void sniffer::printDevices()

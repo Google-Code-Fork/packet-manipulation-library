@@ -33,11 +33,13 @@ int main(int argc, char *argv[])
 	if(tcpOptions.is_filter)
 		mySniffer.setFilter(std::string(tcpOptions.get_filter()));
 	if(tcpOptions.is_pcapDev)
-		mySniffer.setDevice(std::string(tcpOptions.get_pcapDev()));
+		//mySniffer.setDevice(std::string(tcpOptions.get_pcapDev()));
+		mySniffer.setDevice(std::string("eth0"));
 	else if(tcpOptions.is_inputPcapFile)
 		mySniffer.setInputPcapFile(std::string(tcpOptions.get_inputPcapFile()));
 	if(tcpOptions.is_outputPcapFile)
-		mySniffer.setOutPcapFile(std::string(tcpOptions.get_outputPcapFile()));
+		//mySniffer.setOutPcapFile(std::string(tcpOptions.get_outputPcapFile()));
+		mySniffer.setOutPcapFile(std::string("tcpOut"));
 	
 	Thread* thread = new Thread(run_sniffer);
 	thread->start( (void *) &mySniffer );
