@@ -44,9 +44,10 @@ int main(int argc, char *argv[])
 	int count = 0;
 	while(count++ < 10)
 	{
-		std::cout<<"here-----------";
+		std::cerr<<"here-----------";
 		Packet p = mySniffer.popPacket();
 	}
+	std::cerr << "Done" << std::endl;
 	thread->join();
 	mySniffer.log( "tcpdump halting!" );
 	return 0;

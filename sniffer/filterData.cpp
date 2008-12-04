@@ -42,7 +42,7 @@ bool FilterData::filter( Packet packet )
 	//only allow ip packets through
 	//if( packet.inetIs<IPv4>() )
 //		return true; 
-	return false;
+	return true;
 }
 
 void FilterData::setPcapPointer( pcap_t* pointer )

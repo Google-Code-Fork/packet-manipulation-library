@@ -28,6 +28,7 @@ sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
 
 Packet sniffer::popPacket()
 {
+std::cerr << "POPPACKET!" << std::endl;
 	return filterData->popPacket();
 }
 
