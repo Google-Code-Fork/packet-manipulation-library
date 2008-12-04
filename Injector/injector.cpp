@@ -31,20 +31,16 @@ packet)
 		exit(2);
 	}
 	this->packet = packet;
-	strcpy(someArray, "someArray");
 }
 
 
 int Injector::inject()
 {
-	std::cout << someArray << std::endl;
-	return pcap_inject(handle, someArray, 9);
+	return pcap_inject(handle, packet.getBuffer(), packet.size());
 }
 
 
 Injector::~Injector()
 {
 	pcap_close(handle);
-//	delete[] errbuf;
-//	delete[] someArray;
 }

@@ -44,6 +44,26 @@ class Packet : public AppData
       appLayer_.push_back( a );
     }
 
+    template < class T > bool linkIs( int i )
+    {
+      return linkLayer_.at( i ).is< T >();
+    }
+
+    template < class T > bool inetIs( int i )
+    {
+      return inetLayer_.at( i ).is< T >();
+    }
+
+    template < class T > bool transIs( int i )
+    {
+      return transLayer_.at( i ).is< T >();
+    }
+
+    template < class T > bool appIs( int i )
+    {
+      return appLayer_.at( i ).is< T >();
+    }
+
     int linkSize( ) const;
     int inetSize( ) const;
     int transSize( )const;

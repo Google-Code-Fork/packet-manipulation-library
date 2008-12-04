@@ -44,7 +44,6 @@ PacketBuffer::PacketBuffer packet);
 		pcap_t *handle;		/* session handle */
 		char errbuf[PCAP_ERRBUF_SIZE];
 		PacketBuffer::PacketBuffer packet;
-		char someArray[100];
 };
 
 #endif
