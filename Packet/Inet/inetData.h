@@ -10,6 +10,7 @@ class InetData : public Encapsulateable
   public:
     InetData() {}
     virtual ~InetData() {}
+    virtual bool isICMP() const { return false; }
     virtual bool isIPv4() const { return false; }
     virtual bool isIPv6() const { return false; }
     virtual int getSize() const { return 0; }
