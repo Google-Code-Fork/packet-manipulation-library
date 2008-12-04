@@ -27,9 +27,8 @@
 #include <netinet/if_ether.h>
 #include <iostream>
 #include <stdlib.h>
-//#include "packet.h"
 #include "device.h"
-#include "packetBuffer.h"
+#include "../Packet/packetBuffer.h"
 
 
 class Injector
