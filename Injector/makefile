@@ -9,9 +9,6 @@ all: $(OBJS)  test
 
 clean:
 	 -rm -f *.o
-	 for i in $(LAYERDIRS) ; do \
-	 ( cd $$i ; make clean ) ; \
-	 done
 
 test: $(OBJS) $(TESTOBJS) $(PACKETOBJS)
 	g++ $(LDFLAGS) $(OBJS) $(TESTOBJS) $(PACKETOBJS) -o $@
