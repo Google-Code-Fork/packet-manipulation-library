@@ -1,19 +1,3 @@
-/**
- * *
- * * This program is free software: you can redistribute it and/or modify
- * * it under the terms of the GNU General Public License as published by
- * * the Free Software Foundation, either version 3 of the License, or
- * * (at your option) any later version.
- * *
- * * This program is distributed in the hope that it will be useful,
- * * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * * GNU General Public License for more details.
- * *
- * * You should have received a copy of the GNU General Public License
- * * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * */
-
 
 #include <iostream>
 #include <string>
@@ -28,9 +12,6 @@
 #include "../common/threads.h"
 #include "options.h"
 
-//std::string parser(int argc, char *argv[], std::string option);
-//void printHelp();
-
 
 int main(int argc, char *argv[])
 {
@@ -39,13 +20,7 @@ int main(int argc, char *argv[])
 	tcpOptions.get_options(argc, argv);
 	tcpOptions.print_options();
 
-	std::vector<Thread *> threads;
-	int returnCode;
 	sniffer mySniffer;
-
-	//Check for debug
-	if(tcpOptions.is_debug)
-		mySniffer.setDebug(true);
 
 	mySniffer.log("tcpdump starting up!");
 
@@ -56,9 +31,6 @@ int main(int argc, char *argv[])
 		mySniffer.printDevices();
 		exit(-1);
 	}
-
-	//Creating different datastructures
-	mySniffer.log( "Creating Sniffer Thread(s)" );
 
 	if(tcpOptions.is_filter)
 		mySniffer.setFilter(std::string(tcpOptions.get_filter()));
