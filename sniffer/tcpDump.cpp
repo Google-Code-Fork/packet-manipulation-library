@@ -7,8 +7,6 @@
 #include "sniffer.h"
 #include "snifferData.h"
 #include "filterData.h"
-#include "../common/commandLineParser.h"
-#include "../common/parseCommas.h"
 #include "../common/threads.h"
 #include "options.h"
 

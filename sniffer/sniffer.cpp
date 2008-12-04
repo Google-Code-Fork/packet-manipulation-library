@@ -15,7 +15,6 @@
 #include"snifferData.h"
 #include"filterData.h"
 #include"constants.h"
-#include"../common/parseCommas.h"
 
 std::ofstream sniffer::log_stream(logFile.c_str(), std::ios::out|std::ios::app);
 const std::string sniffer::logFile = "./sniffer.log";
