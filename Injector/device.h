@@ -45,7 +45,7 @@ class Device
 	private:
 		std::string dev;
 		int isDev;
-		static DevicesLookup deviceLookup;
+		static DevicesLookup devicesLookup;
 };
 
 #endif

@@ -20,8 +20,7 @@
 #include "injector.h"
 
 
-Injector::Injector(std::string deviceName, PacketBuffer::PacketBuffer 
-packet)
+Injector::Injector(std::string deviceName, Packet::Packet packet)
 {
 	dev.setDevice(deviceName, 1);
 	handle = pcap_open_live(dev.getDevice().c_str(), BUFSIZ, 1, 1000, errbuf);
@@ -31,12 +30,13 @@ packet)
 		exit(2);
 	}
 	this->packet = packet;
+	this->packetBuffer = packet.makePacket();
 }
 
 
 int Injector::inject()
 {
-	return pcap_inject(handle, packet.getBuffer(), packet.size());
+	return pcap_inject(handle, packetBuffer.getBuffer(), packetBuffer.size());
 }
 
 

@@ -29,20 +29,22 @@
 #include <stdlib.h>
 #include "device.h"
 #include "../Packet/packetBuffer.h"
+#include "../Packet/packet.h"
 
 
 class Injector
 {
 	public:
 		Injector(std::string deviceName, 
-PacketBuffer::PacketBuffer packet);
+Packet::Packet packet);
 		int inject();
 		~Injector();
 	private:
 		Device::Device dev;
 		pcap_t *handle;		/* session handle */
 		char errbuf[PCAP_ERRBUF_SIZE];
-		PacketBuffer::PacketBuffer packet;
+		PacketBuffer::PacketBuffer packetBuffer;
+		Packet::Packet packet;
 };
 
 #endif
