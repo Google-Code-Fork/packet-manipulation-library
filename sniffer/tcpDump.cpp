@@ -41,6 +41,12 @@ int main(int argc, char *argv[])
 	
 	Thread* thread = new Thread(run_sniffer);
 	thread->start( (void *) &mySniffer );
+	int count = 0;
+	while(count++ < 10)
+	{
+		std::cout<<"here-----------";
+		Packet p = mySniffer.popPacket();
+	}
 	thread->join();
 	mySniffer.log( "tcpdump halting!" );
 	return 0;
