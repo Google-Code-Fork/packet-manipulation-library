@@ -20,7 +20,8 @@
 #include "injector.h"
 
 
-Injector::Injector(std::string deviceName)
+Injector::Injector(std::string deviceName, PacketBuffer::PacketBuffer 
+packet)
 {
 	dev.setDevice(deviceName, 1);
 	handle = pcap_open_live(dev.getDevice().c_str(), BUFSIZ, 1, 1000, errbuf);
@@ -29,6 +30,7 @@ Injector::Injector(std::string deviceName)
 		std::cout << "Couldn't open device " << dev.getDevice() << std::endl;
 		exit(2);
 	}
+	this->packet = packet;
 	strcpy(someArray, "someArray");
 }
 

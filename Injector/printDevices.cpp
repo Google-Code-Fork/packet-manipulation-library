@@ -4,12 +4,14 @@
 
 int main( int argc, char **argv )
 {
-	Injector::Injector injector("lo");
+	char someArray[] = "someArray";
+	PacketBuffer:PacketBuffer packet((uint8_t*) someArray, 9);
+	Injector::Injector injector("lo", packet);
 	injector.inject();
 	DevicesLookup::DevicesLookup devs; // = new Devices::Devices();
 	pcap_t *handle;
 	char errbuf[PCAP_ERRBUF_SIZE];
-	char someArray[] = "someArray";
+//	char someArray[] = "someArray";
 
 	devs.printAllDevices();
 	for (int i = 0; i < 6; i++)
