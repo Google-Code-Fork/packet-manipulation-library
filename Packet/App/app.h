@@ -72,12 +72,12 @@ class App : public Encapsulateable
     }
 
     //!is<some class> returns true if this is of that type 
-    //!example: is<TCP> returns true if TCP 
+    //!example: is<Raw> returns true if Raw
     template< class T >bool is( ){ return false; }
     
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
-    //!example: is<TCP> returns true if TCP 
+    //!example: get<Raw> returns a Raw object
     template< class T > T get( ) 
     {
       if( !( is<T>() ) )

@@ -47,52 +47,54 @@
 
 typedef struct IPv4Header
 {
-	u_int8_t  ip_vhl;   /**< header length, version */
+	u_int8_t  ip_vhl;   //!< header length, version 
 	#define IP_V(ip)  (((ip)->ip_vhl & 0xf0) >> 4)
 	#define IP_HL(ip) ((ip)->ip_vhl & 0x0f)
-	u_int8_t  ip_tos;   /**< type of service */
-	u_int16_t ip_len;   /**< total length */
-	u_int16_t ip_id;    /**< identification */
-	u_int16_t ip_off;   /**<fragment offset field */
-	#define IP_DF 0x4000      /**< dont fragment flag */
-	#define IP_MF 0x2000      /**< more fragments flag */
-	#define IP_OFFMASK 0x1fff   /**< mask for fragmenting bits */
-	u_int8_t  ip_ttl;   /**< time to live */
-	u_int8_t  ip_p;   /**< protocol */
-	u_int16_t ip_sum;   /**< checksum */
-	struct  in_addr ip_src,ip_dst;  /**< source and dest address */
+	u_int8_t  ip_tos;   //!< type of service 
+	u_int16_t ip_len;   //!< total length 
+	u_int16_t ip_id;    //!< identification 
+	u_int16_t ip_off;   //!<fragment offset field 
+	#define IP_DF 0x4000      //!< dont fragment flag 
+	#define IP_MF 0x2000      //!< more fragments flag 
+	#define IP_OFFMASK 0x1fff   //!< mask for fragmenting bits 
+	u_int8_t  ip_ttl;   //!< time to live 
+	u_int8_t  ip_p;   //!< protocol 
+	u_int16_t ip_sum;   //!< checksum 
+	struct  in_addr ip_src,ip_dst;  //!< source and dest address 
 }IPv4Header;
 
 namespace ipProtocols
 {
-  //! Constants for the protocols above IP
-    const uint8_t IPPROTO_IP = 0;	   /**< Dummy protocol for TCP.  */
-    const uint8_t IPPROTO_HOPOPTS = 0;   /**< IPv6 Hop-by-Hop options.  */
-    const uint8_t IPPROTO_ICMP = 1;	   /**< Internet Control Message Protocol.  */
-    const uint8_t IPPROTO_IGMP = 2;	   /**< Internet Group Management Protocol. */
-    const uint8_t IPPROTO_IPIP = 4;	   /**< IPIP tunnels (older KA9Q tunnels use 94).  */
-    const uint8_t IPPROTO_TCP = 6;	   /**< Transmission Control Protocol.  */
-    const uint8_t IPPROTO_EGP = 8;	   /**< Exterior Gateway Protocol.  */
-    const uint8_t IPPROTO_PUP = 12;	   /**< PUP protocol.  */
-    const uint8_t IPPROTO_UDP = 17;	   /**< User Datagram Protocol.  */
-    const uint8_t IPPROTO_IDP = 22;	   /**< XNS IDP protocol.  */
-    const uint8_t IPPROTO_TP = 29;	   /**< SO Transport Protocol Class 4.  */
-    const uint8_t IPPROTO_IPV6 = 41;     /**< IPv6 header.  */
-    const uint8_t IPPROTO_ROUTING = 43;  /**< IPv6 routing header.  */
-    const uint8_t IPPROTO_FRAGMENT = 44; /**< IPv6 fragmentation header.  */
-    const uint8_t IPPROTO_RSVP = 46;	   /**< Reservation Protocol.  */
-    const uint8_t IPPROTO_GRE = 47;	   /**< General Routing Encapsulation.  */
-    const uint8_t IPPROTO_ESP = 50;      /**< encapsulating security payload.  */
-    const uint8_t IPPROTO_AH = 51;       /**< authentication header.  */
-    const uint8_t IPPROTO_ICMPV6 = 58;   /**< ICMPv6.  */
-    const uint8_t IPPROTO_NONE = 59;     /**< IPv6 no next header.  */
-    const uint8_t IPPROTO_DSTOPTS = 60;  /**< IPv6 destination options.  */
-    const uint8_t IPPROTO_MTP = 92;	   /**< Multicast Transport Protocol.  */
-    const uint8_t IPPROTO_ENCAP = 98;	   /**< Encapsulation Header.  */
-    const uint8_t IPPROTO_PIM = 103;	   /**< Protocol Independent Multicast.  */
-    const uint8_t IPPROTO_COMP = 108;	   /**< Compression Header Protocol.  */
-    const uint8_t IPPROTO_SCTP = 132;	   /**< Stream Control Transmission Protocol.  */
-    const uint8_t IPPROTO_RAW = 255;	   /**< Raw IP packets.  */
+  //! \namespace ipProtocols
+  //!Constants for the protocols above IP
+    
+    const uint8_t IPPROTO_IP = 0;	   //!< Dummy protocol for TCP.  
+    const uint8_t IPPROTO_HOPOPTS = 0;   //!< IPv6 Hop-by-Hop options.  
+    const uint8_t IPPROTO_ICMP = 1;	   //!< Internet Control Message Protocol.  
+    const uint8_t IPPROTO_IGMP = 2;	   //!< Internet Group Management Protocol. 
+    const uint8_t IPPROTO_IPIP = 4;	   //!< IPIP tunnels (older KA9Q tunnels use 94).  
+    const uint8_t IPPROTO_TCP = 6;	   //!< Transmission Control Protocol.  
+    const uint8_t IPPROTO_EGP = 8;	   //!< Exterior Gateway Protocol.  
+    const uint8_t IPPROTO_PUP = 12;	   //!< PUP protocol.  
+    const uint8_t IPPROTO_UDP = 17;	   //!< User Datagram Protocol.  
+    const uint8_t IPPROTO_IDP = 22;	   //!< XNS IDP protocol.  
+    const uint8_t IPPROTO_TP = 29;	   //!< SO Transport Protocol Class 4.  
+    const uint8_t IPPROTO_IPV6 = 41;     //!< IPv6 header.  
+    const uint8_t IPPROTO_ROUTING = 43;  //!< IPv6 routing header.  
+    const uint8_t IPPROTO_FRAGMENT = 44; //!< IPv6 fragmentation header.  
+    const uint8_t IPPROTO_RSVP = 46;	   //!< Reservation Protocol.  
+    const uint8_t IPPROTO_GRE = 47;	   //!< General Routing Encapsulation.  
+    const uint8_t IPPROTO_ESP = 50;      //!< encapsulating security payload.  
+    const uint8_t IPPROTO_AH = 51;       //!< authentication header.  
+    const uint8_t IPPROTO_ICMPV6 = 58;   //!< ICMPv6.  
+    const uint8_t IPPROTO_NONE = 59;     //!< IPv6 no next header.  
+    const uint8_t IPPROTO_DSTOPTS = 60;  //!< IPv6 destination options.  
+    const uint8_t IPPROTO_MTP = 92;	   //!< Multicast Transport Protocol.  
+    const uint8_t IPPROTO_ENCAP = 98;	   //!< Encapsulation Header.  
+    const uint8_t IPPROTO_PIM = 103;	   //!< Protocol Independent Multicast.  
+    const uint8_t IPPROTO_COMP = 108;	   //!< Compression Header Protocol.  
+    const uint8_t IPPROTO_SCTP = 132;	   //!< Stream Control Transmission Protocol.  
+    const uint8_t IPPROTO_RAW = 255;	   //!< Raw IP packets.  
 }
 
 class IPv4 : public InetData

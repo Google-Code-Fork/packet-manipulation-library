@@ -84,7 +84,7 @@ class Trans : public Encapsulateable
     
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
-    //!example: is<TCP> returns true if TCP 
+    //!example: get<TCP> returns a TCP object
     template< class T > T get( ) 
     {
       if( !( is<T>() ) )
@@ -110,7 +110,7 @@ class Trans : public Encapsulateable
     }
 
     //!returns a packet buffer of the underlying datatype suitable for other
-    //libraries or cod
+    //libraries or code
     PacketBuffer makePacket() const 
     {
       return header_->makePacket();
