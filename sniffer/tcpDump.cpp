@@ -39,16 +39,16 @@ int main(int argc, char *argv[])
 	if(tcpOptions.is_outputPcapFile)
 		mySniffer.setOutPcapFile(std::string(tcpOptions.get_outputPcapFile()));
 	
-	Thread* thread = new Thread(run_sniffer);
-	thread->start( (void *) &mySniffer );
+	mySniffer.start();
 	int count = 0;
 	while(count++ < 10)
 	{
-		std::cerr<<"here-----------";
 		Packet p = mySniffer.popPacket();
+		std::cerr<<"Packet count:"<<count<<std::endl;
+		
 	}
 	std::cerr << "Done" << std::endl;
-	thread->join();
+	mySniffer.stop();	
 	mySniffer.log( "tcpdump halting!" );
 	return 0;
 }

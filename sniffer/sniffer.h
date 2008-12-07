@@ -6,7 +6,7 @@
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
 void* run_sniffer(void* data);
 
-class sniffer
+class sniffer : public Thread
 {
 	private:
 		Mutex coutMutex;
@@ -31,6 +31,7 @@ class sniffer
 		std::string getInputPcapFile();
 		Packet popPacket();
 		void log( std::string );
+		void start( );
 		void printDevices();
 		std::string iptos(u_long in);
 		~sniffer(){ delete filterData; }
