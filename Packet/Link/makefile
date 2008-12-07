@@ -4,7 +4,7 @@ TESTOBJS=../packetBuffer.o
 all: $(OBJS) test
 
 clean: 
-	-rm *.o
+	-rm *.o test
 
 test: $(OBJS) $(TESTOBJS) test.cpp
 	g++ -ggdb test.cpp $(OBJS) $(TESTOBJS) -o test

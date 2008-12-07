@@ -7,7 +7,7 @@ CXXFLAGS=$(CFLAGS)
 all: $(OBJS) test
 
 clean: 
-	-rm *.o
+	-rm *.o test
 
 test: $(TESTOBJS) $(OBJS)
 	g++ $(TESTOBJS) $(OBJS) -o $@

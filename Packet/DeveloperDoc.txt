@@ -1,0 +1,45 @@
+Developer Guide for PacMan
+
+The Packet portion of PacMan revolves around a TCP/IP model. The TCP/IP model
+has the following layers. 
+
+Application
+Transport
+Internet
+Link
+
+Our packet class maps each of these layers onto a vector. This allows for
+multiple headers that fall into the same layer to be in a packet. An example of
+such a Packet would be ARP. An ARP packet consist of an Ethernet header and the
+ARP portion. Both of these fall under the Link Layer. As such a packet instance
+of an Arp packet would have a linkSize of 2 and all the other layers would be
+zero. 
+
+Orginally we had a monolithic Packet class that the user would interface with.
+This was nice in some respect as a user only had to look one place for what
+option they wished to manipulate. However this method wasn't very powerful and
+didn't allow for packets to be crafted in any manner other than how the packet
+class put them together. Also as the number of protocols supported grew the cost
+of adding them would grow so this method didn't scale. 
+
+Instead we now have a interface for objects at each layer. A link layer object
+such as Ethernet derives from LinkData, while a internet layer object such as
+IPv4 derives from InetData. In this manner the packet class gets the limited
+functionality it needs from each object to manage them while the user can use
+the "is" functions and "get" functions in packet.h to retrevie an object and use
+that objects interface. Unlike the monolithic approach above the developer
+doesn't need to write interface functions in packet for every member variable in
+their class. 
+
+Because we want to support both parsing of packets created from a sniffing
+session and creation of all kinds of weird and interesting packets for
+injection, we have a few helper classes. The PacketBuilder class is used to
+create packets from a buffer as from a pcap sniffing session. Because it could
+be possible to get a buffer that only had ip information and above or have
+different link layer protocols as the base we allow the user to decide the
+starting point to parse the packet. By including the object that the packet
+starts with (normally Ethernet) we can support different types of sniffing. This
+is accomplished through template specialization. When protocols are added to the
+library if they want to be able to be used for parsing the developer of the
+protocol class should provide the proper specialization in the PacketBuilder
+class. 
