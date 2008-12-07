@@ -24,12 +24,17 @@ sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
 	filterData = new FilterData ( coutMutex, logMutex, &log_stream );
 	inPcapFile_ = std::string("");
 	outPcapFile_ = std::string("");
+	setStartRoutine(run_sniffer);
 }
 
 Packet sniffer::popPacket()
 {
-std::cerr << "POPPACKET!" << std::endl;
 	return filterData->popPacket();
+}
+
+void sniffer::start()
+{
+	Thread::start(this);
 }
 
 void sniffer::setInputPcapFile(std::string pcapFile)
@@ -127,7 +132,7 @@ void* sniffer::packetSniffer()
 	{
 		snifferData.log( (std::string)"Sniffer ERROR: " + (std::string)errbuf );
 		std::cerr << "Sniffer ERROR: " << errbuf << std::endl;
-		exit(-1);
+		std::exit(-1);
 	}
 
 
@@ -141,14 +146,14 @@ void* sniffer::packetSniffer()
 		if(pcap_compile(pcap_ptr, &fcode, filter_.c_str(), 1, NetMask) < 0)
 		{
 			fprintf(stderr,"\nError compiling filter: wrong syntax.\n");
-			exit(1);
+			std::exit(1);
 		}
 
 		//set the filter
 		if(pcap_setfilter(pcap_ptr, &fcode)<0)
 		{
 			fprintf(stderr,"\nError setting the filter\n");
-			exit(1);
+			std::exit(1);
 		}
 	}
 
@@ -203,7 +208,7 @@ void sniffer::printDevices()
 	if(pcap_findalldevs(&alldevs, errbuf) == -1)
 	{
 		std::cerr << "Error in pcap_findalldevs: " << errbuf << std::endl;
-		exit(1);
+		std::exit(1);
 	}
 	/* Scan the list printing every entry */
 	for(pcap_if_t* dev=alldevs;dev != NULL;dev=dev->next)
