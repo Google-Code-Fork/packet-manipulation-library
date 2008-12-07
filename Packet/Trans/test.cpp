@@ -18,12 +18,10 @@ int main()
   std::cout << "TCP:" << std::endl;
   std::cout << "Is TCP? " << ( tptr->isTCP() ? "Yes" : "No" ) << std::endl;
   std::cout << "Is UDP? " << ( tptr->isUDP() ? "Yes" : "No" ) << std::endl;
-  std::cout << "Is ICMP? " << ( tptr->isICMP() ? "Yes" : "No" ) << std::endl;
   tptr = &udp;
   std::cout << "UDP: " << std::endl;
   std::cout << "Is TCP? " << ( tptr->isTCP() ? "Yes" : "No" ) << std::endl;
   std::cout << "Is UDP? " << ( tptr->isUDP() ? "Yes" : "No" ) << std::endl;
-  std::cout << "Is ICMP? " << ( tptr->isICMP() ? "Yes" : "No" ) << std::endl;
   
   std::vector< Trans > data;
   data.push_back( tcp );
