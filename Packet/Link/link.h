@@ -19,11 +19,11 @@
  */
 
 /** \file link.h
- * This is the declaration for the class for handling ethernet frames 
+ * This is the declaration for the class Link
  */
 
 /** \class Link 
- * This class is used in conjunction with Packet for handling Ethernet frames.
+ * This class is used in conjunction with Packet for handling link layer
  *
  */
 
@@ -105,7 +105,7 @@ class Link : public Encapsulateable
       *header_ = e;
     }
 
-    //!Makes a packetbuffer of this Link
+    //!Makes a PacketBuffer of this Link
     PacketBuffer makePacket() const
     {
       return header_->makePacket();
