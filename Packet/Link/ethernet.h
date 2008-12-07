@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2007  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
  *
  * This file is a part of PacMan.
  *
@@ -115,7 +115,7 @@ class Ethernet : public LinkData
     Ethernet( const Ethernet& n );
     //! Ethernets equality operator
     Ethernet& operator =( const Ethernet &n);
-    //! Deconstructor
+    //! Destructor
     ~Ethernet();
 
     //!Returns the Destination MAC address in the Ethernet header.
