@@ -1,3 +1,32 @@
+/*
+ * PacMan - Packet Manipulation Library 
+ * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ *
+ * This file is a part of PacMan.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/** \file trans.h
+ * This is the declaration for the class Trans 
+ */
+
+/** \class Trans 
+ * This class is used in conjunction with Packet for handling Trans
+ *
+ */
+
 #ifndef TRANS_H
 #define TRANS_H
 #include <stdexcept>
@@ -9,26 +38,31 @@
 class Trans : public Encapsulateable
 {
   public:
+    //!Default constructor
     Trans( )
     {
       header_ = NULL;
     }
 
-    Trans( TCP tcp )
+    //!Build a Trans object from a TCP one
+    Trans( const TCP &tcp )
     {
       header_ = new TCP( tcp );
     }
-    
-    Trans( UDP udp )
+   
+    //!Build a Trans object from a UDP one
+    Trans( const UDP &udp )
     {
       header_ = new UDP( udp );
     }
 
+    //!Copy constructor
     Trans( const Trans &n )
     {
       copy( n );
     }
 
+    //!equality operator
     Trans& operator=( const Trans &n )
     {
       if( header_ )
@@ -36,15 +70,21 @@ class Trans : public Encapsulateable
       copy( n );
       return *this;
     }
-    
+   
+    //!destructor
     virtual ~Trans() 
     {
       if( header_ )
       delete header_;
     }
-
+    
+    //!is<some class> returns true if this is of that type 
+    //!example: is<TCP> returns true if TCP 
     template< class T >bool is( ){ return false; }
     
+    //!returns a T object
+    //!If this isn't a T object we throw runtime_error
+    //!example: is<TCP> returns true if TCP 
     template< class T > T get( ) 
     {
       if( !( is<T>() ) )
@@ -54,6 +94,7 @@ class Trans : public Encapsulateable
       return T(*((T*)header_));
     }
 
+    //!sets this trans to be T
     template< class T > void set( T e )
     {
       if( header_ )
@@ -62,11 +103,14 @@ class Trans : public Encapsulateable
       *header_ = e;
     }
 
+    //!returns the size in bytes of the underlying data
     int getSize() const 
     {
       return header_->getSize();
     }
 
+    //!returns a packet buffer of the underlying datatype suitable for other
+    //libraries or cod
     PacketBuffer makePacket() const 
     {
       return header_->makePacket();
@@ -74,7 +118,8 @@ class Trans : public Encapsulateable
 
 
   private:
-   
+  
+    //!Used to copy different Transport Layers supported
     void copy( const Trans &n )
     {
       if( n.header_ == NULL )
@@ -93,6 +138,7 @@ class Trans : public Encapsulateable
 	header_ = NULL;
     }
 
+    //!internal data
     TransData* header_;
 };
 
