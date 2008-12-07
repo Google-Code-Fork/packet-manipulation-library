@@ -12,6 +12,16 @@ Thread::Thread( )
 	#endif
 }
 
+void Thread::stop()
+{
+	#ifndef WIN32 //UNIX
+	int err = pthread_cancel( *threadID_ );
+	if( err )
+		 std::runtime_error( "Problem stopping thread !!" );
+	#endif
+	join();
+}
+
 Thread::Thread( StartRoutine routine ):startRoutine_(routine)
 {
 	#ifndef WIN32 //UNIX
