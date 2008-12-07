@@ -24,7 +24,7 @@ subdir:
 	done
 
 clean:
-	 -rm -f *.o
+	 -rm -f *.o test
 	 for i in $(LAYERDIRS) ; do \
 	 ( cd $$i ; make clean ) ; \
 	 done
