@@ -22,6 +22,7 @@ class Thread
 		void setStartRoutine( StartRoutine );
 		void start( void * dataForThread );
 		void kill( int signal );
+		void stop( );
 		void join();
 
 	private:
