@@ -142,7 +142,7 @@ FILE_PATTERNS          = *.c \
                          *.VHD \
                          *.VHDL
 RECURSIVE              = YES
-EXCLUDE                = 
+EXCLUDE                = old
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXCLUDE_SYMBOLS        = 

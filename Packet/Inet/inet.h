@@ -44,7 +44,7 @@ class Inet : public Encapsulateable
     }
 
     //!builds a Inet object from IPv4
-    Inet( IPv4 ip )
+    Inet( const IPv4 &ip )
     {
       header_ = new IPv4( ip );
     }
@@ -77,7 +77,7 @@ class Inet : public Encapsulateable
     
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
-    //!example: is<IPv4> returns true if IPv4 
+    //!example: get<IPv4> returns an IPv4 object
     template< class T > T get( ) 
     {
       if( !( is<T>() ) )

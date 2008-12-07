@@ -45,14 +45,14 @@ class Link : public Encapsulateable
     }
 
     //! Build a Link from an Ethernet object
-    Link( Ethernet e )
+    Link( const Ethernet &e )
     {
       header_ = new Ethernet;
       *header_ = e;
     }
 
     //! Build a Link from a MACAddress object
-    Link( MACAddress m )
+    Link( const MACAddress &m )
     {
       header_ = new MACAddress;
       *header_ = m;
@@ -86,7 +86,7 @@ class Link : public Encapsulateable
    
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
-    //!example: is<Ethernet> returns true if Ethernet
+    //!example: get<Ethernet> returns an Ethernet object
     template< class T > T get( ) 
     {
       if( !( is<T>() ) )

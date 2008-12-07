@@ -23,6 +23,7 @@ clean:
 	 ( cd $$i ; make clean) ; \
 	 done
 	 cd Docs; make clean;
+	 cd Docs; rm refman.pdf;
 
 docs: 
 	doxygen
