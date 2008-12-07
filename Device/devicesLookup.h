@@ -1,5 +1,5 @@
 /* *
- * * injector.h
+ * * deviceLookup.h
  * *    Pcap Project
  * *
  * * This program is free software: you can redistribute it and/or modify
@@ -17,37 +17,36 @@
  * */
 
 
-#ifndef INJECTOR_H
-#define INJECTOR_H
+#ifndef DEVICELOOKUP_H
+#define DEVICELOOKUP_H
 
-#include "../Packet/packetBuffer.h"
-#include "../Packet/packet.h"
 #include <sstream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netinet/if_ether.h>
 #include <iostream>
 #include <stdlib.h>
-#include "device.h"
+#include <string.h>
+#include <pcap.h>
+//#include "packet.h"
 
 
-class Injector
+class DevicesLookup
 {
 	public:
-		Injector();
-		Injector(std::string deviceName, Packet::Packet packet);
-		Injector(std::string deviceName, PacketBuffer::PacketBuffer packet);
-		int setDevice(std::string deviceName);
-		std::string getDevice();
-		int setPacket(Packet::Packet packet);
-		Packet::Packet getPacket();
-		int setPacketBuffer(PacketBuffer::PacketBuffer packetBuffer);
-		PacketBuffer::PacketBuffer getPacketBuffer();
-		int inject();
-		~Injector();
+		DevicesLookup();
+		pcap_if_t*& operator[](int index);		/* index specifies the index of Device in alldevs */
+		pcap_if_t*& operator()(char* name);		/* name specifies the name of Device in alldevs */
+		~DevicesLookup();
+		void printAllDevices();
+
 	private:
-		Device::Device dev;
-		pcap_t *handle;		/* session handle */
-		char errbuf[PCAP_ERRBUF_SIZE];
-		PacketBuffer::PacketBuffer packetBuffer;
-		Packet::Packet packet;
+		std::string iptos(u_long in);
+
+		// Member variables
+		pcap_if_t *alldevs;
+		
 };
 
 #endif
