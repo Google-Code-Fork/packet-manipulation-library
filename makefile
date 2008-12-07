@@ -22,3 +22,9 @@ clean:
 	 for i in $(MODULES) ; do \
 	 ( cd $$i ; make clean) ; \
 	 done
+	 cd Docs; make clean;
+
+docs: 
+	doxygen
+	cd Docs/latex; make pdf;
+	mv Docs/latex/refman.pdf Docs/;
