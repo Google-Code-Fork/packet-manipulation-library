@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	if(tcpOptions.is_filter)
 		mySniffer.setFilter(std::string(tcpOptions.get_filter()));
 	if(tcpOptions.is_pcapDev)
-		mySniffer.setDevice(std::string(tcpOptions.get_pcapDev()));
+		mySniffer.setInputDevice(std::string(tcpOptions.get_pcapDev()));
 	else if(tcpOptions.is_inputPcapFile)
 		mySniffer.setInputPcapFile(std::string(tcpOptions.get_inputPcapFile()));
 	if(tcpOptions.is_outputPcapFile)
