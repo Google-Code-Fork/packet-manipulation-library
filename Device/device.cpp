@@ -24,6 +24,11 @@ Device::Device()
 {
 }
 
+Device::Device(std::string dev, int isDev)
+{
+  Device::setDevice(dev, isDev);
+}
+
 void Device::setDevice(std::string dev, int isDev)
 {
 	this->dev = dev;
@@ -38,6 +43,11 @@ std::string Device::getDevice()
 int Device::isDevice()
 {
 	return this->isDev;
+}
+
+int Device::isValid()
+{
+        return devicesLookup.isValid(this->getDevice());
 }
 
 Device::~Device()

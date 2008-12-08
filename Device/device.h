@@ -37,9 +37,11 @@ class Device
 {
 	public:
 		Device();
+		Device(std::string dev, int isDev);
 		void setDevice(std::string dev, int isDev);
 		std::string getDevice();
 		int isDevice();		/* returns 1 if it's a device, 0 if it's a pcap file */
+		int isValid();
 		~Device();
 
 	private:
