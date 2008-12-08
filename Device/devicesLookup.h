@@ -37,8 +37,9 @@ class DevicesLookup
 	public:
 		DevicesLookup();
 		pcap_if_t*& operator[](int index);		/* index specifies the index of Device in alldevs */
-		pcap_if_t*& operator()(char* name);		/* name specifies the name of Device in alldevs */
+		pcap_if_t*& operator[](std::string name);		/* name specifies the name of Device in alldevs */
 		~DevicesLookup();
+		int isValid(std::string name);     /* returns 1 if device exists in the system, returns 0 otherwise) */
 		void printAllDevices();
 
 	private:
@@ -46,7 +47,7 @@ class DevicesLookup
 
 		// Member variables
 		pcap_if_t *alldevs;
-		
+		pcap_if_t *dev;
 };
 
 #endif

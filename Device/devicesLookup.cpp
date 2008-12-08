@@ -33,7 +33,7 @@ DevicesLookup::DevicesLookup()
 
 pcap_if_t*& DevicesLookup::operator[](int index)
 {
-	pcap_if_t* dev = alldevs;
+	dev = alldevs;
 	int count = 0;		/* device traversal index */
 
 	while(count != index && dev != NULL)
@@ -45,12 +45,12 @@ pcap_if_t*& DevicesLookup::operator[](int index)
 	return dev;
 }
 
-pcap_if_t*& DevicesLookup::operator()(char* name)
+pcap_if_t*& DevicesLookup::operator[](std::string name)
 {
-	pcap_if_t* dev = alldevs;
+	dev = alldevs;
 
-	for(dev = alldevs; dev != NULL && !strcmp(dev->name, name); dev = dev->next)
-		std::cout << "Comparing device names: " << dev->name;
+	for(dev = alldevs; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next)
+	std::cout << "Comparing device names: " << dev->name;
 
 	return dev;
 }
@@ -59,6 +59,11 @@ DevicesLookup::~DevicesLookup()
 {
 	std::cout << "Freeing the device list..." << std::endl;
 	pcap_freealldevs(alldevs);		/* Free the device list */
+}
+
+int DevicesLookup::isValid(std::string name)
+{
+        return (DevicesLookup::operator[](name) != NULL);
 }
 
 void DevicesLookup::printAllDevices()
