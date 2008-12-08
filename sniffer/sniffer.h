@@ -30,14 +30,13 @@ class sniffer : public Thread
 	private:
 		Mutex coutMutex;
 		Mutex logMutex;
-		std::string outPcapFile_;
-		std::string inPcapFile_;
 		std::string filter_;
 		FilterData *filterData;
 		SnifferData snifferData;
 		static const std::string logFile;
 		static std::ofstream log_stream;
-		Device dev_;
+		Device inDev_;
+		Device outDev_;
 
 	public:
 		sniffer();

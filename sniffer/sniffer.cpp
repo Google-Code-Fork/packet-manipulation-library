@@ -42,8 +42,6 @@ const std::string sniffer::logFile = "./sniffer.log";
 sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
 {
 	filterData = new FilterData ( coutMutex, logMutex, &log_stream );
-	inPcapFile_ = std::string("");
-	outPcapFile_ = std::string("");
 	setStartRoutine(run_sniffer);
 }
 
@@ -59,22 +57,22 @@ void sniffer::start()
 
 void sniffer::setInputPcapFile(std::string pcapFile)
 {
-	inPcapFile_ = pcapFile;
+	inDev_.setDevice( pcapFile, 0);
 }
 
 std::string sniffer::getInputPcapFile( )
 {
-	return inPcapFile_;
+	return inDev_.getDevice();
 }
 
 void sniffer::setOutPcapFile(std::string pcapFile)
 {
-	outPcapFile_ = pcapFile;
+	outDev_.setDevice( pcapFile, 0);
 }
 
 std::string sniffer::getOutputPcapFile( )
 {
-	return outPcapFile_;
+	return outDev_.getDevice();
 }
 
 void sniffer::setFilter(std::string filter)
@@ -91,12 +89,12 @@ void sniffer::log( std::string message )
 
 void sniffer::setDevice( std::string device )
 {
-	snifferData.setDevice( device );
+	inDev_.setDevice( device , 1);
 }
 
 std::string sniffer::getDevice()
 {
-	snifferData.getDevice();
+	inDev_.getDevice();
 }
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
@@ -134,18 +132,19 @@ void* sniffer::packetSniffer()
 	uint8_t* args = (uint8_t*)filterData;
 
 	snifferData.log( "SnifferOffline Started!" ); 
-	snifferData.log( "Opening File: " + snifferData.getDevice() );
+	snifferData.log( "Opening File: " + inDev_.getDevice() );
 
 	// 65535 from pcap man page...
 	pcap_t* pcap_ptr;
-	if(inPcapFile_.size())
-		pcap_ptr = pcap_open_offline( inPcapFile_.c_str(), errbuf );
+	//if(inPcapFile_.size())
+	if(!inDev_.isDevice())
+		pcap_ptr = pcap_open_offline( (inDev_.getDevice()).c_str(), errbuf );
 	else
 	{
-		if( snifferData.getDevice() == "any" )
+		if( inDev_.getDevice() == "any" )
 			pcap_ptr = pcap_open_live( "any", 65535, 1, -1, errbuf );
 		else
-			pcap_ptr = pcap_open_live( snifferData.getDevice().c_str(), 500, 1, 40, errbuf );
+			pcap_ptr = pcap_open_live( (inDev_.getDevice()).c_str(), 500, 1, 40, errbuf );
 	}
 
 	if ( pcap_ptr == NULL )
@@ -177,12 +176,12 @@ void* sniffer::packetSniffer()
 		}
 	}
 
-	if (outPcapFile_.size() != 0)
+	if ((outDev_.getDevice()).size() != 0)
 	{
 		pcap_dumper_t *dumpfile; 
 		struct pcap_pkthdr *header;
 		const u_char *pkt_data;
-		dumpfile= pcap_dump_open(pcap_ptr, outPcapFile_.c_str());
+		dumpfile= pcap_dump_open(pcap_ptr, (outDev_.getDevice()).c_str());
 
 		if (dumpfile == NULL)
 		{

@@ -25,8 +25,6 @@
 #include <fstream>
 #include <stdexcept>
 #include "sniffer.h"
-#include "snifferData.h"
-#include "filterData.h"
 #include "../common/threads.h"
 #include "options.h"
 
