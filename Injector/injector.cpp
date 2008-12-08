@@ -48,6 +48,35 @@ Injector::Injector(std::string deviceName, PacketBuffer::PacketBuffer packetBuff
 	this->packetBuffer = packetBuffer;
 }
 
+int Injector::setDevice(std::string deviceName)
+{
+        dev.setDevice(deviceName, 1);
+}
+
+std::string Injector::getDevice()
+{
+        return dev.getDevice();
+}
+
+int Injector::setPacket(Packet::Packet packet)
+{
+        this->packet = packet;
+}
+
+Packet::Packet Injector::getPacket()
+{
+        return this->packet;
+}
+
+int Injector::setPacketBuffer(PacketBuffer::PacketBuffer packetBuffer)
+{
+        this->packetBuffer = packetBuffer;
+}
+
+PacketBuffer::PacketBuffer Injector::getPacketBuffer()
+{
+        return this->packetBuffer;
+}
 
 int Injector::inject()
 {

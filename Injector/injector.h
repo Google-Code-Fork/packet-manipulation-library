@@ -22,10 +22,11 @@
 
 #include "../Packet/packetBuffer.h"
 #include "../Packet/packet.h"
+#include "../Device/device.h"
+#include <stdint.h>
 #include <sstream>
 #include <iostream>
 #include <stdlib.h>
-#include "device.h"
 
 
 class Injector

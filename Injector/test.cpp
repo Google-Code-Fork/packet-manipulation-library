@@ -24,7 +24,7 @@ int main( int argc, char **argv )
 		else	/* if (devs[i] == NULL) */
 			std::cout << "Device " << i << " doesn't exist or is not active" << std::endl;
 
-	std::cout << "Device with name is " << devs("eth0")->name << std::endl;
+	std::cout << "Device with name is " << devs["eth0"]->name << std::endl;
 
 	handle = pcap_open_live(devs[1]->name, BUFSIZ, 1, 1000, errbuf);
 	if (handle == NULL) {
