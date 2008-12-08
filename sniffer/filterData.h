@@ -43,7 +43,6 @@ class FilterData : public BaseData
 
 	private:
 		pcap_t* pcapPointer_;
-		bool filter( Packet packet );
 		std::deque< Packet > incommingPackets_;
 		Mutex incommingPacketsMutex_;
 		Semaphore semaphore_;

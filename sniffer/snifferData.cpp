@@ -21,6 +21,9 @@
 #include "snifferData.h"
 #include <iostream>
 
+/**
+	Constructor to initialize base class member data
+*/
 SnifferData::SnifferData( Mutex &coutMutex, Mutex &logMutex, std::ofstream *log ): BaseData( coutMutex, logMutex, log)
 {
 }

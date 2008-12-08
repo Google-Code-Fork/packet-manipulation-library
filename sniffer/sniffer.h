@@ -45,9 +45,9 @@ class sniffer : public Thread
 		std::string getDevice();
 		void setFilter(std::string filter);
 		void setOutPcapFile(std::string);
-		std::string getOutputPcapFile( );
+		std::string getOutputDevice( );
 		void setInputPcapFile(std::string);
-		std::string getInputPcapFile();
+		std::string getInputDevice();
 		Packet popPacket();
 		void log( std::string );
 		void start( );
