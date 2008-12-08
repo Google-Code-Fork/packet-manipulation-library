@@ -20,6 +20,7 @@
 #include "device.h"
 
 
+DevicesLookup Device::devicesLookup;
 Device::Device()
 {
 }
