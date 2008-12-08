@@ -20,6 +20,7 @@
 
 #include "snifferData.h"
 #include "filterData.h"
+#include "device.h"
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
 void* run_sniffer(void* data);
@@ -36,6 +37,7 @@ class sniffer : public Thread
 		SnifferData snifferData;
 		static const std::string logFile;
 		static std::ofstream log_stream;
+		Device dev_;
 
 	public:
 		sniffer();

@@ -1,11 +1,10 @@
 
-PCAPLIBS=-I/usr/lib/ -I/usr/include  
+INCLUDE=-I../Device/ 
 OBJS=baseData.o sniffer.o filterData.o snifferData.o 
-PACKETOBJS=../Packet/packetBuilder.o ../Packet/packet.o ../Packet/packetBuffer.o ../Packet/Link/ethernet.o ../Packet/Link/mac.o ../Packet/Link/link.o ../Packet/Inet/ipv4.o ../Packet/Inet/inet.o ../Packet/Trans/tcp.o ../Packet/Trans/udp.o ../Packet/Trans/trans.o ../Packet/App/raw.o ../Packet/App/app.o ../common/threads.o ../common/mutex.o ../common/semaphore.o
-TESTOBJS=$(PACKETOBJS) testSniffer.o 
+PACKETOBJS=../Device/device.o ../Device/devicesLookup.o ../Packet/packetBuilder.o ../Packet/packet.o ../Packet/packetBuffer.o ../Packet/Link/ethernet.o ../Packet/Link/mac.o ../Packet/Link/link.o ../Packet/Inet/ipv4.o ../Packet/Inet/inet.o ../Packet/Trans/tcp.o ../Packet/Trans/udp.o ../Packet/Trans/trans.o ../Packet/App/raw.o ../Packet/App/app.o ../common/threads.o ../common/mutex.o ../common/semaphore.o
 TCPDUMP=$(PACKETOBJS) tcpDump.o
-CFLAGS=-ggdb
-CXXFLAGS=$(CFLAGS)
+CFLAGS=-ggdb $(INCLUDE)
+CXXFLAGS=$(CFLAGS) 
 
 all: $(OBJS) tcpDump
 
