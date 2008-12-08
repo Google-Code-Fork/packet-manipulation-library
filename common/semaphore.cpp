@@ -21,6 +21,9 @@
 
 #include "threads.h"
 
+/**
+	Constructor to initialize member data
+*/
 Semaphore::Semaphore( int num ):num_(num)
 {
 	pthread_mutex_init( &count_mutex, NULL );
@@ -31,6 +34,9 @@ Semaphore::Semaphore( int num ):num_(num)
 	}
 }
 
+/**
+	Obtain a Lock, increment data, post the signal and release the lock 
+*/
 void Semaphore::post()
 {
 	pthread_mutex_lock( &count_mutex );
@@ -39,6 +45,9 @@ void Semaphore::post()
 	pthread_mutex_unlock( &count_mutex );
 }
 
+/**
+	Wait untill someone signals 'post' i.e. makes member data non-zero
+*/
 void Semaphore::wait()
 {
 	pthread_mutex_lock( &count_mutex );
@@ -50,6 +59,9 @@ void Semaphore::wait()
 	pthread_mutex_unlock( &count_mutex );
 }
 
+/**
+	Return current data member value
+*/
 int Semaphore::getNum()
 {
 	pthread_mutex_lock( &count_mutex );
