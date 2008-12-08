@@ -41,7 +41,7 @@ class sniffer : public Thread
 	public:
 		sniffer();
 		void *packetSniffer();
-		void setDevice( std::string device );
+		void setInputDevice( std::string device );
 		void setFilter(std::string filter);
 		void setOutPcapFile(std::string);
 		std::string getOutputDevice( );

@@ -117,7 +117,7 @@ void sniffer::log( std::string message )
 /**
 	Set input device which should be used for sniffing packets
 */
-void sniffer::setDevice( std::string device )
+void sniffer::setInputDevice( std::string device )
 {
 	inDev_.setDevice( device , 1);
 }
