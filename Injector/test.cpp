@@ -34,7 +34,7 @@ int main( int argc, char **argv )
 
 	// delete devs;
 
-	std::cout << sameArray << std::endl;
+	std::cout << "Injecting: " << sameArray << std::endl;
 	pcap_inject(handle, sameArray, 15);
 	pcap_close(handle);
 
