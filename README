@@ -8,6 +8,6 @@ Developer document, "DeveloperDoc.doc" and the tutorial on how to run the librar
 
 The manual, "refman.pdf" is available in directory "Docs".
 
-Class hierarchy and diagrams of the library are available in directory "Docs/html". The main page is "main.html".
+Class hierarchy and diagrams of the library are available in directory "Docs/html". The index page is "index.html". The main page is "main.html".
 
 The Powerpoint presentation, "PacMan.ppt" is available in the top directory.
