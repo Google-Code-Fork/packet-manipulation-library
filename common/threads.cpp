@@ -25,6 +25,9 @@
 #include <signal.h>
 #endif
 
+/**
+	Constructor to initialize member data
+*/
 Thread::Thread( )
 {
 	#ifndef WIN32 //UNIX
@@ -32,6 +35,9 @@ Thread::Thread( )
 	#endif
 }
 
+/**
+	Stop currently running thread
+*/
 void Thread::stop()
 {
 	#ifndef WIN32 //UNIX
@@ -42,6 +48,9 @@ void Thread::stop()
 	join();
 }
 
+/**
+	Contructor to initialize member data as well as set thread 'start' routine
+*/
 Thread::Thread( StartRoutine routine ):startRoutine_(routine)
 {
 	#ifndef WIN32 //UNIX
@@ -49,16 +58,25 @@ Thread::Thread( StartRoutine routine ):startRoutine_(routine)
 	#endif
 }
 
+/**
+	Set thread 'start' routine
+*/
 void Thread::setStartRoutine( StartRoutine routine)
 {
 	startRoutine_ = routine;
 }
 
+/**
+	Contructor to initialize member data 
+*/
 Thread::~Thread( )
 {
 	delete threadID_;
 }
 
+/**
+	Copy Contructor 
+*/
 Thread::Thread( const Thread & thread )
 {
 	#ifndef WIN32 //UNIX
@@ -69,6 +87,9 @@ Thread::Thread( const Thread & thread )
 	#endif
 }
 
+/**
+	Start this thread to make it run using using 'startRoutine_,' as the starting soutine and 'dataForThread' a its argument
+*/
 void Thread::start( void * dataForThread )
 {
 	#ifndef WIN32 // UNIX
@@ -78,6 +99,9 @@ void Thread::start( void * dataForThread )
 	#endif
 }
 
+/**
+	Kill 'this' running thread
+*/
 void Thread::kill( int signal )
 {
 	#ifndef WIN32 // UNIX
@@ -87,6 +111,9 @@ void Thread::kill( int signal )
 	#endif
 }
 
+/**
+	Wait for 'this' thread to join with parent process
+*/
 void Thread::join( )
 {
 	#ifndef WIN32 //UNIX

@@ -23,6 +23,9 @@
 #include <stdexcept>
 #include <errno.h>
 
+/**
+	Constructor to initialize member data
+*/
 Mutex::Mutex()
 {
 #ifndef WIN32 // UNIX
@@ -33,6 +36,9 @@ Mutex::Mutex()
 #endif
 }
 
+/**
+	Destructor to release mutex
+*/
 Mutex::~Mutex()
 {
 	#ifndef WIN32 // UNIX
@@ -46,6 +52,9 @@ Mutex::~Mutex()
 	#endif
 }
 
+/**
+	Copy constructor 
+*/
 Mutex::Mutex( const Mutex& mutex )
 {
 	#ifndef WIN32 //UNIX
@@ -54,6 +63,9 @@ Mutex::Mutex( const Mutex& mutex )
 	#endif
 }
 
+/**
+	Acquire a lock
+*/
 void Mutex::lock()
 {
 	#ifndef WIN32 // UNIX
@@ -61,6 +73,9 @@ void Mutex::lock()
 	#endif
 }
 
+/**
+	Unlock 'this' lock 
+*/
 void Mutex::unlock()
 {
 	#ifndef WIN32 //UNIX
@@ -68,6 +83,9 @@ void Mutex::unlock()
 	#endif
 }
 
+/**
+	Try to acuire 'this' lock only if it is free at the time of invocation
+*/
 int Mutex::trylock()
 {
 	#ifndef WIN32 //UNIX
