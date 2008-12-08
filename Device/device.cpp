@@ -25,14 +25,13 @@
 #include "device.h"
 
 
-DevicesLookup Device::devicesLookup;
 Device::Device()
 {
 }
 
 Device::Device(std::string dev, int isDev)
 {
-  Device::setDevice(dev, isDev);
+        Device::setDevice(dev, isDev);
 }
 
 void Device::setDevice(std::string dev, int isDev)
