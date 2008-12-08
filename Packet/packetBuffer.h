@@ -32,6 +32,7 @@
 #define PACKETBUFFER_H
 
 #include <vector>
+#include <stdint.h>
 
 class PacketBuffer 
 {
