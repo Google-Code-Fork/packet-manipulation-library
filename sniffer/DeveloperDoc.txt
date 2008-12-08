@@ -1,0 +1,18 @@
+Developer Guide for Sniffer module
+
+Sniffer class is currently implemented a thread. It inherits from a class 
+'Thread' which is a wrapper over 'pthread' api. User may want to sniff multiple
+devices in parallel and that's why it's a good idea to run all the sniffers in 
+parallel. 
+
+Sniffer uses a doubly-ended-queue(Deque) to push packets by default. 'Deque' 
+is thread-safe and can be used to push and pop packets in parallel. 
+
+Sniffer uses a 'Device' class object to instantiate a device user may want to 
+sniff. It may either be a physical or logical device.
+It also uses FilterData and SnifferData classes derived from 'BaseData' to 
+allow thread-safe packet-push and step-by-step logging mechanism.
+
+Threads, Mutex and Semaphore classes are implemented to allow thread-safe behaviour.
+Implementation of these classes can be found in 'common' directory.
+
