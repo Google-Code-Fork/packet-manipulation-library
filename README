@@ -3,3 +3,11 @@ To generate documentation type 'make docs' in the top directory
 
 Readme for the different modules of the libraries are available in their
 respective directories.
+
+Developer document, "DeveloperDoc.doc" and the tutorial on how to run the library, "Pacman_Tutorial.doc", are available in the top directory, while the sub-directories also contain documents exclusive to the respective directories.
+
+The manual, "refman.pdf" is available in directory "Docs".
+
+Class hierarchy and diagrams of the library are available in directory "Docs/html". The main page is "main.html".
+
+The Powerpoint presentation, "PacMan.ppt" is available in the top directory.
