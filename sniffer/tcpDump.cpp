@@ -62,10 +62,10 @@ int main(int argc, char *argv[])
 	while(count++ < 10)
 	{
 		Packet p = mySniffer.popPacket();
-		std::cerr<<"Packet count:"<<count<<std::endl;
+		std::cout<<"Packet count:"<<count<<std::endl;
 		
 	}
-	std::cerr << "Done" << std::endl;
+	std::cout << "Done" << std::endl;
 	mySniffer.stop();	
 	mySniffer.log( "tcpdump halting!" );
 	return 0;

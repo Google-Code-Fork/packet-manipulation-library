@@ -39,47 +39,74 @@
 std::ofstream sniffer::log_stream(logFile.c_str(), std::ios::out|std::ios::app);
 const std::string sniffer::logFile = "./sniffer.log";
 
+/**
+	Constructor to initialize member data and base class data
+*/
 sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
 {
 	filterData = new FilterData ( coutMutex, logMutex, &log_stream );
 	setStartRoutine(run_sniffer);
 }
 
+/**
+    Pop single packet from doubly-ended-queue containing sniffed packets
+*/
 Packet sniffer::popPacket()
 {
 	return filterData->popPacket();
 }
 
+/**
+    Start the sniffer to allow packet sniffing 
+*/
 void sniffer::start()
 {
 	Thread::start(this);
 }
 
+/**
+    set pcap file as logical input device for sniffing packets
+*/
 void sniffer::setInputPcapFile(std::string pcapFile)
 {
 	inDev_.setDevice( pcapFile, 0);
 }
 
-std::string sniffer::getInputPcapFile( )
+/**
+	Return input device name used for packet sniffing
+*/
+std::string sniffer::getInputDevice( )
 {
 	return inDev_.getDevice();
 }
 
+/**
+	set pcap file as an output for sniffed packets
+*/
 void sniffer::setOutPcapFile(std::string pcapFile)
 {
 	outDev_.setDevice( pcapFile, 0);
 }
 
-std::string sniffer::getOutputPcapFile( )
+/**
+	return name of output device used for dumping sniffed packets
+*/
+std::string sniffer::getOutputDevice( )
 {
 	return outDev_.getDevice();
 }
 
+/**
+	Set filter expression for sniffing packets
+*/
 void sniffer::setFilter(std::string filter)
 {
 	filter_ = filter;
 }
 
+/**
+	Log intermediate messages in a thread-safe manner 
+*/
 void sniffer::log( std::string message )
 {
 	logMutex.lock();
@@ -87,16 +114,17 @@ void sniffer::log( std::string message )
 	logMutex.unlock();
 }
 
+/**
+	Set input device which should be used for sniffing packets
+*/
 void sniffer::setDevice( std::string device )
 {
 	inDev_.setDevice( device , 1);
 }
 
-std::string sniffer::getDevice()
-{
-	inDev_.getDevice();
-}
-
+/**
+	Callback function used for capturing sniffed packets
+*/
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
 {
 	FilterData* filterData = (FilterData*)args;
@@ -119,12 +147,19 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 	}
 }
 
+/**
+	Starting method used by sniffer to start packet sniffing
+*/
 void* run_sniffer(void* data)
 {
 	sniffer *tempSniffer = (sniffer*) data;
 	tempSniffer->packetSniffer();
 }
 
+/**
+  *	Function to start actual packet sniffing once the sniffer has been started using 'start' method. 
+  * It takes care of both physical and logical device as input nad writes into doubly-ended-queue or another pcap file as specified by the user
+  */
 void* sniffer::packetSniffer()
 {
 	char errbuf[PCAP_ERRBUF_SIZE];
@@ -219,8 +254,12 @@ void* sniffer::packetSniffer()
 	snifferData.log( "SnifferOffline Stopping!" );
 }
 
+/**
+	Method to print all the devices in the system 
+*/
 void sniffer::printDevices()
 {
+	
 	pcap_if_t *alldevs;
 	char errbuf[PCAP_ERRBUF_SIZE+1];
 	/* Retrieve the device list */
@@ -281,6 +320,9 @@ void sniffer::printDevices()
 	pcap_freealldevs(alldevs);
 } 
 
+/**
+	Converts an input ip in decimal format into human-readable string format
+*/
 std::string sniffer::iptos(u_long in)
 {
 	std::stringstream output;

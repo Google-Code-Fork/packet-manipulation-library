@@ -22,23 +22,28 @@
 #include "filterData.h"
 #include <iostream>
 
+/**
+	Constructor to initialize member data and base class data
+*/
 FilterData::FilterData( Mutex &coutMutex, Mutex &logMutex, std::ofstream *log ): BaseData( coutMutex, logMutex, log)
 {
 	Semaphore semaphore_;
 }
 
+/**
+	Push packets into a doubly-ended-queue in a thread-safe manner
+*/
 void FilterData::pushPacket( Packet packet )
 {
-	if( filter( packet ) )
-	{
 		incommingPacketsMutex_.lock( );
 		incommingPackets_.push_back( packet );
 		semaphore_.post();
 		incommingPacketsMutex_.unlock( );
-	}
-
 }
 
+/**
+	Pop packets from a doubly-ended-queue in a thread-safe manner
+*/
 Packet FilterData::popPacket( )
 {
 	semaphore_.wait();
@@ -49,6 +54,9 @@ Packet FilterData::popPacket( )
 	return packet;
 }
 
+/**
+	Return number of packets currently in the queue 
+*/
 int FilterData::size()
 {
 	incommingPacketsMutex_.lock( );
@@ -57,19 +65,17 @@ int FilterData::size()
 	return size;
 }
 
-bool FilterData::filter( Packet packet )
-{
-	//only allow ip packets through
-	//if( packet.inetIs<IPv4>() )
-//		return true; 
-	return true;
-}
-
+/**
+	Set current pcap pointer 
+*/
 void FilterData::setPcapPointer( pcap_t* pointer )
 {
 	pcapPointer_ = pointer;
 }
 
+/**
+	Return current pcap pointer
+*/
 pcap_t* FilterData::getPcapPointer( )
 {
 	return pcapPointer_;
