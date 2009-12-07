@@ -24,7 +24,7 @@
 #include <vector>
 #include <fstream>
 #include <stdexcept>
-#include "sniffer.h"
+#include "../sniffer.h"
 #include "../common/threads.h"
 #include "options.h"
 
