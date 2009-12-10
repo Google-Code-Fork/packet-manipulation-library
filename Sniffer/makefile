@@ -6,6 +6,7 @@ TCPDUMP=$(PACKETOBJS) tcpDump.o
 CFLAGS=-ggdb $(INCLUDE)
 CXXFLAGS=$(CFLAGS) 
 DIRECTORIES=example
+THIS=Sniffer
 
 all: $(OBJS) 
 	for i in $(DIRECTORIES) ; do \
@@ -13,11 +14,18 @@ all: $(OBJS)
 	done
 
 clean:
-	-rm -f *.o
+	-rm -f *.o *.gch
 	for i in $(DIRECTORIES) ; do \
 	( cd $$i ; make clean ) ; \
 	done
 
+include:
+	-mkdir ../include/$(THIS)
+	-cp *.h ../include/$(THIS)
+
+
+lib:
+	cp *.o ../lib
 PCAPLINK=-L/usr/lib/  
 LDFLAGS=$(PCAPLINK) -lpthread -lpcap
 
