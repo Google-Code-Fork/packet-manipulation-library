@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ethernet.h"
-#include "mac.h"
-#include "link.h"
+#include "../ethernet.h"
+#include "../mac.h"
+#include "../link.h"
 //This is file is to ensure that all instances of an object work 
 //This is to find problems with templates and abstract pure functions and
 //classes.
