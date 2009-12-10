@@ -3,9 +3,16 @@ PACKETOBJS=../Packet/packetBuilder.o ../Packet/packetBuffer.o ../Packet/packet.o
 CFLAGS=-ggdb 
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-lpcap
-
+THIS=Device
 
 all: $(OBJS) 
+
+include:
+	-mkdir ../include/$(THIS)
+	-cp *.h ../include/$(THIS)
+
+lib:
+	cp *.o ../lib/
 
 clean:
 	 -rm -f *.o
