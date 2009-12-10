@@ -28,7 +28,7 @@ lib: pacman
 	-for i in $(MODULES) ; do \
 	( cd $$i; make include ) ; \
 	done
-	-( cd lib; ar rs libPacMan.a *.o; rm *.o ) ; 
+	-( cd lib; ar rs libpacman.a *.o; rm *.o ) ; 
 
 packet:
 	@cd $(PACKETDIR) ; make
@@ -44,7 +44,7 @@ clean:
 	 -rm -rf include
 
 install: lib
-	cp lib/libPacMan.a $(INSTALL_LIB)
+	cp lib/libpacman.a $(INSTALL_LIB)
 	cp -r include $(INSTALL_INCLUDE)
 
 docs: 
