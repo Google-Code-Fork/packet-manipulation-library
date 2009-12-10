@@ -1,13 +1,13 @@
 OBJS=raw.o app.o
-TESTOBJS=test.o ../packetBuffer.o
+TESTOBJS=example/test.o ../packetBuffer.o
 
-CFLAGS=-ggdb
+CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
 all: $(OBJS) test
 
 clean: 
-	-rm *.o test
+	-rm *.o test example/*.o
 
 test: $(TESTOBJS) $(OBJS)
 	g++ $(TESTOBJS) $(OBJS) -o $@

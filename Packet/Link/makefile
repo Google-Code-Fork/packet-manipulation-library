@@ -1,13 +1,15 @@
 OBJS=mac.o ethernet.o link.o
-TESTOBJS=../packetBuffer.o
+TESTOBJS=../packetBuffer.o example/test.o
+CFLAGS=-ggdb -fPIC
+CXXFLAGS=$(CFLAGS)
 
 all: $(OBJS) test
 
 clean: 
-	-rm *.o test
+	-rm *.o test example/*.o
 
-test: $(OBJS) $(TESTOBJS) test.cpp
-	g++ -ggdb test.cpp $(OBJS) $(TESTOBJS) -o test
+test: $(OBJS) $(TESTOBJS) 
+	g++ -ggdb $(OBJS) $(TESTOBJS) -o test
 
 
 ethernet.o: ethernet.cpp ethernet.h mac.h linkData.h ../packetBuffer.h

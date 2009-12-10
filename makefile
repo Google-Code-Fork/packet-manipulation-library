@@ -2,11 +2,11 @@ PACKETDIR=Packet
 DEVICEDIR=Device
 SNIFFERDIR=Sniffer
 INJECTORDIR=Injector
-COMMONDIR=
+COMMONDIR=common
 MODULES = $(PACKETDIR) $(DEVICEDIR) $(SNIFFERDIR) $(INJECTORDIR) $(COMMONDIR) 
 
 INSTALL_LIB=/usr/local/lib
-INSTALL_INCLUDE=/usr/local/include/PacMan
+INSTALL_INCLUDE=/usr/local/include/PacMan/
 all: pacman lib
 
 pacman:
@@ -28,7 +28,7 @@ lib: pacman
 	-for i in $(MODULES) ; do \
 	( cd $$i; make include ) ; \
 	done
-	-( cd lib; ar rs libpacman.a *.o; rm *.o ) ; 
+	-( cd lib; g++ -shared -o libpacman.so *.o; rm *.o ) ; 
 
 packet:
 	@cd $(PACKETDIR) ; make
@@ -43,9 +43,10 @@ clean:
 	 -rm -rf lib
 	 -rm -rf include
 
-install: lib
-	cp lib/libpacman.a $(INSTALL_LIB)
-	cp -r include $(INSTALL_INCLUDE)
+install: 
+	cp lib/libpacman.so $(INSTALL_LIB)
+	-mkdir $(INSTALL_INCLUDE)
+	cp -r include/* $(INSTALL_INCLUDE)
 
 docs: 
 	doxygen

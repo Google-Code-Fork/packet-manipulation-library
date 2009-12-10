@@ -20,7 +20,7 @@
 
 #include "snifferData.h"
 #include "filterData.h"
-#include "device.h"
+#include "../Device/device.h"
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
 void* run_sniffer(void* data);

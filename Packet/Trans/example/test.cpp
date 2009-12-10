@@ -2,10 +2,10 @@
 //This is to find problems with templates and abstract pure functions and
 //classes.
 
-#include "tcp.h"
-#include "udp.h"
+#include "../tcp.h"
+#include "../udp.h"
 #include <vector>
-#include "trans.h"
+#include "../trans.h"
 #include <iostream>
 
 int main()
