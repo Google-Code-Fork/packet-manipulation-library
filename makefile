@@ -7,7 +7,7 @@ MODULES = $(PACKETDIR) $(DEVICEDIR) $(SNIFFERDIR) $(INJECTORDIR) $(COMMONDIR)
 
 INSTALL_LIB=/usr/local/lib
 INSTALL_INCLUDE=/usr/local/include/PacMan
-all: pacman library
+all: pacman lib
 
 pacman:
 	@echo
@@ -19,14 +19,14 @@ pacman:
 	( cd $$i ; make ) ; \
 	done
 
-library:
+lib: pacman
 	-mkdir lib
 	-for i in $(MODULES) ; do \
-	( cd $$i; cp *.o ../lib/ ) ; \
+	( cd $$i; make lib ) ; \
 	done
 	-mkdir include
 	-for i in $(MODULES) ; do \
-	( mkdir include/$$i; cd $$i; cp *.h ../include/$$i/ ) ; \
+	( cd $$i; make include ) ; \
 	done
 	-( cd lib; ar rs libPacMan.a *.o; rm *.o ) ; 
 
@@ -43,7 +43,7 @@ clean:
 	 -rm -rf lib
 	 -rm -rf include
 
-install: library
+install: lib
 	cp lib/libPacMan.a $(INSTALL_LIB)
 	cp -r include $(INSTALL_INCLUDE)
 
