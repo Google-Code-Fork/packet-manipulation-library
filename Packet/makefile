@@ -2,16 +2,33 @@ LINKDIR=Link
 INETDIR=Inet
 TRANSDIR=Trans
 APPDIR=App
+THIS=Packet
 
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
 
 OBJS=packetBuilder.o packetBuffer.o packet.o
-TESTOBJS=test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/udp.o Trans/trans.o App/raw.o App/app.o
+TESTOBJS=example/test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/udp.o Trans/trans.o App/raw.o App/app.o
 
 CFLAGS=-ggdb
 CXXFLAGS=$(CFLAGS)
 
 all: subdir $(OBJS) test
+
+include: 
+	-mkdir ../include/$(THIS)
+	-for i in $(LAYERDIRS) ; do \
+	( mkdir ../include/$(THIS)/$$i ) ; \
+	done
+	-for i in $(LAYERDIRS) ; do \
+	( cd $$i ; cp *.h ../../include/$(THIS)/$$i/ ) ; \
+	done
+	-cp *.h ../include/$(THIS)
+
+lib: subdir $(OBJS)
+	for i in $(LAYERDIRS) ; do \
+	( cd $$i ; cp *.o ../../lib/ ) ; \
+	done
+	cp *.o ../lib
 
 subdir:
 	@echo

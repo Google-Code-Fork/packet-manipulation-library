@@ -20,7 +20,7 @@
 //! \file test.cpp 
 //! This is a test program for PacMan
 
-#include "packetBuilder.h"
+#include "../packetBuilder.h"
 #include <iostream>
 
 int main()
