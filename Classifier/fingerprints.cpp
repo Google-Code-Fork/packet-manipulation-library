@@ -155,8 +155,7 @@ void setFromFingerPrint( const std::string &fingerPrint )
 	{
 		osGenreFingerPrint = fingerPrint.substr( start, pos - start );
 		start = pos + 1;
-	}
-
+	}	
 	//Details
 	detailsFingerPrint = fingerPrint.substr( start );
 
@@ -169,7 +168,6 @@ void setFromFingerPrint( const std::string &fingerPrint )
 	setOSGenreFingerPrint( osGenreFingerPrint );
 	setDetailsFingerPrint( detailsFingerPrint );
 }
-
 
 void FingerPrint::setWindowFingerPrint( std::string fp )
 {
@@ -189,17 +187,123 @@ void FingerPrint::setSynSizeFingerPrint( std::string fp )
 
 void FingerPrint::setOptionsFingerPrint( std::string fp )
 {
+	zeroStamp_ = true;
+	//tcp options - . denotes no options
+	if( fp == "." )
+		tcpOptions_ = "";
+	else
+		tcpOptions_ = fp;
 }
 
 void FingerPrint::setQuirksFingerPrint( std::string fp )
 {
+	quirks_ = 0;
+	/*
+	 * Quirks section is usually an empty list ('.') of oddities or bugs of this 
+	 * particular stack. List items are not separated in any way. Possible values:
+	 *
+	 * P     - options past EOL,
+	 * Z - zero IP ID,
+	 * I - IP options specified,
+	 * U - urg pointer non-zero,
+	 * X     - unused (x2) field non-zero,
+	 * A - ACK number non-zero,
+	 * T     - non-zero second timestamp,
+	 * F     - unusual flags (PUSH, URG, etc),
+	 * D     - data payload,
+	 * !     - broken options segment.
+	 */
+
+	std::string::iterator itr;
+	for( itr = fp.begin(); itr != fp.end(); ++itr )
+	{
+		switch( *itr )
+		{
+			case 'p':
+			case 'P': quirks_ |= QUIRK_PAST;
+								break;
+			case 'z':
+			case 'Z': quirks_ |= QUIRK_ZEROID;
+								break;
+			case 'i':
+			case 'I': quirks_ |= QUIRK_IPOPT;
+								break;
+			case 'u':
+			case 'U': quirks_ |= QUIRK_URG;
+								break;
+			case 'x':
+			case 'X': quirks_ |= QUIRK_X2;
+								break;
+			case 'a':
+			case 'A': quirks_ |= QUIRK_ACK;
+								break;
+			case 't':
+			case 'T': quirks_ |= QUIRK_T2;
+								break;
+			case 'f':
+			case 'F': quirks_ |= QUIRK_FLAGS;
+								break;
+			case 'd':
+			case 'D': quirks_ |= QUIRK_DATA;
+								break;
+			case '!': quirks_ |= QUIRK_BROKEN;
+								break;
+			case 'k':
+			case 'K': quirks_ |= QUIRK_RSTACK;
+								break;
+			case 'q':
+			case 'Q': quirks_ |= QUIRK_SEQEQ;
+								break;
+			case '0': quirks_ |= QUIRK_SEQ0;
+								break;
+		}
+	}
 }
 
 void FingerPrint::setOSGenreFingerPrint( std::string fp )
 {
+	noDetail_ = false;
+	generic_ = false;
+	userland_ = false;
+	/*  from the p0f.fp finger print file...
+	 *
+	 * If OS genre starts with '*', p0f will not show distance, link type
+	 * and timestamp data. It is useful for userland TCP/IP stacks of
+	 * network scanners and so on, where many settings are randomized or
+	 * bogus.
+	 *
+	 * If OS genre starts with @, it denotes an approximate hit for a group
+	 * of operating systems (signature reporting still enabled in this case). 
+	 * Use this feature at the end of this file to catch cases for which
+	 * you don't have a precise match, but can tell it's Windows or FreeBSD
+	 * or whatnot by looking at, say, flag layout alone.
+	 *
+	 * If OS genre starts with - (which can prefix @ or *), the entry is
+	 * not considered to be a real operating system (but userland stack
+	 * instead). It is important to mark all scanners and so on with -,
+	 * so that they are not used for masquerade detection (also add this
+	 * prefix for signatures of application-induced behavior, such as
+	 * increased window size with Opera browser).
+	 */
+
+	switch( fp.at(0) )
+  { 
+		case '*': 
+			noDetail_ = true;
+			fp = fp.substr( 1 ); //everything after '*'
+			break;
+		case '@':
+			generic_ = true;
+			fp = fp.substr( 1 ); //everything else
+		case '-':
+			userland_ = true;
+			fp = fp.substr( 1 ); //everything else
+	}
+
+	os_ = fp;
 }
 
 void FingerPrint::setDetailsFingerPrint( std::string fp )
 {
-	 
+	desc_ = fp;
 }

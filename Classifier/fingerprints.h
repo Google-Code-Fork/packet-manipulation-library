@@ -63,14 +63,14 @@ class FingerPrint
 	private:
 		std::string os_;
 		std::string desc_;
-		uint8_t noDetail_;
-		uint8_t generic_;
-		uint8_t userland_;
+		bool noDetail_;
+		bool generic_;
+		bool userland_;
 		uint16_t windowSize_;
 		uint8_t windowSizeMod_;
 		uint8_t dontFragment_;
 		uint8_t ttl_;
-		uint8_t zeroStamp_;
+		bool zeroStamp_;
 		uint16_t size_;
 		uint8_t optCount_;
 		std::vector<uint8_t> tcpOptions_; 
