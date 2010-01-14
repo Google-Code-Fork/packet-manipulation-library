@@ -79,87 +79,87 @@ class TCP : public TransData
   ~TCP();
 
   //!return the source port
-  uint16_t getSourcePort() const;
+  uint16_t sourcePort() const;
   //!set the source port
   void setSourcePort( uint16_t );
   //!return the destination port
-  uint16_t getDestinationPort() const;
+  uint16_t destinationPort() const;
   //!set the destination port
   void setDestinationPort( uint16_t );
   //!return the sequence number
-  uint32_t getSequenceNumber() const;
+  uint32_t sequenceNumber() const;
   //!set the sequence number
   void setSequenceNumber( uint32_t );
   //!return the acknowledgement number
-  uint32_t getAcknowledgementNumber() const;
+  uint32_t acknowledgementNumber() const;
   //!set the acknowledgement number
   void setAcknowledgementNumber( uint32_t );
   //!return the data offset
-  uint8_t getDataOffset() const;
+  uint8_t dataOffset() const;
   //!set the data offset
   void setDataOffset( uint8_t );
   //!return the flage (true|false)
-  bool getFlagsCWR() const;
+  bool CWR_Flag() const;
   //!set the flag (true|false)
-  void setFlagsCWR( bool );
+  void setCWR_Flag( bool );
   //!set the flag true
-  void setFlagsCWR( ); // ==setFlagsCWR( true );
+  void setCWR_Flag( ); // ==setFlagsCWR( true );
   //!return the flage (true|false)
-  bool getFlagsECE() const;
+  bool ECE_Flag() const;
   //!set the flag (true|false)
-  void setFlagsECE( bool );
+  void setECE_Flag( bool );
   //!set the flag true
-  void setFlagsECE( ); // == setFlagsECE( true );
+  void setECE_Flag( ); // == setFlagsECE( true );
   //!return the flage (true|false)
-  bool getFlagsURG() const;
+  bool URG_Flag() const;
   //!set the flag (true|false)
-  void setFlagsURG( bool );
+  void setURG_Flag( bool );
   //!set the flag true
-  void setFlagsURG( ); // == setFlagsURG( true );
+  void setURG_Flag( ); // == setFlagsURG( true );
   //!return the flage (true|false)
-  bool getFlagsACK() const;
+  bool ACK_Flag() const;
   //!set the flag (true|false)
-  void setFlagsACK( bool );
+  void setACK_Flag( bool );
   //!set the flag true
-  void setFlagsACK( ); // == setFlagsACK( true );
+  void setACK_Flag( ); // == setFlagsACK( true );
   //!return the flage (true|false)
-  bool getFlagsPSH() const;
+  bool PSH_Flag() const;
   //!set the flag (true|false)
-  void setFlagsPSH( bool );
+  void setPSH_Flag( bool );
   //!set the flag true
-  void setFlagsPSH( ); // == setFlagsPSH( true );
+  void setPSH_Flag( ); // == setFlagsPSH( true );
   //!return the flage (true|false)
-  bool getFlagsRST() const;
+  bool RST_Flag() const;
   //!set the flag (true|false)
-  void setFlagsRST( bool );
+  void setRST_Flag( bool );
   //!set the flag true
-  void setFlagsRST( ); // == setFlagsRST( true );
+  void setRST_Flag( ); // == setFlagsRST( true );
   //!return the flage (true|false)
-  bool getFlagsSYN() const;
+  bool SYN_Flag() const;
   //!set the flag (true|false)
-  void setFlagsSYN( bool );
+  void setSYN_Flag( bool );
   //!set the flag true
-  void setFlagsSYN( ); // == setFlagsSYN( true );
+  void setSYN_Flag( ); // == setFlagsSYN( true );
   //!return the flage (true|false)
-  bool getFlagsFIN() const;
+  bool FIN_Flag() const;
   //!set the flag (true|false)
-  void setFlagsFIN( bool );
+  void setFIN_Flag( bool );
   //!set the flag true
-  void setFlagsFIN( ); // == setFlagsFIN( true );
+  void setFIN_Flag( ); // == setFlagsFIN( true );
   //!return the window size
-  uint16_t getWindow() const;
+  uint16_t windowSize() const;
   //!set the window size
-  void setWindow( uint16_t ); 
+  void setWindowSize( uint16_t ); 
   //!return the checksum
-  uint16_t getChecksum() const;
+  uint16_t checksum() const;
   //!set the checksum
   void setChecksum( uint16_t ); 
   //!return the urgent pointer
-  uint16_t getUrgentPointer() const;
+  uint16_t urgentPointer() const;
   //!set the urgent pointer
   void setUrgentPointer( uint16_t );
   //!return the size of the tcp header
-  int getSize() const;
+  int size() const;
   //!return a Packet buffer of the TCP header suitable for use in other libraries and code
   PacketBuffer makePacket() const;
   //!return true... overloaded from TransData

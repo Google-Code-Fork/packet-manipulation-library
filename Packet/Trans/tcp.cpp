@@ -59,7 +59,7 @@ TCP::~TCP()
   delete header_;
 }
 
-uint16_t TCP::getSourcePort() const
+uint16_t TCP::sourcePort() const
 {
   return ntohs( header_->sport );
 }
@@ -69,7 +69,7 @@ void TCP::setSourcePort( uint16_t port )
   header_->sport = htons( port );
 }
 
-uint16_t TCP::getDestinationPort() const
+uint16_t TCP::destinationPort() const
 {
   return ntohs( header_->dport );
 }
@@ -79,7 +79,7 @@ void TCP::setDestinationPort( uint16_t port )
   header_->dport = htons( port );
 }
 
-uint32_t TCP::getSequenceNumber() const
+uint32_t TCP::sequenceNumber() const
 {
   return ntohl( header_->sequenceNumber );
 }
@@ -89,7 +89,7 @@ void TCP::setSequenceNumber( uint32_t num )
   header_->sequenceNumber = htonl( num );
 }
 
-uint32_t TCP::getAcknowledgementNumber() const
+uint32_t TCP::acknowledgementNumber() const
 {
   return ntohl( header_->ackNumber );
 }
@@ -99,7 +99,7 @@ void TCP::setAcknowledgementNumber( uint32_t ackNum )
   header_->ackNumber = htonl( ackNum );
 }
 
-uint8_t TCP::getDataOffset() const
+uint8_t TCP::dataOffset() const
 {
   return OFFSET( header_ ) * 4;
 }
@@ -113,132 +113,132 @@ void TCP::setDataOffset( uint8_t dataOffset )
   header_->dataOffset |= dataOffset << 4;
 }
 
-bool TCP::getFlagsCWR() const
+bool TCP::CWR_Flag() const
 {
   return (( 0 < ( header_->flags & TCP_CWR ) ) );
 }
 
-void TCP::setFlagsCWR()
+void TCP::setCWR_Flag()
 {
-  setFlagsCWR( true );
+  setCWR_Flag( true );
 }
 
-void TCP::setFlagsCWR( bool set )
+void TCP::setCWR_Flag( bool set )
 {
   set ? header_->flags |= TCP_CWR : header_->flags & (TCP_CWR ^ 0xFF);
 }
 
-bool TCP::getFlagsECE() const
+bool TCP::ECE_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_ECE ) );
 }
 
-void TCP::setFlagsECE()
+void TCP::setECE_Flag()
 {
-  setFlagsECE( true );
+  setECE_Flag( true );
 }
 
-void TCP::setFlagsECE( bool set )
+void TCP::setECE_Flag( bool set )
 {
   set ? header_->flags |= TCP_ECE : header_->flags & (TCP_ECE ^ 0xFF);
 }
 
-bool TCP::getFlagsURG() const
+bool TCP::URG_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_URG ) );
 }
 
-void TCP::setFlagsURG()
+void TCP::setURG_Flag()
 {
-  setFlagsURG( true );
+  setURG_Flag( true );
 }
 
-void TCP::setFlagsURG( bool set )
+void TCP::setURG_Flag( bool set )
 {
   set ? header_->flags |= TCP_URG : header_->flags & (TCP_URG ^ 0xFF);
 }
 
-bool TCP::getFlagsACK() const
+bool TCP::ACK_Flags() const
 {
   return ( 0 < ( header_->flags & TCP_ACK ) );
 }
 
-void TCP::setFlagsACK()
+void TCP::setACK_Flag()
 {
-  setFlagsACK( true );
+  setACK_Flag( true );
 }
 
-void TCP::setFlagsACK( bool set )
+void TCP::setACK_Flags( bool set )
 {
   set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
 }
 
-bool TCP::getFlagsPSH() const
+bool TCP::PSH_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_PSH ) );
 }
 
-void TCP::setFlagsPSH( )
+void TCP::setPSH_Flag( )
 {
-  setFlagsPSH( true );
+  setPSH_Flag( true );
 }
 
-void TCP::setFlagsPSH( bool set )
+void TCP::setPSH_Flag( bool set )
 {
   set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
 }
 
-bool TCP::getFlagsRST() const
+bool TCP::RST_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_RST ) );
 }
 
-void TCP::setFlagsRST( )
+void TCP::setRST_Flag( )
 {
-  setFlagsRST( true );
+  setRST_Flag( true );
 }
 
-void TCP::setFlagsRST( bool set )
+void TCP::setRST_Flag( bool set )
 {
   set ? header_->flags |= TCP_RST : header_->flags & (TCP_RST ^ 0xFF);
 }
 
-bool TCP::getFlagsSYN() const
+bool TCP::SYN_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_SYN ) );
 }
 
-void TCP::setFlagsSYN( )
+void TCP::setSYN_Flag( )
 {
-  setFlagsSYN( true );
+  setSYN_Flag( true );
 }
 
-void TCP::setFlagsSYN( bool set )
+void TCP::setSYN_Flag( bool set )
 {
   set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
 }
 
-bool TCP::getFlagsFIN() const
+bool TCP::FIN_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_FIN ) );
 }
 
-void TCP::setFlagsFIN( )
+void TCP::setFIN_Flag( )
 {
-  setFlagsFIN( true );
+  setFIN_Flag( true );
 }
 
-void TCP::setFlagsFIN( bool set )
+void TCP::setFIN_Flag( bool set )
 {
   set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
 }
 
-uint16_t TCP::getWindow() const
+uint16_t TCP::windowSize() const
 {
   return ntohs( header_->window );
 }
 
-void TCP::setWindow( uint16_t windowSize )
+void TCP::setWindowSize( uint16_t windowSize )
 {
   header_->window = htons( windowSize );
 }
@@ -253,7 +253,7 @@ void TCP::setChecksum( uint16_t checksum )
   header_->checksum = htons( checksum );
 }
 
-uint16_t TCP::getUrgentPointer() const
+uint16_t TCP::UrgentPointer() const
 {
   return ntohs( header_->urgentPointer );
 }
@@ -281,5 +281,11 @@ PacketBuffer TCP::makePacket() const
   }
   for( int i = 0; i < bytes-TCPStructSize; ++i )
     packet.push_back( 0 );
+	std::vector< SmartPtr< TCPOption > >::iterator itr;
+	for( itr = options_.begin(); itr != options_.end(); ++itr )
+	{
+		std::vector< uint8_t > bytes = itr->packetData();
+
+	}
   return PacketBuffer( packet );
 }
