@@ -36,6 +36,7 @@
 #include <pcap.h>
 #include <netinet/in.h>
 #include "transData.h"
+#include "../../common/smartPtr.h"
 
 struct my_tcp {
   //!TCP datatype for use with the class TCP
@@ -164,12 +165,18 @@ class TCP : public TransData
   //!return true... overloaded from TransData
   bool isTCP() const { return true; }
 
+	//OPTIONS
+	//! Erase all options.
+	void clearOptions() { options_.clear(); }
+	//! Add a new option to the list of options.
+	void addOption( SmartPtr< TCPOption > option );
+	//! Return the current list of options. 
+	std::vector< SmartPtr< TCPOption > options() const { return options_; }
+
   private:
   //!internal data
   struct my_tcp *header_;
+	std::vector< SmartPtr< TCPOption > > options_;
 };
-
-
-
 
 #endif 
