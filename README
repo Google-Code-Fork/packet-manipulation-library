@@ -1,4 +1,4 @@
-To build type make in the top directory
+To build type make in the top directory:
 To generate documentation type 'make docs' in the top directory
 
 Readme for the different modules of the libraries are available in their
