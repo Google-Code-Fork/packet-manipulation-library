@@ -1,5 +1,7 @@
-
-
+#ifndef TCP_OPTIONS_H
+#define TCP_OPTIONS_H
+#include <stdint.h>
+#include <vector>
 /*  TCP OPTIONS
  *
  *  Kind  Length               Meaning                            Reference
@@ -14,9 +16,9 @@
      8      10   TSOPT - Time Stamp Option           [RFC1323]
      9      2    Partial Order Connection Permitted  [RFC1693]
      10     3    Partial Order Service Profile       [RFC1693]
-     11          CC                                  [RFC1644]
-     12          CC.NEW                              [RFC1644]
-     13          CC.ECHO                             [RFC1644]
+     11     6    CC                                  [RFC1644]
+     12     6    CC.NEW                              [RFC1644]
+     13     6    CC.ECHO                             [RFC1644]
      14     3    TCP Alternate Checksum Request      [RFC1146]
      15     N    TCP Alternate Checksum Data         [RFC1146]
      16          Skeeter                             [Stev_Knowles]
@@ -38,7 +40,7 @@
 */
 
 const uint8_t END_OF_LIST = 0;
-const uint8_t NO-OPERATION = 1;
+const uint8_t NO_OPERATION = 1;
 const uint8_t MAXIMUM_SEGMENT_SIZE = 2;
 const uint8_t WINDOW_SCALE = 3;
 const uint8_t SACK_PERMITTED = 4;
@@ -55,7 +57,7 @@ const uint8_t TCP_ALTERNATE_CHECKSUM_REQUEST = 14;
 const uint8_t TCP_ALTERNATE_CHECKSUM_DATA = 15;
 const uint8_t SKEETER = 16;
 const uint8_t BUBBA = 17;
-const uint8_t TRAILER CHECKSUM OPTION = 18;
+const uint8_t TRAILER_CHECKSUM_OPTION = 18;
 const uint8_t MD5_SIGNATURE_OPTION = 19;
 const uint8_t SCPS_CAPABILITIES = 20;
 const uint8_t SELECTIVE_NEGATIVE_ACKNOWLEDGEMENTS = 21;
@@ -296,7 +298,8 @@ const uint8_t RFC_3692_EXPERIEMNT_2 = 254;
 class TCPOption
 {
 	public:
-		TCPOption( uint8_t kind );
+		TCPOption( );
+		//TCPOption( uint8_t kind );
 		TCPOption( const TCPOption &t );
 		virtual ~TCPOption( );
 
@@ -312,7 +315,8 @@ class TCPOption
 
 		virtual std::vector< uint8_t > packetData(); // packs up the bits as they appear on the network
 
-	private:
+
+	protected:
 		uint8_t kind_;
 		uint8_t length_;
 		std::vector<uint8_t> data_;
@@ -325,3 +329,5 @@ class TCPOption
 		 */
 		bool isSingleOctet_; 
 };
+
+#endif

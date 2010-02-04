@@ -41,6 +41,72 @@ TCP::TCP( const uint8_t *packet, int size )
   if( size < headerSize )
     throw std::runtime_error( "Packet capture too small to make packet" );
   *header_ = *((struct my_tcp*)packet);
+
+	int optionSize = header_->dataOffset - 5; //5 is the minimum size for tcp with NO options
+	optionSize *= 4; //in bytes
+	optionSize = optionSize + TCPStructSize - size < optionSize ? 
+																		size - TCPStructSize : optionSize;
+
+	for( int i = 0; i < optionSize;  )
+	{
+		switch( packet[ i + TCPStructSize ] )
+		{
+			case 0: //END OF LIST
+				{
+					SmartPtr< TCPOption > option0( new EOLOption() );
+					options_.push_back( option0 );
+					i = i + option0->length();
+				}
+				break;
+			case 1: //NO-OP
+				{
+					SmartPtr< TCPOption > option1( new NOOPOption() );
+					options_.push_back( option1 );
+					i = i + option1->length();
+				}
+				break;
+			case 2: //MSS
+				{
+					SmartPtr< TCPOption > option2( new MSSOption( packet+(i+TCPStructSize), optionSize - i) );
+					options_.push_back( option2 );
+					i = i + option2->length();
+				}
+				break;
+			case 3: //Window Scale
+				{
+					SmartPtr< TCPOption > option3( new WSOption( packet+(i + TCPStructSize),
+								optionSize - i ) );
+					options_.push_back( option3 );
+					i = i + option3->length();
+				}
+				break;
+			case 4: //SACK PREMITTED
+				{
+					SmartPtr< TCPOption > option4( new SACKPremittedOption() ); 
+					options_.push_back( option4 );
+					i = i + option4->length();
+				}
+				break;
+			case 5: //SACK 
+				{
+					SmartPtr< TCPOption > option5( new SACKOption( packet+(i+TCPStructSize), optionSize - i) ); 
+					options_.push_back( option5 );
+					i = i + option5->length();
+				}
+				break;
+			case 8: //Time Stamp Option
+				{
+					SmartPtr< TCPOption > option8( new TimeStampOption( packet+(i+TCPStructSize), optionSize - i) ); 
+					options_.push_back( option8 );
+					i = i + option8->length();
+				}
+				break;
+		//	default:
+		};
+
+
+	}
+
 }
 
 TCP::TCP( const TCP &n )
@@ -158,7 +224,7 @@ void TCP::setURG_Flag( bool set )
   set ? header_->flags |= TCP_URG : header_->flags & (TCP_URG ^ 0xFF);
 }
 
-bool TCP::ACK_Flags() const
+bool TCP::ACK_Flag() const
 {
   return ( 0 < ( header_->flags & TCP_ACK ) );
 }
@@ -168,7 +234,7 @@ void TCP::setACK_Flag()
   setACK_Flag( true );
 }
 
-void TCP::setACK_Flags( bool set )
+void TCP::setACK_Flag( bool set )
 {
   set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
 }
@@ -243,7 +309,7 @@ void TCP::setWindowSize( uint16_t windowSize )
   header_->window = htons( windowSize );
 }
 
-uint16_t TCP::getChecksum() const
+uint16_t TCP::checksum() const
 {
   return ntohs( header_->checksum );
 }
@@ -253,7 +319,7 @@ void TCP::setChecksum( uint16_t checksum )
   header_->checksum = htons( checksum );
 }
 
-uint16_t TCP::UrgentPointer() const
+uint16_t TCP::urgentPointer() const
 {
   return ntohs( header_->urgentPointer );
 }
@@ -263,9 +329,9 @@ void TCP::setUrgentPointer( uint16_t urgentPointer )
   header_->urgentPointer = htons( urgentPointer );
 }
 
-int TCP::getSize() const 
+int TCP::size() const 
 {
-  return static_cast<int>( getDataOffset() );
+  return static_cast<int>( dataOffset() );
 }
 
 PacketBuffer TCP::makePacket() const 
@@ -281,10 +347,10 @@ PacketBuffer TCP::makePacket() const
   }
   for( int i = 0; i < bytes-TCPStructSize; ++i )
     packet.push_back( 0 );
-	std::vector< SmartPtr< TCPOption > >::iterator itr;
+	std::vector< SmartPtr< TCPOption > >::const_iterator itr;
 	for( itr = options_.begin(); itr != options_.end(); ++itr )
 	{
-		std::vector< uint8_t > bytes = itr->packetData();
+		std::vector< uint8_t > bytes = (*itr)->packetData();
 
 	}
   return PacketBuffer( packet );

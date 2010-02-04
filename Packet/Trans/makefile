@@ -1,4 +1,4 @@
-OBJS=tcp.o udp.o trans.o
+OBJS=tcp.o tcpOptions.o udp.o trans.o
 TESTOBJS=example/test.o ../packetBuffer.o
 
 CFLAGS=-ggdb -fPIC

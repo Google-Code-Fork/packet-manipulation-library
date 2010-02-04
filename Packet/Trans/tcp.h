@@ -37,6 +37,14 @@
 #include <netinet/in.h>
 #include "transData.h"
 #include "../../common/smartPtr.h"
+#include "tcpOptions.h"
+#include "eolOption.h"
+#include "mssOption.h"
+#include "noopOption.h"
+#include "sackOption.h"
+#include "sackPermittedOption.h"
+#include "timeStampOption.h"
+#include "wsOption.h"
 
 struct my_tcp {
   //!TCP datatype for use with the class TCP
@@ -171,7 +179,7 @@ class TCP : public TransData
 	//! Add a new option to the list of options.
 	void addOption( SmartPtr< TCPOption > option );
 	//! Return the current list of options. 
-	std::vector< SmartPtr< TCPOption > options() const { return options_; }
+	std::vector< SmartPtr< TCPOption > > options() const { return options_; }
 
   private:
   //!internal data

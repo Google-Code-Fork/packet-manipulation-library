@@ -1,12 +1,12 @@
-#ifndef EOL_OPTION
-#define EOL_OPTION
-
+#ifndef TIME_STAMP_OPTION_H 
+#define TIME_STAMP_OPTION_H 
 #include "tcpOptions.h"
 
-const uint8_t TIME_STAMP_SIZE = 10; //RFC 1323
+const uint8_t TIME_STAMP_SIZE = 10;
 
-class TimeStampOption : public TCPOptions
+class TimeStampOption : public TCPOption
 {
+	public:
 	TimeStampOption() 
 	{ 
 		kind_ = TIME_STAMP_OPTION; 
@@ -15,6 +15,21 @@ class TimeStampOption : public TCPOptions
 	  //initialize 8 bytes worth of data	
 		for( int i = 0; i < 8; ++i )
 			data_.push_back( 0 );
+	}
+	
+	TimeStampOption( const uint8_t *bytes, int size ) 
+	{ 
+		kind_ = TIME_STAMP_OPTION; 
+		isSingleOctet_ = false; 
+		length_ = TIME_STAMP_SIZE;
+		for( int i = 0; i < 8; ++i )
+			data_.push_back( 0 );
+	  //initialize 8 bytes worth of data
+		if( size >= TIME_STAMP_SIZE )
+		{
+			setTSVAL( *(reinterpret_cast<const uint32_t* >( bytes + 2 ) ) );
+			setTSecr( *(reinterpret_cast<const uint32_t* >( bytes + 6 ) ) );
+		}
 	}
 
 	TimeStampOption( const TimeStampOption & o ) 
@@ -46,7 +61,7 @@ class TimeStampOption : public TCPOptions
 		data_[7] = static_cast<uint8_t>( value & 0xFF );
 	}
 
-}
+};
 
 
 #endif
