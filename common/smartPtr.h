@@ -2,8 +2,6 @@
 #define SMARTPTR_H
 
 #include <iostream>
-#include <QMutex>
-#include <QMutexLocker>
 #include <stdexcept>
 
 class SmartPtrNULL;
@@ -27,11 +25,6 @@ class SmartPtrNULL;
 
     //changing the data in dataPtr changes the data in dataPtr2, however dataPtr3 doesn't effect
     //dataPtr or dataPtr2.
-
-	THREAD SAFETY:
-  This class is only semi thread safe. The class protects it's own internal count of users and
-	things related to the SmartPtr internal workings. The class however makes no attempt to ensure
-	that the underlying data pointed to by SmartPtr is thread safe.
 
  NULL Pointers :
   NULL pointers can be created with the default constructor.
