@@ -7,7 +7,7 @@
 class FingerPrint
 {
 	public:
-		FingerPrint( std::string fingerPrint );
+		FingerPrint( const std::string &fingerPrint );
 		FingerPrint();
 		FingerPrint( const FingerPrint &n );
 		~FingerPrint();
@@ -25,7 +25,8 @@ class FingerPrint
 		uint8_t zeroStamp() { return zeroStamp_; }
 		uint16_t size() { return size_; }
 		uint8_t optCount() { return tcpOptions_.size(); }
-		std::vector<uint8_t> tcpOptions() { return tcpOptions_; }
+		std::string tcpOptions() { return tcpOptions_; }
+		//std::vector<uint8_t> tcpOptions() { return tcpOptions_; }
 		uint16_t wsc() { return wsc_; }
 		uint16_t mss() { return mss_; }
 		uint8_t wscMod() { return wscMod_; }
@@ -34,7 +35,12 @@ class FingerPrint
 		uint32_t configFileLine() { return configFileLine_; }
 		FingerPrint* next() { return next_; }
 
-		bool hasNext() { next_ != NULL ? return true : return false; }
+		bool hasNext() 
+		{
+			if(next_ != NULL )
+				return true;
+		 return false; 
+		}
 
 		//set functions
 		void setFromFingerPrint( const std::string &fingerPrint );
@@ -49,7 +55,8 @@ class FingerPrint
 		void setTtl( uint8_t ttl ) { ttl_ = ttl; }
 		void setZeroStamp( uint8_t zeroStamp ) { zeroStamp_ = zeroStamp; }
 		void setSize( uint16_t size ) { size_ = size; }
-		void setTcpOptions( std::vector< uint8_t > tcpOptions ) { tcpOptions_ = tcpOptions; }
+		//void setTcpOptions( std::vector< uint8_t > tcpOptions ) { tcpOptions_ = tcpOptions; }
+		void setTcpOptions( std::string tcpOptions ) { tcpOptions_ = tcpOptions; }
 		void setWsc( uint16_t wsc ) { wsc_ = wsc; }
 		void setMss( uint16_t mss ) { mss_ = mss; }
 		void setWscMod( uint8_t wscMod ) { wscMod_ = wscMod; }
@@ -73,7 +80,8 @@ class FingerPrint
 		bool zeroStamp_;
 		uint16_t size_;
 		uint8_t optCount_;
-		std::vector<uint8_t> tcpOptions_; 
+		std::string tcpOptions_; 
+		//std::vector<uint8_t> tcpOptions_; 
 		uint16_t wsc_;
 		uint16_t mss_;
 		uint8_t wscMod_;
@@ -105,4 +113,6 @@ class FingerPrint
 		void setQuirksFingerPrint( std::string fp );
 		void setOSGenreFingerPrint( std::string fp );
 		void setDetailsFingerPrint( std::string fp );
-}
+};
+
+#endif
