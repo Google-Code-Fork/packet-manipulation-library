@@ -87,7 +87,7 @@ FingerPrint::~FingerPrint()
 {
 }
 
-void setFromFingerPrint( const std::string &fingerPrint )
+void FingerPrint::setFromFingerPrint( const std::string &fingerPrint )
 {
 	std::string windowFingerPrint;
 	std::string ttlFingerPrint;
@@ -119,7 +119,7 @@ void setFromFingerPrint( const std::string &fingerPrint )
 
 	//Don't Fragment
 	pos = fingerPrint.find( ':', start );
-	if( pos != std::string::nops )
+	if( pos != std::string::npos )
 	{
 		dontFragmentFingerPrint = fingerPrint.substr( start, pos - start );
 		start = pos + 1;
@@ -190,7 +190,7 @@ void FingerPrint::setOptionsFingerPrint( std::string fp )
 	zeroStamp_ = true;
 	//tcp options - . denotes no options
 	if( fp == "." )
-		tcpOptions_ = "";
+		tcpOptions_.clear();
 	else
 		tcpOptions_ = fp;
 }
