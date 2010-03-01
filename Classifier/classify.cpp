@@ -3,7 +3,7 @@
 const std::string Classify::SYN_DB = "p0f.fp";
 const std::string Classify::SYNACK_DB = "p0fa.fp";
 const std::string Classify::RST_DB = "p0fr.fp";
-const std::string Classify::OPEN_DB = "p0fo.fp"
+const std::string Classify::OPEN_DB = "p0fo.fp";
 
 const int Classify::MAXSIGS = 1024;
 const int Classify::MAXLINE = 1024;

@@ -1,6 +1,7 @@
 #ifndef CLASSIFY_H
 #define CLASSIFY_H
 #include <string>
+#include "../Packet/packet.h"
 
 class Classify
 {
@@ -80,6 +81,6 @@ class Classify
 		static const int QUERY_TIMEOUT;
 
 
-}
+};
 
 #endif
