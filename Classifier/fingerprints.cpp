@@ -1,5 +1,5 @@
 #include "fingerprints.h"
-
+#include "../common/helpers.h"
 
 const uint32_t FingerPrint::QUIRK_PAST = 0x00000001; //P
 const uint32_t FingerPrint::QUIRK_ZEROID = 0x00000002; //Z
@@ -14,6 +14,11 @@ const uint32_t FingerPrint::QUIRK_BROKEN = 0x00000200; //!
 const uint32_t FingerPrint::QUIRK_RSTACK = 0x00000400; //K
 const uint32_t FingerPrint::QUIRK_SEQEQ = 0x00000800; //!
 const uint32_t FingerPrint::QUIRK_SEQ0 = 0x00001000; //0
+
+const uint32_t FingerPrint::MOD_CONST = 1;
+const uint32_t FingerPrint::MOD_MSS = 2;
+const uint32_t FingerPrint::MOD_MTU = 3;
+const uint32_t FingerPrint::MOD_NULL = 0;
 
 
 FingerPrint::FingerPrint( const std::string &fingerPrint ):
@@ -171,10 +176,36 @@ void FingerPrint::setFromFingerPrint( const std::string &fingerPrint )
 
 void FingerPrint::setWindowFingerPrint( std::string fp )
 {
+	if( fp.at(0) == '*' )
+	{ //wildcard
+		windowSize_ = 1;
+		windowSizeMod_ = MOD_CONST;
+	}
+	else if ( tolower( fp.at(0) ) == 's' )
+	{ //Multiple of MSS
+		windowSizeMod_ = MOD_MSS;
+		windowSize_ = ss_atoi<int>(fp.substr(1));
+	}
+	else if ( tolower( fp.at(0) )  == 't' )
+	{
+		windowSizeMod_ = MOD_MTU;
+		windowSize_ = ss_atoi<int>( fp.substr(1) );
+	}
+	else if ( fp.at(0)  == '%' )
+	{
+		windowSizeMod_ = MOD_CONST;
+		windowSize_ = ss_atoi<int>( fp.substr( 1 ) );
+	}
+	else
+	{
+		windowSizeMod_ = MOD_NULL;
+		windowSize_ = ss_atoi<int>( fp );
+	}
 }
 
 void FingerPrint::setTTLFingerPrint( std::string fp )
 {
+	
 }
 
 void FingerPrint::setDontFragmentFingerPrint( std::string fp )

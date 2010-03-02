@@ -26,7 +26,6 @@ class FingerPrint
 		uint16_t size() { return size_; }
 		uint8_t optCount() { return tcpOptions_.size(); }
 		std::string tcpOptions() { return tcpOptions_; }
-		//std::vector<uint8_t> tcpOptions() { return tcpOptions_; }
 		uint16_t wsc() { return wsc_; }
 		uint16_t mss() { return mss_; }
 		uint8_t wscMod() { return wscMod_; }
@@ -103,6 +102,12 @@ class FingerPrint
 		static const uint32_t QUIRK_RSTACK; //K
 		static const uint32_t QUIRK_SEQEQ; //Q
 		static const uint32_t QUIRK_SEQ0; //0
+
+		//WINDOW MODES
+		static const uint32_t MOD_CONST; 
+		static const uint32_t MOD_MSS;
+		static const uint32_t MOD_MTU;
+		static const uint32_t MOD_NULL; //No Mod set window size constant.
 
 		//Private Functions
 		void setWindowFingerPrint( std::string fp );
