@@ -1,4 +1,4 @@
-OBJS=fingerprint.o signature.o
+OBJS=packetfingerprint.o signatures.o
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-lpcap

@@ -1,31 +1,56 @@
-#ifndef CLASSIFY_H
-#define CLASSIFY_H
+#ifndef FINGERPRINT_H
+#define FINGERPRINT_H
 #include <string>
+#include "signatures.h"
+#include <vector>
 #include "../Packet/packet.h"
 
-class Classify
+
+
+class PacketFingerprint
 {
 	public:
-		Classify( Packet p );
-		Classify( const Classify &n );
-		~Classify();
+		static const uint16_t NoSignature = 0x0;
+		static const uint16_t SynSignatures = 0x1;
+		static const uint16_t SynAckSignatures = 0x2;
+		static const uint16_t RstSignatures = 0x4;
+		static const uint16_t OpenSignatures = 0x8;
 
+	public:
+		PacketFingerprint( uint16_t useSignature = (SynSignatures | SynAckSignatures |
+					RstSignatures | OpenSignatures) );
+		PacketFingerprint( const PacketFingerprint &n );
+		~PacketFingerprint();
+
+		void usePacket( Packet p );
+		//void useHttp( Http http );
+
+	private:
 		//! Initialize all the databases
-		void init();
+		void init( uint16_t useSignature );
 		void initSyn();
 		void initSynAck();
 		void initRst();
 		void initOpen();
+		static inline uint8_t sighash( uint8_t tsize, uint8_t optcnt, uint8_t df, uint32_t quirks )
+		{
+			return static_cast<uint8_t>( ((tsize << 1) ^ (optcnt << 1) ^ (df) ^ (quirks) ) & 0x0F );
+		}
 
-		//
+	private: //member variables
+		static std::vector< Signature* > synHashLookup_;
+		static std::vector< Signature > synSignatures_;
+		static std::vector< Signature* > synAckHashLookup_;
+		static std::vector< Signature > synAckSignatures_;
+		static std::vector< Signature* > rstHashLookup_;
+		static std::vector< Signature > rstSignatures_;
+		static std::vector< Signature* > openHashLookup_;
+		static std::vector< Signature > openSignatures_;
+		static bool hasBeenInit_;
 
 
-
-	private:
-
-
-
-		//! Syn signature database
+	private: //constant data
+		static const int SIGHASH_SIZE;
 		static const std::string SYN_DB;
 		//! Syn-Ack signatures
 		static const std::string SYNACK_DB;

@@ -19,7 +19,7 @@ class Signature
 		uint8_t noDetail() { return noDetail_; }
 		uint8_t generic() { return generic_; }
 		uint8_t userland() { return userland_; }
-		uint32_t windowSize() { return windowSize_; }
+		uint8_t windowSize() { return windowSize_; }
 		uint8_t windowSizeMod() { return windowSizeMod_; }
 		uint8_t dontFragment() { return dontFragment_; }
 		uint8_t ttl() { return ttl_; }
@@ -50,7 +50,7 @@ class Signature
 		void setNoDetail( uint8_t noDetail ) { noDetail_ = noDetail; }
 		void setGeneric( uint8_t generic ) { generic_ = generic; }
 		void setUserland( uint8_t userland ) { userland_ = userland; }
-		void setWindowSize( uint32_t windowSize ) { windowSize_ = windowSize; }
+		void setWindowSize( uint8_t windowSize ) { windowSize_ = windowSize; }
 		void setWindowSizeMod( uint8_t windowSizeMod ) { windowSizeMod_ = windowSizeMod; }
 		void setDontFragment( uint8_t dontFragment ) { dontFragment_ = dontFragment; } 
 		void setTtl( uint8_t ttl ) { ttl_ = ttl; }
@@ -74,7 +74,7 @@ class Signature
 		bool noDetail_;
 		bool generic_;
 		bool userland_;
-		uint32_t windowSize_;
+		uint8_t windowSize_;
 		uint8_t windowSizeMod_;
 		uint8_t dontFragment_;
 		uint8_t ttl_;
