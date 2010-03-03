@@ -46,6 +46,8 @@ class PacketFingerprint
 		{
 			return static_cast<uint8_t>( ((tsize << 1) ^ (optcnt << 1) ^ (df) ^ (quirks) ) & 0x0F );
 		}
+		const std::string trim( const std::string &pString, 
+														const std::string &pWhitespace = " \t" );
 
 	private: //member variables
 		static std::string synDB_;
