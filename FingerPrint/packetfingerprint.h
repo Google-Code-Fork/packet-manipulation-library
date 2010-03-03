@@ -25,9 +25,19 @@ class PacketFingerprint
 		void usePacket( Packet p );
 		//void useHttp( Http http );
 
+		std::string synDB() const { return synDB_; }
+		std::string synAckDB() const { return synAckDB_; }
+		std::string rstDB() const { return rstDB_; }
+		std::string openDB() const { return openDB_; }
+
+		void setSynDB( const std::string &file );
+		void setSynAckDB( const std::string &file );
+		void setRstDB( const std::string &file );
+		void setOpenDB( const std::string &file );
+
 	private:
 		//! Initialize all the databases
-		void init( uint16_t useSignature );
+		void init( const uint16_t &useSignature );
 		void initSyn();
 		void initSynAck();
 		void initRst();
@@ -38,6 +48,10 @@ class PacketFingerprint
 		}
 
 	private: //member variables
+		static std::string synDB_;
+		static std::string synAckDB_;
+		static std::string rstDB_;
+		static std::string openDB_;
 		static std::vector< Signature* > synHashLookup_;
 		static std::vector< Signature > synSignatures_;
 		static std::vector< Signature* > synAckHashLookup_;
@@ -47,17 +61,11 @@ class PacketFingerprint
 		static std::vector< Signature* > openHashLookup_;
 		static std::vector< Signature > openSignatures_;
 		static bool hasBeenInit_;
+		
 
 
 	private: //constant data
 		static const int SIGHASH_SIZE;
-		static const std::string SYN_DB;
-		//! Syn-Ack signatures
-		static const std::string SYNACK_DB;
-		//! RST and RST-ACK signatures
-		static const std::string RST_DB;
-		//! Open DB (not very relaible)
-		static const std::string OPEN_DB;
 
 		//! Number of signatures allowed in the config file
 		static const int MAXSIGS;
