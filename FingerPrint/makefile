@@ -1,4 +1,4 @@
-OBJS=classify.o fingerprints.o
+OBJS=fingerprint.o signature.o
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-lpcap
