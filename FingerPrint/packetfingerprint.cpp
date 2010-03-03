@@ -1,9 +1,9 @@
-#include "fingerprint.h"
+#include "packetfingerprint.h"
 
-const std::string PacketFingerprint::SYN_DB = "p0f.fp";
-const std::string PacketFingerprint::SYNACK_DB = "p0fa.fp";
-const std::string PacketFingerprint::RST_DB = "p0fr.fp";
-const std::string PacketFingerprint::OPEN_DB = "p0fo.fp";
+std::string PacketFingerprint::synDB_ = "p0f.fp";
+std::string PacketFingerprint::synAckDB_ = "p0fa.fp";
+std::string PacketFingerprint::rstDB_ = "p0fr.fp";
+std::string PacketFingerprint::openDB_ = "p0fo.fp";
 
 const int PacketFingerprint::MAXSIGS = 1024;
 const int PacketFingerprint::MAXLINE = 1024;
@@ -26,7 +26,7 @@ PacketFingerprint::PacketFingerprint( uint16_t useSignature )
 		init( useSignature );
 }
 
-void PacketFingerprint::init( uint16_t useSignature )
+void PacketFingerprint::init( const uint16_t &useSignature )
 {
 	if( ! hasBeenInit_ )
 	{
@@ -56,8 +56,8 @@ void PacketFingerprint::init( uint16_t useSignature )
 		hasBeenInit_ = true;
 	}
 }
-
-void PacketFingerprint::reinit()
+/*
+void PacketFingerprint::reinit(const uint16_t &useSignature)
 {
 	synHashLookup_.clear();
 	synSignatures_.clear();
@@ -68,12 +68,52 @@ void PacketFingerprint::reinit()
 	openHashLookup_.clear();
 	openSignatures_.clear();
 	hasBeenInit_ = false;
-	init();
+	init(useSignature);
+}
+*/
+
+void PacketFingerprint::setSynDB( const std::string &file )
+{
+	synHashLookup_.clear();
+	synSignatures_.clear();
+	synDB_ = file;
+	for( int i = 0; i < SIGHASH_SIZE; ++i )
+		synHashLookup_.push_back( NULL );
+	initSyn();
+}
+
+void PacketFingerprint::setSynAckDB( const std::string &file )
+{
+	synAckHashLookup_.clear();
+	synAckSignatures_.clear();
+	synAckDB_ = file;
+	for( int i = 0; i < SIGHASH_SIZE; ++i )
+		synAckHashLookup_.push_back( NULL );
+	initSynAck();
+}
+
+void PacketFingerprint::setRstDB( const std::string &file )
+{
+	rstHashLookup_.clear();
+	rstSignatures_.clear();
+	rstDB_ = file;
+	for( int i = 0; i < SIGHASH_SIZE; ++i )
+		rstHashLookup_.push_back( NULL );
+	initRst();
+}
+
+void PacketFingerprint::setOpenDB( const std::string &file )
+{
+	openHashLookup_.clear();
+	openSignatures_.clear();
+	openDB_ = file;
+	for( int i = 0; i < SIGHASH_SIZE; ++i )
+		openHashLookup_.push_back( NULL );
+	initOpen();
 }
 
 void PacketFingerprint::initSyn()
 {
-
 }
 
 void PacketFingerprint::initSynAck()
