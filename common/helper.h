@@ -1,9 +1,10 @@
 /**
+ * * Used in PacMan orginally taken from:
  * * INAV - Interactive Network Active-traffic Visualization
  * * Copyright © 2007  Nathan Robinson, Jeff Scaparra
  * * Copyright © 2008 Jeff Scaparra
  * *
- * * This file is a part of the INAV project.
+ * * This file is a part of the PacMan project.
  * *
  * * This program is free software: you can redistribute it and/or modify
  * * it under the terms of the GNU General Public License as published by
