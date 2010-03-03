@@ -128,4 +128,33 @@ void PacketFingerprint::initOpen()
 {
 }
 
+void PacketFingerprint::readFile( std::string file,   )
+{
+	ifstream infile( file );
+	std::string signatureLine;
+
+  while( infile.good() )
+	{
+		getline( infile, signatureLine, '\n');
+		signatureLine = trim( signatureLine ); 
+		Signature sig(signatureLine);
+
+	}
+}
+
+const std::string trim(const std::string& pString,
+                       const std::string& pWhitespace )
+{
+    const size_t beginStr = pString.find_first_not_of(pWhitespace);
+    if (beginStr == std::string::npos)
+    {
+        // no content
+        return "";
+    }
+
+    const size_t endStr = pString.find_last_not_of(pWhitespace);
+    const size_t range = endStr - beginStr + 1;
+
+    return pString.substr(beginStr, range);
+}
 
