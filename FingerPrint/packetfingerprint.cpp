@@ -114,21 +114,27 @@ void PacketFingerprint::setOpenDB( const std::string &file )
 
 void PacketFingerprint::initSyn()
 {
+	readFile( synDB_, synSignatures_, synHashLookup_ );
 }
 
 void PacketFingerprint::initSynAck()
 {
+	readFile( synAckDB_, synAckSignatures_, synAckHashLookup_ );
 }
 
 void PacketFingerprint::initRst()
 {
+	readFile( rstDB_, rstSignatures_, rstHashLookup_ );
 }
 
 void PacketFingerprint::initOpen()
 {
+	readFile( openDB_, openSignatures_, OpenHashLookup_ );
 }
 
-void PacketFingerprint::readFile( std::string file,   )
+void PacketFingerprint::readFile( const std::string &file,
+																  std::vector< Signature > &signatures,
+																	std::vector< Signature* > &hashTable )
 {
 	ifstream infile( file );
 	std::string signatureLine;
@@ -138,7 +144,11 @@ void PacketFingerprint::readFile( std::string file,   )
 		getline( infile, signatureLine, '\n');
 		signatureLine = trim( signatureLine ); 
 		Signature sig(signatureLine);
-
+		signatures.push_back( sig );
+		int index = signatures.size() - 1;
+		Signature* ptr = &signatures.at(index);
+		hashTable[ sighash( 
+		
 	}
 }
 

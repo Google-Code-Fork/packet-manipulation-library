@@ -35,6 +35,7 @@ class PacketFingerprint
 		void setRstDB( const std::string &file );
 		void setOpenDB( const std::string &file );
 
+
 	private:
 		//! Initialize all the databases
 		void init( const uint16_t &useSignature );
@@ -42,10 +43,21 @@ class PacketFingerprint
 		void initSynAck();
 		void initRst();
 		void initOpen();
+
+		//! hashing function
+		/*!
+		 * tsize:
+		 * optcnt:
+		 * df:
+		 * quirks:
+		 */
 		static inline uint8_t sighash( uint8_t tsize, uint8_t optcnt, uint8_t df, uint32_t quirks )
 		{
 			return static_cast<uint8_t>( ((tsize << 1) ^ (optcnt << 1) ^ (df) ^ (quirks) ) & 0x0F );
 		}
+		void readFile( const std::string &file, std::vector< Signature >
+				&signatures, std::vector< Signature* > &hashTable );
+		
 		const std::string trim( const std::string &pString, 
 														const std::string &pWhitespace = " \t" );
 
