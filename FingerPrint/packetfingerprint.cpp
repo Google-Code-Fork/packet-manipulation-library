@@ -1,5 +1,5 @@
 #include "packetfingerprint.h"
-
+#include <fstream>
 std::string PacketFingerprint::synDB_ = "p0f.fp";
 std::string PacketFingerprint::synAckDB_ = "p0fa.fp";
 std::string PacketFingerprint::rstDB_ = "p0fr.fp";
@@ -129,14 +129,15 @@ void PacketFingerprint::initRst()
 
 void PacketFingerprint::initOpen()
 {
-	readFile( openDB_, openSignatures_, OpenHashLookup_ );
+	readFile( openDB_, openSignatures_, openHashLookup_ );
 }
 
 void PacketFingerprint::readFile( const std::string &file,
 																  std::vector< Signature > &signatures,
 																	std::vector< Signature* > &hashTable )
 {
-	ifstream infile( file );
+	std::ifstream infile;
+	infile.open( file.c_str() );
 	std::string signatureLine;
 
   while( infile.good() )
@@ -147,8 +148,17 @@ void PacketFingerprint::readFile( const std::string &file,
 		signatures.push_back( sig );
 		int index = signatures.size() - 1;
 		Signature* ptr = &signatures.at(index);
-		hashTable[ sighash( 
-		
+		Signature* hashptr = hashTable[ sighash( sig.size(), sig.optCount(), sig.dontFragment(), sig.quirks() ) ];
+		if( hashptr == NULL )
+		{
+			hashTable[ sighash( sig.size(), sig.optCount(), sig.dontFragment(), sig.quirks() ) ] = ptr;
+		}
+		else
+		{
+			while( hashptr->next() != NULL )
+				hashptr = hashptr->next();
+			hashptr->setNext( ptr );
+		}
 	}
 }
 
