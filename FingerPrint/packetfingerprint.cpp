@@ -5,6 +5,15 @@ std::string PacketFingerprint::synAckDB_ = "p0fa.fp";
 std::string PacketFingerprint::rstDB_ = "p0fr.fp";
 std::string PacketFingerprint::openDB_ = "p0fo.fp";
 
+std::vector< Signature* > PacketFingerprint::synHashLookup_;
+std::vector< Signature > PacketFingerprint::synSignatures_;
+std::vector< Signature* > PacketFingerprint::synAckHashLookup_;
+std::vector< Signature > PacketFingerprint::synAckSignatures_;
+std::vector< Signature* > PacketFingerprint::rstHashLookup_;
+std::vector< Signature > PacketFingerprint::rstSignatures_;
+std::vector< Signature* > PacketFingerprint::openHashLookup_;
+std::vector< Signature > PacketFingerprint::openSignatures_;
+
 const int PacketFingerprint::MAXSIGS = 1024;
 const int PacketFingerprint::MAXLINE = 1024;
 const int PacketFingerprint::MAXDIST = 40;
@@ -24,6 +33,10 @@ bool PacketFingerprint::hasBeenInit_=false;
 PacketFingerprint::PacketFingerprint( uint16_t useSignature ) 
 {
 		init( useSignature );
+}
+
+PacketFingerprint::~PacketFingerprint()
+{
 }
 
 void PacketFingerprint::init( const uint16_t &useSignature )
@@ -114,7 +127,7 @@ void PacketFingerprint::setOpenDB( const std::string &file )
 
 void PacketFingerprint::initSyn()
 {
-	readFile( synDB_, synSignatures_, synHashLookup_ );
+	readFile( synDB_, PacketFingerprint::synSignatures_, PacketFingerprint::synHashLookup_ );
 }
 
 void PacketFingerprint::initSynAck()
@@ -138,12 +151,16 @@ void PacketFingerprint::readFile( const std::string &file,
 {
 	std::ifstream infile;
 	infile.open( file.c_str() );
+	if( !infile.is_open() ) 
+		throw std::runtime_error( "Error: opening " + file );
 	std::string signatureLine;
 
   while( infile.good() )
 	{
 		getline( infile, signatureLine, '\n');
-		signatureLine = trim( signatureLine ); 
+		signatureLine = trim( signatureLine );
+		if( signatureLine.size() == 0 )
+			continue;
 		Signature sig(signatureLine);
 		signatures.push_back( sig );
 		int index = signatures.size() - 1;
@@ -162,19 +179,29 @@ void PacketFingerprint::readFile( const std::string &file,
 	}
 }
 
-const std::string trim(const std::string& pString,
-                       const std::string& pWhitespace )
+const std::string PacketFingerprint::trim(const std::string& pString,
+                       const std::string& pWhitespace, 
+											 const std::string& commentChars)
 {
-    const size_t beginStr = pString.find_first_not_of(pWhitespace);
-    if (beginStr == std::string::npos)
-    {
-        // no content
-        return "";
-    }
+	//Take out comment Characters.
+	std::string newString;
+	const size_t comment = pString.find_first_of( commentChars );
+	if( comment != std::string::npos )
+	{
+		newString = pString.substr( 0, comment );
+	}
+	
+	//Deal with whitespace...
+	const size_t beginStr = newString.find_first_not_of(pWhitespace);
+	if (beginStr == std::string::npos)
+	{
+		// no content
+		return "";
+	}
 
-    const size_t endStr = pString.find_last_not_of(pWhitespace);
-    const size_t range = endStr - beginStr + 1;
+	const size_t endStr = newString.find_last_not_of(pWhitespace);
+	const size_t range = endStr - beginStr + 1;
 
-    return pString.substr(beginStr, range);
+	return newString.substr(beginStr, range);
 }
 
