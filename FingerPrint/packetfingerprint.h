@@ -59,7 +59,8 @@ class PacketFingerprint
 				&signatures, std::vector< Signature* > &hashTable );
 		
 		const std::string trim( const std::string &pString, 
-														const std::string &pWhitespace = " \t" );
+														const std::string &pWhitespace = " \t",
+														const std::string &commentChars = "#" );
 
 	private: //member variables
 		static std::string synDB_;
