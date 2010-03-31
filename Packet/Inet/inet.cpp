@@ -23,7 +23,7 @@
  */
 #include "inet.h"
 
-template<> bool Inet::is<IPv4>( )
+template<> bool Inet::is<IPv4>( ) const
 {
   return header_->isIPv4();
 }

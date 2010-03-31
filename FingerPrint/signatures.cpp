@@ -1,6 +1,8 @@
 #include "signatures.h"
 #include "../common/helper.h"
 #include "../Packet/Trans/tcpOptions.h"
+#include "../Packet/Inet/ipv4.h"
+#include "../Packet/Trans/tcp.h"
 #include <stdexcept>
 
 const uint32_t Signature::QUIRK_PAST = 0x00000001; //P
@@ -43,6 +45,28 @@ Signature::Signature( const std::string &fingerPrint ):
 	next_(0)
 {
 	setFromSignature( fingerPrint );
+}
+
+Signature::Signature( const Packet &packet ):
+	noDetail_(0),
+	generic_(0),
+	userland_(0),
+	windowSize_(0),
+	windowSizeMod_(0),
+	dontFragment_(0),
+	ttl_(0),
+	zeroStamp_(0),
+	size_(0),
+	optCount_(0),
+	wsc_(0),
+	mss_(0),
+	wscMod_(0),
+	mssMod_(0),
+	quirks_(0),
+	configFileLine_(0),
+	next_(0)
+{
+	setFromPacket( packet );
 }
 
 Signature::Signature():
@@ -92,6 +116,44 @@ Signature::Signature( const Signature &n )
 
 Signature::~Signature()
 {
+}
+
+void Signature::setFromPacket( const Packet &p )
+{
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
+	{
+		IPv4 ip = p.getInet<IPv4>( 0 );
+		TCP tcp = p.getTrans<TCP>( 0 );
+		std::vector< SmartPtr< TCPOption > > options = tcp.options();
+		uint32_t quirks = 0;
+
+		//set IP stuff
+		setDontFragment( ip.dontFragment() );
+		setTtl( ip.ttl() );
+		//set TCP stuff
+		setWindowSize( tcp.windowSize() );
+
+		//set TCP options
+		std::vector< uint8_t > tcpOptions;
+		std::vector< SmartPtr< TCPOption > >::iterator itr;
+		for( itr = options.begin(); itr != options.end(); ++itr )
+		{
+			uint8_t kind = itr->kind();
+			uint32_t quirks |= checkForQuirks( *itr ); 
+			tcpOptions.push_back( kind() );
+		}
+		setTcpOptions( tcpOptions );
+
+	}
+
+}
+
+void Signature::checkForQuirks( const TCPOption &option )
+{
+	if( option.kind() == TIME_STAMP_OPTION )
+	{
+//CONTINUE WORKING HERE
+	}
 }
 
 void Signature::setFromSignature( const std::string &fingerPrint )

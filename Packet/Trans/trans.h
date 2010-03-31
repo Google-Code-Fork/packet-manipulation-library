@@ -80,71 +80,72 @@ class Trans : public Encapsulateable
     
     //!is<some class> returns true if this is of that type 
     //!example: is<TCP> returns true if TCP 
-    template< class T >bool is( ){ return false; }
+		//is<UDP> and is<TCP> Declared below
+    template< class T >bool is( ) const { return false; }
     
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
     //!example: get<TCP> returns a TCP object
-    template< class T > T get( ) 
-    {
-      if( !( is<T>() ) )
-      {
-	throw std::runtime_error("wrong type");
-      }
-      return T(*((T*)header_));
-    }
+		template< class T > T get( ) 
+		{
+			if( !( is<T>() ) )
+			{
+				throw std::runtime_error("wrong type");
+			}
+			return T(*((T*)header_));
+		}
 
-    //!sets this trans to be T
-    template< class T > void set( T e )
-    {
-      if( header_ )
-	delete header_;
-      header_ = new T;
-      *header_ = e;
-    }
+		//!sets this trans to be T
+		template< class T > void set( T e )
+		{
+			if( header_ )
+				delete header_;
+			header_ = new T;
+			*header_ = e;
+		}
 
-    //!returns the size in bytes of the underlying data
-    int getSize() const 
-    {
-      return header_->getSize();
-    }
+		//!returns the size in bytes of the underlying data
+		int getSize() const 
+		{
+			return header_->getSize();
+		}
 
-    //!returns a packet buffer of the underlying datatype suitable for other
-    //libraries or code
-    PacketBuffer makePacket() const 
-    {
-      return header_->makePacket();
-    }
+		//!returns a packet buffer of the underlying datatype suitable for other
+		//libraries or code
+		PacketBuffer makePacket() const 
+		{
+			return header_->makePacket();
+		}
 
 
-  private:
-  
-    //!Used to copy different Transport Layers supported
-    void copy( const Trans &n )
-    {
-      if( n.header_ == NULL )
-      {
-	header_ = NULL;
-      }
-      else if( n.header_->isTCP() )
-      {
-	header_ = new TCP( *((TCP*)n.header_) );
-      }
-      else if( n.header_->isUDP() )
-      {
-	header_ = new UDP( *((UDP*)n.header_) );
-      }
-      else
-	header_ = NULL;
-    }
+	private:
 
-    //!internal data
-    TransData* header_;
+		//!Used to copy different Transport Layers supported
+		void copy( const Trans &n )
+		{
+			if( n.header_ == NULL )
+			{
+				header_ = NULL;
+			}
+			else if( n.header_->isTCP() )
+			{
+				header_ = new TCP( *((TCP*)n.header_) );
+			}
+			else if( n.header_->isUDP() )
+			{
+				header_ = new UDP( *((UDP*)n.header_) );
+			}
+			else
+				header_ = NULL;
+		}
+
+		//!internal data
+		TransData* header_;
 };
 
-template<> bool Trans::is<UDP>( );
+template<> bool Trans::is<UDP>( ) const;
 
-template<> bool Trans::is<TCP>( );
+template<> bool Trans::is<TCP>( ) const;
 
 
 

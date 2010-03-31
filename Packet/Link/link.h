@@ -82,7 +82,7 @@ class Link : public Encapsulateable
 
     //!is<some class> returns true if this is of that type 
     //!example: is<Ethernet> returns true if Ethernet
-    template< class T >bool is( ){ return false; }
+    template< class T >bool is( ) const { return false; }
    
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
@@ -142,6 +142,6 @@ class Link : public Encapsulateable
     LinkData* header_;
 };
 
-template<> bool Link::is<Ethernet>( );
+template<> bool Link::is<Ethernet>( ) const;
 
 #endif

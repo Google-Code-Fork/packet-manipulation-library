@@ -3,7 +3,7 @@ INETDIR=Inet
 TRANSDIR=Trans
 APPDIR=App
 THIS=Packet
-
+TESTDIR=example
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
 
 OBJS=packetBuilder.o packetBuffer.o packet.o
@@ -45,6 +45,7 @@ clean:
 	 for i in $(LAYERDIRS) ; do \
 	 ( cd $$i ; make clean ) ; \
 	 done
+	 cd $(TESTDIR) ; rm -f *.o
 
 test: $(OBJS) $(TESTOBJS)
 	g++ $(OBJS) $(TESTOBJS) -o $@

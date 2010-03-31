@@ -112,65 +112,65 @@ class IPv4 : public InetData
 	  ~IPv4();
 
 	  //!Returns the version of IP
-	  uint8_t getVersion() const;
+	  uint8_t version() const;
 	  //!Allows the user to set the version number
 	  //!If the user doesn't set this to 4 then it doesn't make much sense
 	  //!unless they are trying to create a malformed packet.
 	  void setVersion( uint8_t );
 	  //!Returns the length of the IP header.
-	  uint8_t getHeaderLength() const;
+	  uint8_t headerLength() const;
 	  //!Sets the length of the header
 	  void setHeaderLength( uint8_t );
 	  //!returns the total length field
-	  uint16_t getTotalLength() const;
+	  uint16_t totalLength() const;
 	  //!Sets the total length field 
 	  void setTotalLength( uint16_t );
 	  //!returns the identifacation field
-	  uint16_t getIdentifaction() const;
+	  uint16_t identifaction() const;
 	  //!sets the identification field
 	  void setIdentifaction( uint16_t );
 	  //!Returns flag (true|false)
-	  bool getFlagsNoFragment() const;
+	  bool dontFragment() const;
 	  //!Set flag (true|false)
-	  void setFlagsNoFragment( bool );
+	  void setDontFragment( bool );
 	  //!Set flag true
-	  void setFlagsNoFragment( ); // == setFlagsNoFragment( true );
+	  void setDontFragment( ); // == setFlagsNoFragment( true );
 	  //!Returns flag (true|false)
-	  bool getFlagsMoreFragments() const;
+	  bool moreFragments() const;
 	  //!Set flag (true|false)
-	  void setFlagsMoreFragments( bool );
+	  void setMoreFragments( bool );
 	  //!Set flag true
-	  void setFlagsMoreFragments( ); // == setFlagsMoreFragments( true );
+	  void setMoreFragments( ); // == setFlagsMoreFragments( true );
 	  //!returns the fragment offset field
-	  uint16_t getFragmentOffset() const;
+	  uint16_t fragmentOffset() const;
 	  //!sets the fragment offset field
 	  void setFragmentOffset( uint16_t );
 	  //!Returns the ttl value of the header
-	  uint8_t getTTL() const;
+	  uint8_t ttl() const;
 	  //!Sets the TTL value of the header
-	  void setTTL( uint8_t );
+	  void setTtl( uint8_t );
 	  //!Returns the value of the upper level protocol
 	  //!Protocols are defined in the ipProtocols namespace
-	  uint8_t getProtocol() const;
+	  uint8_t protocol() const;
 	  //!Sets the value of the upper level protocol
 	  //!Protocols are defined in the ipProtocols namespace
 	  void setProtocol( uint8_t ); 
 	  //!Returns the checksum
-	  uint16_t getChecksum() const;
+	  uint16_t checksum() const;
 	  //!Sets the checksum field
 	  void setChecksum( uint16_t );
 	  //!returns the sources ip
-	  uint32_t getSourceAddress() const;
+	  uint32_t sourceAddress() const;
 	  //!Sets the source IP
 	  void setSourceAddress( uint32_t );
 	  //!returns the destination IP.
-	  uint32_t getDestinationAddress()const;
+	  uint32_t destinationAddress()const;
 	  //!sets the destination IP.
 	  void setDestinationAddress( uint32_t );
 	  //!Returns a packet buffer suitable for use in other libraries
 	  PacketBuffer makePacket() const;
 	  //!Returns the number of bytes in the IP header
-	  int getSize() const;
+	  int size() const;
 	  //!Returns true this is IP! Overloaded from InetData so we can tell we
 	  //have an IP header in the Packet
 	  bool isIPv4() const {return true;}
