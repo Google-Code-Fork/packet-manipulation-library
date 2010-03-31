@@ -24,12 +24,12 @@
 
 #include "trans.h"
 
-template<> bool Trans::is<UDP>( )
+template<> bool Trans::is<UDP>( ) const
 {
   return header_->isUDP();
 }
 
-template<> bool Trans::is<TCP>( )
+template<> bool Trans::is<TCP>( ) const
 {
   return header_->isTCP();
 }

@@ -4,11 +4,13 @@
 #include <vector>
 #include <string>
 #include <stdint.h>
+#include "../Packet/packet.h"
 
 class Signature
 {
 	public:
 		Signature( const std::string &signature );
+		Signature( const Packet &p );
 		Signature();
 		Signature( const Signature &n );
 		~Signature();
@@ -45,6 +47,7 @@ class Signature
 
 		//set functions
 		void setFromSignature( const std::string &signature );
+		void setFromPacket( const Packet &packet );
 		void setOS( std::string os ) { os_ = os; };
 		void setDesc( std::string desc ) { desc_ = desc; }
 		void setNoDetail( uint8_t noDetail ) { noDetail_ = noDetail; }

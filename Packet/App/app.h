@@ -73,7 +73,7 @@ class App : public Encapsulateable
 
     //!is<some class> returns true if this is of that type 
     //!example: is<Raw> returns true if Raw
-    template< class T >bool is( ){ return false; }
+    template< class T >bool is( ) const { return false; }
     
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
@@ -130,6 +130,6 @@ class App : public Encapsulateable
     AppData* header_;
 };
 
-template<> bool App::is<Raw>( );
+template<> bool App::is<Raw>( ) const;
 
 #endif

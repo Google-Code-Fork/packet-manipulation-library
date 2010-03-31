@@ -22,7 +22,8 @@ class PacketFingerprint
 		PacketFingerprint( const PacketFingerprint &n );
 		~PacketFingerprint();
 
-		void usePacket( Packet p );
+		Signature fingerprintPacket( const Packet &p ) const ;
+		//void usePacket( Packet p );
 		//void useHttp( Http http );
 
 		std::string synDB() const { return synDB_; }

@@ -59,7 +59,7 @@ IPv4& IPv4::operator =( const IPv4 &n )
 	*header_ = *(n.header_);
 }
 
-uint8_t IPv4::getVersion() const
+uint8_t IPv4::version() const
 {
 	uint8_t version = header_->ip_vhl;
 	return ((version & 0xf0) >> 4); 
@@ -73,7 +73,7 @@ void IPv4::setVersion( uint8_t version )
 	header_->ip_vhl |= version << 4;
 }
 
-uint8_t IPv4::getHeaderLength() const
+uint8_t IPv4::headerLength() const
 {
 	uint8_t headerLength = header_->ip_vhl;
 	return ((headerLength & 0x0F ) * 4);
@@ -86,7 +86,7 @@ void IPv4::setHeaderLength( uint8_t headerLength )
 	header_->ip_vhl |= headerLength & 0xF;
 }
 
-uint16_t IPv4::getTotalLength() const
+uint16_t IPv4::totalLength() const
 {
 	return ntohs( header_->ip_len);
 }
@@ -96,7 +96,7 @@ void IPv4::setTotalLength( uint16_t length )
 	header_->ip_len = htons(length);
 }
 
-uint16_t IPv4::getIdentifaction() const
+uint16_t IPv4::identifaction() const
 {
 	return ntohs( header_->ip_id);
 }
@@ -106,37 +106,37 @@ void IPv4::setIdentifaction( uint16_t id )
 	header_->ip_id = htons( id );
 }
 
-bool IPv4::getFlagsNoFragment() const
+bool IPv4::dontFragment() const
 {
 	return (  0 < (header_->ip_off & IP_DF) );
 }
 
-void IPv4::setFlagsNoFragment()
+void IPv4::setDontFragment()
 {
-	setFlagsNoFragment( true );
+	setDontFragment( true );
 }
 
-void IPv4::setFlagsNoFragment( bool set )
+void IPv4::setDontFragment( bool set )
 {
 	set ? header_->ip_off |= IP_DF : header_->ip_off &= 0x3FFF;
 }
 
-bool IPv4::getFlagsMoreFragments() const
+bool IPv4::moreFragments() const
 {
 	return (  0 < (header_->ip_off & IP_MF) );
 }
 
-void IPv4::setFlagsMoreFragments( bool set )
+void IPv4::setMoreFragments( bool set )
 {
 	set ? header_->ip_off |= IP_MF : header_->ip_off &= 0x5FFF;
 }
 
-void IPv4::setFlagsMoreFragments( )
+void IPv4::setMoreFragments( )
 {
-	setFlagsMoreFragments( true );
+	setMoreFragments( true );
 }
 
-uint16_t IPv4::getFragmentOffset() const
+uint16_t IPv4::fragmentOffset() const
 {
 	return header_->ip_off & IP_OFFMASK;
 }
@@ -148,17 +148,17 @@ void IPv4::setFragmentOffset( uint16_t fragmentOffset )
 	header_->ip_off |= fragmentOffset & IP_OFFMASK;
 }
 
-uint8_t IPv4::getTTL() const
+uint8_t IPv4::ttl() const
 {
 	return header_->ip_ttl;
 }
 
-void IPv4::setTTL( uint8_t ttl )
+void IPv4::setTtl( uint8_t ttl )
 {
 	header_->ip_ttl = ttl;
 }
 
-uint8_t IPv4::getProtocol() const
+uint8_t IPv4::protocol() const
 {
 	return header_->ip_p;
 }
@@ -168,7 +168,7 @@ void IPv4::setProtocol( uint8_t protocol )
 	header_->ip_p = protocol;
 }
 
-uint16_t IPv4::getChecksum() const
+uint16_t IPv4::checksum() const
 {
 	return ntohs( header_->ip_sum );
 }
@@ -178,7 +178,7 @@ void IPv4::setChecksum( uint16_t checksum )
 	header_->ip_sum = htons( checksum );
 }
 
-uint32_t IPv4::getSourceAddress() const
+uint32_t IPv4::sourceAddress() const
 {
 	return header_->ip_src.s_addr;
 }
@@ -188,7 +188,7 @@ void IPv4::setSourceAddress( uint32_t ip )
 	header_->ip_src.s_addr = ip;
 }
 
-uint32_t IPv4::getDestinationAddress() const
+uint32_t IPv4::destinationAddress() const
 {
 	return header_->ip_dst.s_addr;
 }
@@ -201,7 +201,7 @@ void IPv4::setDestinationAddress( uint32_t ip )
 PacketBuffer IPv4::makePacket( ) const
 {
   std::vector< uint8_t > packet;
-  int bytes = getHeaderLength();
+  int bytes = headerLength();
   uint8_t* ptr = (uint8_t*)( header_ );
   for( int i = 0; i < bytes; ++i )
   {
@@ -210,8 +210,8 @@ PacketBuffer IPv4::makePacket( ) const
   return PacketBuffer( packet );
 }
 
-int IPv4::getSize() const
+int IPv4::size() const
 {
-  return static_cast< uint16_t >(getHeaderLength( ));
+  return static_cast< uint16_t >(headerLength( ));
 }
 

@@ -205,3 +205,33 @@ const std::string PacketFingerprint::trim(const std::string& pString,
 	return newString.substr(beginStr, range);
 }
 
+Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const 
+{
+	uint16_t type = PacketFingerprint::NoSignature;
+	if( p.transIs<TCP>( 0 ) )
+	{
+		//Which Database
+		if( p.getTrans<TCP>(0).SYN_Flag() ) 
+		{
+			if( p.getTrans<TCP>(0).ACK_Flag() )
+				type = PacketFingerprint::SynAckSignatures;
+			else
+				type = PacketFingerprint::SynSignatures;
+		}
+		else if( p.getTrans<TCP>(0).RST_Flag() )
+		{
+			type = PacketFingerprint::RstSignatures;
+		}
+		else
+			type = PacketFingerprint::OpenSignatures;
+		
+		//find match :)
+		Signature packetSignature( p );
+
+
+		//Return signature found...
+	}
+		//WASN'T TCP
+		return Signature();
+}
+

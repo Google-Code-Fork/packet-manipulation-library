@@ -24,7 +24,7 @@
 
 #include "app.h"
 
-template<> bool App::is<Raw>( )
+template<> bool App::is<Raw>( ) const 
 {
   return header_->isRaw();
 }

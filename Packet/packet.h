@@ -86,33 +86,33 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: linkIs<Ethernet> returns true if Ethernet
-    template < class T > bool linkIs( int i )
+    template < class T > bool linkIs( int i ) const
     {
       return linkLayer_.at( i ).is< T >();
     }
 
     //!is<some class> returns true if this is of that type 
     //!example: inetIs<IPv4> returns true if IPv4 
-    template < class T > bool inetIs( int i )
+    template < class T > bool inetIs( int i ) const
     {
       return inetLayer_.at( i ).is< T >();
     }
 
     //!is<some class> returns true if this is of that type 
     //!example: transIs<TCP> returns true if TCP
-    template < class T > bool transIs( int i )
+    template < class T > bool transIs( int i ) const
     {
       return transLayer_.at( i ).is< T >();
     }
 
     //!is<some class> returns true if this is of that type 
     //!example: appIs<Raw> returns true if Raw 
-    template < class T > bool appIs( int i )
+    template < class T > bool appIs( int i ) const
     {
       return appLayer_.at( i ).is< T >();
     }
 
-    //!Returns the number of object in the link layer
+    //!Returns the number of objects in the link layer
     int linkSize( ) const;
     //!Returns the number of objects in the inet layer
     int inetSize( ) const;
@@ -165,13 +165,13 @@ class Packet : public AppData
 
   private:
     //!internal data
-    std::vector< Link > linkLayer_;
+    std::vector< Link >linkLayer_;
     //!internal data
-    std::vector< Inet > inetLayer_;
+    std::vector< Inet >inetLayer_;
     //!internal data
-    std::vector< Trans > transLayer_;
+    std::vector< Trans >transLayer_;
     //!internal data
-    std::vector< App > appLayer_;
+    std::vector< App >appLayer_;
 };
 
 //!Addition of two packets in the same manner as operator+=

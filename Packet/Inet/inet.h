@@ -73,7 +73,7 @@ class Inet : public Encapsulateable
 
     //!is<some class> returns true if this is of that type 
     //!example: is<IPv4> returns true if IPv4 
-    template< class T >bool is( ){ return false; }
+    template< class T >bool is( ) const { return false; }
     
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
@@ -129,6 +129,6 @@ class Inet : public Encapsulateable
     InetData* header_;
 };
 
-template<> bool Inet::is<IPv4>( );
+template<> bool Inet::is<IPv4>( ) const;
 
 #endif
