@@ -16,7 +16,7 @@ class Signature
 		~Signature();
 
 		//get functions
-	  std::string  os() { return os_; }
+		std::string  os() { return os_; }
 		std::string desc() { return desc_; }
 		uint8_t noDetail() { return noDetail_; }
 		uint8_t generic() { return generic_; }
@@ -42,7 +42,7 @@ class Signature
 		{
 			if(next_ != NULL )
 				return true;
-		 return false; 
+			return false; 
 		}
 
 		//set functions
@@ -69,7 +69,7 @@ class Signature
 		void addQuirk( uint32_t quirk ) { quirks_ |= quirk; }
 		void setConfigFileLine( uint32_t line ) { configFileLine_ = line; }
 		void setNext( Signature* next ) { next_ = next; }
-		
+
 
 	private:
 		std::string os_;
@@ -115,6 +115,7 @@ class Signature
 		static const uint32_t MOD_NULL; //No Mod set window size constant.
 
 		//Private Functions
+		uint32_t checkForQuirks( const TCPOption &option ) const; 
 		void setWindowSignature( std::string fp );
 		void setTTLSignature( std::string fp );
 		void setDontFragmentSignature( std::string fp );
