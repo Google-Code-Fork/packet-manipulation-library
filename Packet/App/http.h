@@ -18,35 +18,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** \file raw.h
- * This is the declaration for the class for handling Raw data
- * This is a catch all class. This is also how the packet class can currently
- * support unknown protocols. Unknown as in they are yet supported in PacMan. :)
+/** \file http.h
+ * This is the declaration for the class for handling HTTP data.
  */
 
 /** \class Raw
- * This class is used in conjunction with Packet for handling anything.
+ * This class is used in conjunction with Packet for handling HTTP.
  *
  */
-#ifndef RAW_H
-#define RAW_H
+#ifndef HTTP_H
+#define HTTP_H
 
 #include "appData.h"
 #include <vector>
 
-class Raw : public AppData
+class HTTP : public AppData
 {
   public: 
     //!default constructor
-    Raw();
+    HTTP();
     //!Build a Raw object from a byte buffer
-    Raw( const uint8_t* data, int size );
+    HTTP( const uint8_t* data, int size );
     //!copy constructor
-    Raw( const Raw &n );
+    HTTP( const HTTP &n );
     //!equality operator
-    Raw& operator=( const Raw &n );
+    HTTP& operator=( const HTTP &n );
     //!destructor
-    virtual ~Raw();
+    virtual ~HTTP();
     //!Return a Packet Buffer holding the contents of the Raw object for use
     //with other libraries or code
     PacketBuffer makePacket() const;
@@ -57,7 +55,7 @@ class Raw : public AppData
     //!Get the raw data in a std::vector<uint8_t> format
     std::vector< uint8_t > getData() const;
     //!Overloaded from App (returns true).
-    bool isRaw() const {return true;}
+    bool isHTTP() const {return true;}
 
   private:
     //!internal data

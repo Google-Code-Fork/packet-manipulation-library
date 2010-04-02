@@ -138,8 +138,8 @@ void Signature::setFromPacket( const Packet &p )
 		std::vector< SmartPtr< TCPOption > >::iterator itr;
 		for( itr = options.begin(); itr != options.end(); ++itr )
 		{
-			uint8_t kind = itr->kind();
-			uint32_t quirks |= checkForQuirks( *itr ); 
+			uint8_t kind = (*itr)->kind();
+			quirks |= checkForQuirks( *itr ); 
 			tcpOptions.push_back( kind() );
 		}
 		setTcpOptions( tcpOptions );
@@ -148,10 +148,11 @@ void Signature::setFromPacket( const Packet &p )
 
 }
 
-void Signature::checkForQuirks( const TCPOption &option )
+void Signature::checkForQuirks( const TCPOption &option ) const 
 {
 	if( option.kind() == TIME_STAMP_OPTION )
 	{
+
 //CONTINUE WORKING HERE
 	}
 }

@@ -46,6 +46,8 @@ class AppData : public Encapsulateable
     virtual PacketBuffer makePacket() const { return PacketBuffer(); }
     //!Raw Overloads this, returns false;
     virtual bool isRaw() const {return false;}
+		//!HTTP Overloads this, return false;
+		virtual bool isHTTP() const {return false;}
     //!Packet Overloads this, returns false;
     virtual bool isPacket() const { return false; }
 };
