@@ -53,12 +53,12 @@ class TCPOption
 		virtual void setData( std::vector< uint8_t > data );
 		virtual void singleOctet( bool isit );
 
-		virtual bool isSingleOctet( ) { return isSingleOctet_; }
-		virtual uint8_t kind() { return kind_; }
-		virtual uint8_t length() { return length_; }
-		virtual std::vector< uint8_t > data() { return data_; }
+		virtual bool isSingleOctet( ) const { return isSingleOctet_; }
+		virtual uint8_t kind() const { return kind_; }
+		virtual uint8_t length() const { return length_; }
+		virtual std::vector< uint8_t > data() const { return data_; }
 
-		virtual std::vector< uint8_t > packetData(); // packs up the bits as they appear on the network
+		virtual std::vector< uint8_t > packetData() const; // packs up the bits as they appear on the network
 
 
 	protected:

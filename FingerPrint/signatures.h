@@ -115,7 +115,7 @@ class Signature
 		static const uint32_t MOD_NULL; //No Mod set window size constant.
 
 		//Private Functions
-		uint32_t checkForQuirks( const TCPOption &option ) const; 
+		uint32_t checkForQuirks( const TCPOption *option ) const; 
 		void setWindowSignature( std::string fp );
 		void setTTLSignature( std::string fp );
 		void setDontFragmentSignature( std::string fp );

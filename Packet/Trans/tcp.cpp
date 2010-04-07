@@ -179,6 +179,17 @@ void TCP::setDataOffset( uint8_t dataOffset )
   header_->dataOffset |= dataOffset << 4;
 }
 
+uint8_t TCP::x2() const
+{
+	return X2( header_ );
+}
+
+void TCP::setX2( uint8_t x2 )
+{
+	header_->dataOffset &= 0x0F;
+	header_->dataOffset |= (x2 & 0x0F);
+}
+
 bool TCP::CWR_Flag() const
 {
   return (( 0 < ( header_->flags & TCP_CWR ) ) );
