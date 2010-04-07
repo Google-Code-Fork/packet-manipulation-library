@@ -293,14 +293,14 @@ void TCPOption::singleOctet( bool isit )
 	isSingleOctet_ = isit;
 }
 
-std::vector< uint8_t > TCPOption::packetData()
+std::vector< uint8_t > TCPOption::packetData() const
 {
 	std::vector< uint8_t > data;
 	data.push_back( kind_ );
 	if( !isSingleOctet_ )
 	{
 		data.push_back( length_ );
-		std::vector< uint8_t >::iterator itr;
+		std::vector< uint8_t >::const_iterator itr;
 		for( itr = data_.begin(); itr != data_.end(); ++itr )
 		{
 			data.push_back( *itr );

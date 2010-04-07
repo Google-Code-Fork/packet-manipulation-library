@@ -140,7 +140,7 @@ void Signature::setFromPacket( const Packet &p )
 		{
 			uint8_t kind = (*itr)->kind();
 			quirks |= checkForQuirks( *itr ); 
-			tcpOptions.push_back( kind() );
+			tcpOptions.push_back( kind );
 		}
 		setTcpOptions( tcpOptions );
 
@@ -148,10 +148,11 @@ void Signature::setFromPacket( const Packet &p )
 
 }
 
-void Signature::checkForQuirks( const TCPOption &option ) const 
+uint32_t Signature::checkForQuirks( const TCPOption *option ) const 
 {
-	if( option.kind() == TIME_STAMP_OPTION )
+	if( option->kind() == TCPOption::TIME_STAMP_OPTION )
 	{
+
 
 //CONTINUE WORKING HERE
 	}

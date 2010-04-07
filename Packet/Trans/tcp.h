@@ -53,6 +53,7 @@ struct my_tcp {
   u_int32_t sequenceNumber; 
   u_int32_t ackNumber;
   u_int8_t dataOffset;
+	#define X2(tcp) ((tcp)->dataOffset & 0x0F) 
   #define OFFSET(tcp)  (((tcp)->dataOffset & 0xF0) >> 4)
   u_int8_t flags;
   #define TCP_CWR 0x80
@@ -106,6 +107,10 @@ class TCP : public TransData
   uint8_t dataOffset() const;
   //!set the data offset
   void setDataOffset( uint8_t );
+	//!returns reserved data after the dataoffset in tcp header
+	uint8_t x2() const;
+	//!sets the reserved data after the dataoffset in the tcp header
+	void setX2( uint8_t x2 );
   //!return the flage (true|false)
   bool CWR_Flag() const;
   //!set the flag (true|false)
