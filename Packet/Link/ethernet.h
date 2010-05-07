@@ -110,7 +110,7 @@ class Ethernet : public LinkData
     //! Builds an Ethernet header from a byte buffer
     Ethernet( const uint8_t* buff, int size ); 
     //! Builds an Ethernet header from a vector of bytes
-    Ethernet( const std::vector< uint8_t > data ); 
+    Ethernet( const std::vector< uint8_t > &data ); 
     //! Ethernets copy constructor
     Ethernet( const Ethernet& n );
     //! Ethernets equality operator
