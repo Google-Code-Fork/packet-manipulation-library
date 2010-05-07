@@ -57,6 +57,23 @@ MACAddress& MACAddress::operator=( const MACAddress &a )
   return *this;
 }
 
+bool MACAddress::operator==( const MACAddress &a )
+{
+	if( mac_[0] != a.mac_[0] )
+		return false;
+	if( mac_[1] != a.mac_[1] )
+		return false;
+	if( mac_[2] != a.mac_[2] )
+		return false;
+	if( mac_[3] != a.mac_[3] )
+		return false;
+	if( mac_[4] != a.mac_[4] )
+		return false;
+	if( mac_[5] != a.mac_[5] )
+		return false;
+	return true;
+}
+
 MACAddress::~MACAddress()
 {
 }

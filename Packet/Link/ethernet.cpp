@@ -33,7 +33,7 @@ Ethernet::Ethernet()
   MACAddress mac; //zero everything out
   mac.getMAC( header_.destination);
   mac.getMAC( header_.source );
-  header_.protocol = 0;
+  header_.protocol = ethernetProtocol::ETH_P_IP; //default to IP
 }
 
 Ethernet::Ethernet( const Ethernet& n )
@@ -57,6 +57,11 @@ Ethernet::Ethernet( const uint8_t* buff, int size )
     const uint8_t* ptr = buff + EthernetSize;
     vlanTag_ = *((VlanTag*)ptr);
   }
+}
+
+Ethernet::Ethernet( const std::vector< uint8_t > &bytes )
+{
+	
 }
 
 Ethernet& Ethernet::operator =( const Ethernet &n )
@@ -91,12 +96,12 @@ void Ethernet::setSourceMAC( MACAddress mac )
 
 uint16_t Ethernet::getType()
 {
-	return ntohs(header_.protocol);
+	return header_.protocol;
 }
 
 void Ethernet::setType( uint16_t type )
 {
-	header_.protocol = htons( type );
+	header_.protocol =  type;
 }
 
 uint16_t Ethernet::getDot1QType( )

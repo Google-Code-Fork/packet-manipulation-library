@@ -48,8 +48,10 @@ class MACAddress : public LinkData
     MACAddress( std::vector< uint8_t > mac );
     //! Copy Constructor
     MACAddress( const MACAddress& a );
-    //! Equality operator
+    //! Assignment operator
     MACAddress& operator=( const MACAddress &a );
+		//! Equality operation
+		bool operator==( const MACAddress &a );
     //! Destructor
     virtual ~MACAddress();
 
