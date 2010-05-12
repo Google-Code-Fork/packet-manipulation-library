@@ -38,20 +38,55 @@
 #include "../packet.h"
 #include "inetData.h"
 
+//! icmp header data for use in the class ICMP
 typedef struct icmpHeader 
 {
-  //! icmp header data for use in the class ICMP
   uint8_t type;
   uint8_t code;
   uint16_t checkSum;
 } icmpHeader;
 
+//! icmpRequest data for use in ICMP
 typedef struct icmpRequest
 {
-  //! icmpRequest data for use in ICMP
   uint16_t identifier;
   uint16_t sequence;
 }icmpRequest;
+
+
+namespace icmpTypes
+{
+	const uint8_t ICMP_ECHO_REPLY = 0; // [RFC792]
+  const uint8_t ICMP_UNASSIGNED_1 = 1; //     [JBP]
+  const uint8_t ICMP_UNASSIGNED_2 = 2; //     [JBP]
+  const uint8_t ICMP_DESTINATION_UNREACHABLE = 3; // [RFC792]
+  const uint8_t ICMP_SOURCE_QUENCH = 4; // [RFC792]
+  const uint8_t ICMP_REDIRECT = 5; // [RFC792]
+	const uint8_t ICMP_ALTERNATE_HOST_ADDRESS = 6; // [JBP]
+	const uint8_t ICMP_UNASSIGNED_7 = 7; //JBP
+	const uint8_t ICMP_ECHO_REQUEST = 8; // [RFC792]
+	const uint8_t ICMP_ROUTER_ADVERTISEMENT = 9; // [RFC1256]
+	const uint8_t ICMP_ROUTER_SELECTION = 10; // [RFC1256]
+	const uint8_t ICMP_TIME_OUT = 11; // [RFC792]
+	const uint8_t ICMP_PARAMETER_PROBLEM = 12; // [RFC792]
+	const uint8_t ICMP_TIMESTAMP = 13; // [RFC792]
+	const uint8_t ICMP_TIMESTAMP_REPLY = 14; // [RFC792]
+	const uint8_t ICMP_INFORMATION_REQUEST = 15; // [RFC792]
+	const uint8_t ICMP_INFORMATION_REPLY = 16; // [RFC792]
+	const uint8_t ICMP_ADDRESS_MASK_REQUEST = 17; // [RFC950]
+	const uint8_t ICMP_ADDRESS_MASK_REPLY = 18; // [RFC950]
+	const uint8_t ICMP_RESERVED_SECURITY = 19; // [Solo]
+	//const uint8_t ICMP_RESERVED_ROBUSTNESS = 20 - 29 ; // [ZSu]
+	const uint8_t ICMP_TRACEROUTE = 30; // [RFC1393]
+	const uint8_t ICMP_DATAGRAM_CONVERSION_ERROR = 31; // [RFC1475]
+	const uint8_t ICMP_MOBILE_HOST_REDIRECT = 32; // [David Johnson]
+	const uint8_t ICMP_IPv6_WHERE_ARE_YOU = 33; // [Bill Simpson]
+	const uint8_t ICMP_IPv6_I_AM_HERE = 34; // [Bill Simpson]
+	const uint8_t ICMP_MOBILE_REGISTRATION_REQUEST = 35; // [Bill Simpson]
+	const uint8_t ICMP_MOBILE_REGISTRATION_REPLY = 36; // [Bill Simpson]
+	const uint8_t ICMP_DOMAIN_NAME_REQUEST = 37; // [Bill Simpson]
+}
+
 
 class Packet;
 
@@ -73,27 +108,27 @@ class ICMP : public InetData
     ICMP& operator= ( const ICMP &n );
 
     //!Return the ICMP type
-    uint8_t getType() const;
+    uint8_t type() const;
     //!Set the ICMP type
     void setType(uint8_t type);
     //!Return the ICMP code
-    uint8_t getCode() const;
+    uint8_t code() const;
     //!set the ICMP code
     void setCode(uint8_t code);
     //!return the checksum field
-    uint16_t getChecksum() const;
+    uint16_t checksum() const;
     //!set the checksum
     void setChecksum( uint16_t );
 
     //!return the length of the header
-    int getHeaderLength() const;
+    int headerLength() const;
 
     //!if a type 8 icmp request
-    uint16_t getIdentifier() const;
+    uint16_t identifier() const;
     //!to set a type 8 icmp request
     void setIdentifier( uint16_t ident );
-    //!return squence number
-    uint16_t getSequenceNum() const;
+    //!return sequence number
+    uint16_t sequenceNum() const;
     //!set the squence number
     void setSequenceNum( uint16_t sequence );
     //!generate the checksum
@@ -102,14 +137,17 @@ class ICMP : public InetData
     //!This is for type 11 icmp time-to-live exceeded 
     //!Returns a Packet object with the orginal content of the the exceeded
     //packet.
-    Packet getOrginalPacket();
+    Packet orginalPacket() const;
 
     //!Returns a PacketBuffer for use with other libraries and code
-    PacketBuffer make Packet() const;
+    PacketBuffer packet() const;
     //!Returns the size in bytes of the ICMP header
-    int getSize() const;
+    int size() const;
     //!Returns true... overloaded from InetData
     bool isICMP() const { return true; }
+
+		//! Make a PacketBuffer
+		PacketBuffer makePacket() const;
 
   private:
     //!internal data
@@ -117,7 +155,7 @@ class ICMP : public InetData
     //!internal data
     icmpRequest *request_; //type 8
     //!internal data
-    uint8_t *orginal_; //type 11 copy of orginal packet ip header
+    Packet *orginal_; //type 11 copy of orginal packet ip header
 };
 
 #endif
