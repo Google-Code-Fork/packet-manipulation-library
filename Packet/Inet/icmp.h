@@ -80,7 +80,7 @@ class ICMP : public InetData
     uint8_t getCode() const;
     //!set the ICMP code
     void setCode(uint8_t code);
-    //!return the checksum feild
+    //!return the checksum field
     uint16_t getChecksum() const;
     //!set the checksum
     void setChecksum( uint16_t );
