@@ -33,7 +33,6 @@
 #define IP_H
 
 #include <string>
-#include <pcap.h>
 #include <netinet/in.h>
 #include "inetData.h"
 #include "../encapsulateable.h"

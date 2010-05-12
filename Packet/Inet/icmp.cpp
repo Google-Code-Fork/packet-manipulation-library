@@ -24,10 +24,10 @@
 
 
 
-#include <iostream>
+//#include <iostream>
 #include "icmp.h"
-#include "../common/constants.h"
-#include "packet.h"
+//#include "packet.h"
+#include "../packetBuilder.h"
 
 ICMP::ICMP()
 {
@@ -42,11 +42,13 @@ ICMP::ICMP( const uint8_t *packet, const int size)
 	orginal_ = NULL;
 	header_ = new icmpHeader;
 	*header_ = *((icmpHeader*)packet);
-	if( getType() == net::TimeOut)
+	if( type() == icmpTypes::ICMP_TIME_OUT)
 	{
 		//must keep the orginal packet info
 		orginal_ = new Packet( );
-		orginal_->startAtIPHeader( packet + 8, size - 8 );
+		PacketBuilder pb;
+		*orginal_ = pb.build<IPv4>( packet + 8, size - 8 );
+		
 
 		/***** DEBUG 
 		if( orginal_->isIP() )
@@ -58,7 +60,7 @@ ICMP::ICMP( const uint8_t *packet, const int size)
 			*/
 	}
 
-	if( getType() == net::EchoRequest || getType() == net::EchoReply )
+	if( type() == icmpTypes::ICMP_ECHO_REQUEST  || type() == icmpTypes::ICMP_ECHO_REPLY )
 	{
 		request_ = new icmpRequest;
 		*request_ = *((icmpRequest*)(packet + sizeof( icmpHeader )));
@@ -126,7 +128,7 @@ ICMP& ICMP::operator= ( const ICMP &n )
 	}
 }
 
-uint8_t ICMP::getType()
+uint8_t ICMP::type() const
 {
 	return header_->type;
 }
@@ -147,7 +149,7 @@ void ICMP::setType( uint8_t type )
 	}
 }
 
-uint8_t ICMP::getCode()
+uint8_t ICMP::code() const
 {
 	return header_->code;
 }
@@ -157,7 +159,7 @@ void ICMP::setCode( uint8_t code )
 	header_->code = code;
 }
 
-uint16_t ICMP::getChecksum()
+uint16_t ICMP::checksum() const
 {
 	return header_->checkSum;
 }
@@ -211,7 +213,7 @@ uint16_t icmpChecksum (uint16_t * buffer, int numOfBytes)
 	return (uint16_t) (~cksum);
 }
 
-int ICMP::getHeaderLength()
+int ICMP::headerLength() const
 {
 	int size = 0;
 	if( header_ )
@@ -225,7 +227,7 @@ int ICMP::getHeaderLength()
 
 
 
-uint16_t ICMP::getIdentifier()
+uint16_t ICMP::identifier() const
 {
 	if( request_ == NULL )
 		throw std::runtime_error( "ICMP WRONG TYPE" );
@@ -239,7 +241,7 @@ void ICMP::setIdentifier( uint16_t identifier )
 	request_->identifier = identifier;
 }
 
-uint16_t ICMP::getSequenceNum()
+uint16_t ICMP::sequenceNum() const
 {
 	if( !request_ )
 		throw std::runtime_error( "ICMP WRONG TYPE" );
@@ -253,12 +255,12 @@ void ICMP::setSequenceNum( uint16_t sequence )
 	request_->sequence = sequence;
 }
 
-Packet ICMP::getOrginalPacket()
+Packet ICMP::orginalPacket() const
 {
 	if( header_->type != 11 )
 		throw std::runtime_error( "ICMP WRONG TYPE - Needs 11" );
 	PacketBuilder pb;
-	return pb.buildPacket<Ethernet>( orginal_ );
+	return pb.buildPacket<Ethernet>( orginal_->makePacket() );
 }
 
 PacketBuffer ICMP::makePacket() const
