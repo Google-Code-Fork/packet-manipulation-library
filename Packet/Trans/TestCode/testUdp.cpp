@@ -71,3 +71,8 @@ class UdpTest
 			QUNIT_IS_TRUE( udp1.isUDP() );
 		}
 };
+
+int main()
+{
+	return UdpTest( std::cerr ).run();
+}
