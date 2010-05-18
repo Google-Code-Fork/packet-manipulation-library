@@ -267,3 +267,9 @@ PacketBuffer ICMP::makePacket() const
 {
 
 }
+
+int ICMP::size() const
+{
+	//TODO: Make sure this is right..
+	return sizeof(header_); 
+}

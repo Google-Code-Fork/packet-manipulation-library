@@ -151,7 +151,7 @@ void PacketBuffer::setBuffer( uint8_t* buff, int size )
   }
 }
 
-uint8_t* PacketBuffer::getBuffer()
+uint8_t* PacketBuffer::buffer()
 {
   return buff_;
 }

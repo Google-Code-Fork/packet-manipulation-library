@@ -28,10 +28,10 @@ template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size
   Ethernet e( buff, size );
   Packet p;
   p.pushBackLink( e );
-  const uint8_t* newbuff = buff + e.getSize();
-  int newsize = size - e.getSize();
+  const uint8_t* newbuff = buff + e.size();
+  int newsize = size - e.size();
   Packet p2;
-  switch( e.getType() )
+  switch( e.type() )
   {
     case ethernetProtocol::ETH_P_IP:
       //std::cerr << "IP" << std::endl;
@@ -59,10 +59,10 @@ template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size )
   Packet p; 
   p.pushBackInet( ip );
   Packet p2;
-  const uint8_t* newbuff = buff + p.getSize();
-  int newsize = size - p.getSize();
+  const uint8_t* newbuff = buff + p.size();
+  int newsize = size - p.size();
   
-  switch( static_cast<uint16_t>( ip.getProtocol() ) )
+  switch( static_cast<uint16_t>( ip.protocol() ) )
   {
     case ipProtocols::IPPROTO_TCP:
       p2 = build< TCP >( newbuff, newsize );
@@ -83,8 +83,8 @@ template <> Packet PacketBuilder::build<TCP>( const  uint8_t* buff, int size )
   Packet p; 
   p.pushBackTrans( tcp );
   Packet p2;
-  const uint8_t* newbuff = buff + tcp.getSize();
-  int newsize = size - tcp.getSize();
+  const uint8_t* newbuff = buff + tcp.size();
+  int newsize = size - tcp.size();
 
   //NO TCP APPLICATION LAYER SUPPORTED ATM
   p2 = build< Raw >( newbuff, newsize );
@@ -98,8 +98,8 @@ template <> Packet PacketBuilder::build<UDP>( const  uint8_t* buff, int size )
   Packet p; 
   p.pushBackTrans( udp );
   Packet p2;
-  const uint8_t* newbuff = buff + udp.getSize();
-  int newsize = size - udp.getSize();
+  const uint8_t* newbuff = buff + udp.size();
+  int newsize = size - udp.size();
 
   //NO UDP APPLICATION LAYER SUPPORTED ATM
   p2 = build< Raw >( newbuff, newsize );

@@ -65,23 +65,23 @@ class UDP : public TransData
 
 
     //!Returns the sourcePort
-    uint16_t getSourcePort() const;
+    uint16_t sourcePort() const;
     //!Set the sourcePort
     void setSourcePort( uint16_t );
     //!gets the Destination port
-    uint16_t getDestinationPort() const;
+    uint16_t destinationPort() const;
     //!sets the Destination port
     void setDestinationPort( uint16_t );
     //!returns the checksum
-    uint16_t getChecksum() const;
+    uint16_t checksum() const;
     //!sets the checksum (doesn't care if it is correct)
     void setChecksum( uint16_t );
     //!gets the length of the UDP header
-    uint16_t getLength() const;
+    uint16_t length() const;
     //!sets the length of the UDP header
     void setLength( uint16_t );
     //!returns the size of the UDP header. Overloaded from encapsulatable
-    int getSize() const;
+    int size() const;
     //!Returns a packet buffer for use with other libraries and code
     PacketBuffer makePacket() const;
     //!Returns true... overloaded from TransData

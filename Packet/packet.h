@@ -58,7 +58,7 @@ class Packet : public AppData
     //!Returns a PacketBuffer with the contents of the packet
     PacketBuffer makePacket() const;
     //!Returns the size of the packet in bytes
-    int getSize() const;
+    int size() const;
   
     //!Puts a link layer header on the link layer 
     template<class T> void pushBackLink( T l )

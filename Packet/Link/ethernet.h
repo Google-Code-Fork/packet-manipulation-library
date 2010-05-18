@@ -119,16 +119,16 @@ class Ethernet : public LinkData
     ~Ethernet();
 
     //!Returns the Destination MAC address in the Ethernet header.
-    MACAddress getDestinationMAC();
+    MACAddress destinationMAC();
     //!Sets the Destination Mac address in the Ethernet header to mac.
     void setDestinationMAC( MACAddress mac );
     //!Returns the Source MAC address in the Ethernet header.
-    MACAddress getSourceMAC();
+    MACAddress sourceMAC();
     //!Sets the Destination Mac address in the Ethernet header to mac.
     void setSourceMAC( MACAddress );
     //!Returns the protocol of data above the Ethernet header.
     //!Protocols are defined in the namespace ethernetProtocol.
-    uint16_t getType();
+    uint16_t type();
     //!Sets the protocol of the data above the Ethernet header.
     //!If this is a dot1q frame it returns ETH_P_8021Q and getDot1QType
     //!returns the higher level protocol.
@@ -136,7 +136,7 @@ class Ethernet : public LinkData
     void setType( uint16_t );
     //!Returns the protocol of the data above the Ethernet and Dot1q addition.
     //!If this isn't a dot1q frame this function throws runtime_error.
-    uint16_t getDot1QType();
+    uint16_t dot1QType();
     //!Sets the protocol of the data above the Ethernet and Dot1q addition.
     //!If this isn't a dot1q frame this function turns it into one.
     void setDot1QType( uint16_t );
@@ -144,7 +144,7 @@ class Ethernet : public LinkData
     //libraries.
     PacketBuffer makePacket() const;
     //!Returns the size of the Ethernet header in bytes.
-    int getSize() const;
+    int size() const;
     //!Returns true because this is ethernet.
     //!Overloaded from LinkData.
     bool isEthernet() const;

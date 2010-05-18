@@ -41,7 +41,7 @@ class AppData : public Encapsulateable
     //!destructor
     virtual ~AppData() {}
     //!Returns 0
-    virtual int getSize() const { return 0; }
+    virtual int size() const { return 0; }
     //!Return empty PacketBuffer
     virtual PacketBuffer makePacket() const { return PacketBuffer(); }
     //!Raw Overloads this, returns false;

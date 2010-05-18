@@ -36,97 +36,97 @@
 
 class Inet : public Encapsulateable 
 {
-  public:
-    //!constructor
-    Inet( )
-    {
-      header_ = NULL;
-    }
+	public:
+		//!constructor
+		Inet( )
+		{
+			header_ = NULL;
+		}
 
-    //!builds a Inet object from IPv4
-    Inet( const IPv4 &ip )
-    {
-      header_ = new IPv4( ip );
-    }
+		//!builds a Inet object from IPv4
+		Inet( const IPv4 &ip )
+		{
+			header_ = new IPv4( ip );
+		}
 
-    //!copy constructor
-    Inet( const Inet &n )
-    {
-      copy( n );
-    }
+		//!copy constructor
+		Inet( const Inet &n )
+		{
+			copy( n );
+		}
 
-    //!equality operator
-    Inet& operator=( const Inet &n )
-    {
-      if( header_ )
-	delete header_;
-      copy( n );
-      return *this;
-    }
-   
-    //!destructor
-    virtual ~Inet() 
-    {
-      if( header_ )
-      delete header_;
-    }
+		//!equality operator
+		Inet& operator=( const Inet &n )
+		{
+			if( header_ )
+				delete header_;
+			copy( n );
+			return *this;
+		}
 
-    //!is<some class> returns true if this is of that type 
-    //!example: is<IPv4> returns true if IPv4 
-    template< class T >bool is( ) const { return false; }
-    
-    //!returns a T object
-    //!If this isn't a T object we throw runtime_error
-    //!example: get<IPv4> returns an IPv4 object
-    template< class T > T get( ) 
-    {
-      if( !( is<T>() ) )
-      {
-	throw std::runtime_error("wrong type");
-      }
-      return T(*((T*)header_));
-    }
+		//!destructor
+		virtual ~Inet() 
+		{
+			if( header_ )
+				delete header_;
+		}
 
-    //!sets this inet to be a T
-    template< class T > void set( T e )
-    {
-      if( header_ )
-	delete header_;
-      header_ = new T;
-      *header_ = e;
-    }
+		//!is<some class> returns true if this is of that type 
+		//!example: is<IPv4> returns true if IPv4 
+		template< class T >bool is( ) const { return false; }
 
-    //!Makes a PacketBuffer of this Inet
-    PacketBuffer makePacket() const 
-    {
-      return header_->makePacket();
-    }
+		//!returns a T object
+		//!If this isn't a T object we throw runtime_error
+		//!example: get<IPv4> returns an IPv4 object
+		template< class T > T get( ) 
+		{
+			if( !( is<T>() ) )
+			{
+				throw std::runtime_error("wrong type");
+			}
+			return T(*((T*)header_));
+		}
 
-    //!Returns the size of this Inet
-    int getSize() const
-    {
-      return header_->getSize();
-    }
+		//!sets this inet to be a T
+		template< class T > void set( T e )
+		{
+			if( header_ )
+				delete header_;
+			header_ = new T;
+			*header_ = e;
+		}
 
-  private:
-  
-    //!Used to copy the different Inet Layers supported
-    void copy( const Inet &n )
-    {
-      if( n.header_ == NULL )
-      {
-	header_ = NULL;
-      }
-      else if( n.header_->isIPv4() )
-      {
-	header_ = new IPv4( *((IPv4*)n.header_) );
-      }
-      else
-	header_ = NULL;
-    }
+		//!Makes a PacketBuffer of this Inet
+		PacketBuffer makePacket() const 
+		{
+			return header_->makePacket();
+		}
 
-    //!internal data
-    InetData* header_;
+		//!Returns the size of this Inet
+		int size() const
+		{
+			return header_->size();
+		}
+
+	private:
+
+		//!Used to copy the different Inet Layers supported
+		void copy( const Inet &n )
+		{
+			if( n.header_ == NULL )
+			{
+				header_ = NULL;
+			}
+			else if( n.header_->isIPv4() )
+			{
+				header_ = new IPv4( *((IPv4*)n.header_) );
+			}
+			else
+				header_ = NULL;
+		}
+
+		//!internal data
+		InetData* header_;
 };
 
 template<> bool Inet::is<IPv4>( ) const;

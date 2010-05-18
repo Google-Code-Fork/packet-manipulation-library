@@ -39,7 +39,7 @@ class Encapsulateable
     //!Forces derived classes to be able to produce PacketBuffers
     virtual PacketBuffer makePacket() const = 0; 
     //!Forces Derived classes to be able to return their size.
-    virtual int getSize() const = 0;
+    virtual int size() const = 0;
 
   private:
 };

@@ -45,7 +45,7 @@ class PacketBuilder
 
     //!builds a packet starting from the T header from a byte buffer given as a
     //!PacketBuffer
-    template <class T> Packet buildPacket( PacketBuffer pb ) { return build< T >( pb.getBuffer(), pb.size() ); }
+    template <class T> Packet buildPacket( PacketBuffer pb ) { return build< T >( pb.buffer(), pb.size() ); }
     //!Builds Packet from a buffer and a size
     template <class K> Packet build( const uint8_t* buff, int size );
 };

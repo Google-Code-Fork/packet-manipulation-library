@@ -36,98 +36,98 @@
 
 class App : public Encapsulateable
 {
-  public:
-    //!default constructor
-    App( )
-    {
-      header_ = NULL;
-    }
+	public:
+		//!default constructor
+		App( )
+		{
+			header_ = NULL;
+		}
 
-    //!build an App from a Raw object
-    App( const Raw &p )
-    {
-      header_ = new Raw( p );
-    }
+		//!build an App from a Raw object
+		App( const Raw &p )
+		{
+			header_ = new Raw( p );
+		}
 
-    //!copy constructor
-    App( const App &n )
-    {
-      copy( n );
-    }
+		//!copy constructor
+		App( const App &n )
+		{
+			copy( n );
+		}
 
-    //!equality operator
-    App& operator=( const App &n )
-    {
-      if( header_ )
-	delete header_;
-      copy( n );
-      return *this;
-    }
-   
-    //!destructor
-    virtual ~App() 
-    {
-      if( header_ )
-      delete header_;
-    }
+		//!equality operator
+		App& operator=( const App &n )
+		{
+			if( header_ )
+				delete header_;
+			copy( n );
+			return *this;
+		}
 
-    //!is<some class> returns true if this is of that type 
-    //!example: is<Raw> returns true if Raw
-    template< class T >bool is( ) const { return false; }
-    
-    //!returns a T object
-    //!If this isn't a T object we throw runtime_error
-    //!example: get<Raw> returns a Raw object
-    template< class T > T get( ) 
-    {
-      if( !( is<T>() ) )
-      {
-	throw std::runtime_error("wrong type");
-      }
-      return T(*((T*)header_));
-    }
+		//!destructor
+		virtual ~App() 
+		{
+			if( header_ )
+				delete header_;
+		}
 
-    //!sets this App to a T
-    template< class T > void set( T e )
-    {
-      if( header_ )
-	delete header_;
-      header_ = new T;
-      *header_ = e;
-    }
+		//!is<some class> returns true if this is of that type 
+		//!example: is<Raw> returns true if Raw
+		template< class T >bool is( ) const { return false; }
 
-    //!returns the size in bytes of the underlying data
-    int getSize() const 
-    {
-      return header_->getSize();
-    }
+		//!returns a T object
+		//!If this isn't a T object we throw runtime_error
+		//!example: get<Raw> returns a Raw object
+		template< class T > T get( ) 
+		{
+			if( !( is<T>() ) )
+			{
+				throw std::runtime_error("wrong type");
+			}
+			return T(*((T*)header_));
+		}
 
-    //!returns a packet buffer of the underlying datatype suitable for other
-    //libraries or code
-    PacketBuffer makePacket() const 
-    {
-      return header_->makePacket();
-    }
+		//!sets this App to a T
+		template< class T > void set( T e )
+		{
+			if( header_ )
+				delete header_;
+			header_ = new T;
+			*header_ = e;
+		}
 
-  private:
-  
-    //!Used to copy different Application layers supported
-    void copy( const App &n )
-    {
-      if( n.header_ == NULL )
-      {
-	header_ = NULL;
-      }
-      else if( n.header_->isRaw() )
-      {
-	header_ = new Raw( *((Raw*)n.header_) );
-      }
-      else
-	header_ = NULL;
-    }
+		//!returns the size in bytes of the underlying data
+		int size() const 
+		{
+			return header_->size();
+		}
 
-    //!internal data
-    AppData* header_;
+		//!returns a packet buffer of the underlying datatype suitable for other
+		//libraries or code
+		PacketBuffer makePacket() const 
+		{
+			return header_->makePacket();
+		}
+
+	private:
+
+		//!Used to copy different Application layers supported
+		void copy( const App &n )
+		{
+			if( n.header_ == NULL )
+			{
+				header_ = NULL;
+			}
+			else if( n.header_->isRaw() )
+			{
+				header_ = new Raw( *((Raw*)n.header_) );
+			}
+			else
+				header_ = NULL;
+		}
+
+		//!internal data
+		AppData* header_;
 };
 
 template<> bool App::is<Raw>( ) const;

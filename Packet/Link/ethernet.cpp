@@ -74,7 +74,7 @@ Ethernet::~Ethernet()
 {
 }
 
-MACAddress Ethernet::getDestinationMAC()
+MACAddress Ethernet::destinationMAC()
 {
   return MACAddress( header_.destination );
 }
@@ -84,7 +84,7 @@ void Ethernet::setDestinationMAC( MACAddress mac )
   mac.getMAC( header_.destination );
 }
 
-MACAddress Ethernet::getSourceMAC()
+MACAddress Ethernet::sourceMAC()
 {
   return MACAddress( header_.source );
 }
@@ -94,7 +94,7 @@ void Ethernet::setSourceMAC( MACAddress mac )
   mac.getMAC( header_.source );
 }
 
-uint16_t Ethernet::getType()
+uint16_t Ethernet::type()
 {
 	return header_.protocol;
 }
@@ -104,7 +104,7 @@ void Ethernet::setType( uint16_t type )
 	header_.protocol =  type;
 }
 
-uint16_t Ethernet::getDot1QType( )
+uint16_t Ethernet::dot1QType( )
 {
   if( header_.protocol != ethernetProtocol::ETH_P_8021Q )
     throw std::runtime_error( "not 802.1Q" );
@@ -118,7 +118,7 @@ void Ethernet::setDot1QType( uint16_t type )
   vlanTag_.type = type;
 }
 
-int Ethernet::getSize() const
+int Ethernet::size() const
 {
   if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
     return EthernetSize + Dot1QSize;

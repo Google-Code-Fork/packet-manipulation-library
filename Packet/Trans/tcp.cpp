@@ -348,7 +348,7 @@ int TCP::size() const
 PacketBuffer TCP::makePacket() const 
 {
   std::vector< uint8_t > packet;
-  int bytes = getSize();
+  int bytes = size();
   std::cerr << "SIZE: " << bytes << std::endl;
   uint8_t* ptr = (uint8_t*) header_;
   int sizeToCopy = bytes < TCPStructSize ? bytes : TCPStructSize;
