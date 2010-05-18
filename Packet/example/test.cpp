@@ -47,8 +47,8 @@ int main()
   PacketBuilder pb;
   Packet p2 = pb.buildPacket<Ethernet>( packBuff );
 
-  std::cout << "p2.size(): " << p2.getSize() << std::endl;
-  std::cout << "p.size(): " << p.getSize() << std::endl;
+  std::cout << "p2.size(): " << p2.size() << std::endl;
+  std::cout << "p.size(): " << p.size() << std::endl;
   std::cout << "packetBuff.size(): " << packBuff.size() << std::endl;
 
   std::cout << "p is " <<  (p.linkIs<Ethernet>( 0 ) ? "Ethernet" : "Not Ethernet" ) << std::endl;

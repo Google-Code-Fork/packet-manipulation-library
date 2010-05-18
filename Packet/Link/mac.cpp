@@ -87,7 +87,7 @@ void MACAddress::setMACAddress( std::vector< uint8_t > mac )
   mac_ = mac;
 }
 
-int MACAddress::getSize() const
+int MACAddress::size() const
 {
   return MACAddressSize;
 }

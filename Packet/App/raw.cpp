@@ -57,7 +57,7 @@ PacketBuffer Raw::makePacket() const
   return PacketBuffer( data_ );
 }
 
-int Raw::getSize() const
+int Raw::size() const
 {
   return data_.size();
 }
@@ -67,7 +67,7 @@ void Raw::setData( std::vector< uint8_t > data )
   data_ = data;
 }
 
-std::vector< uint8_t > Raw::getData() const
+std::vector< uint8_t > Raw::data() const
 {
   return data_;
 }

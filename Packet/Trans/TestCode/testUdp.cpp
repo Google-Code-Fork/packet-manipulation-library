@@ -40,32 +40,32 @@ class UdpTest
 			UDP udp2( udp1 );
 
 			//check source port
-			QUNIT_IS_TRUE( udp1.getSourcePort() == 0xd51b );
+			QUNIT_IS_TRUE( udp1.sourcePort() == 0xd51b );
 			//check set source port
 			udp1.setSourcePort( 0xd599 );
-			QUNIT_IS_TRUE( udp1.getSourcePort() == 0xd599 );
+			QUNIT_IS_TRUE( udp1.sourcePort() == 0xd599 );
 
 			//check dest port
-			QUNIT_IS_TRUE( udp1.getDestinationPort() == 0x0035 );
+			QUNIT_IS_TRUE( udp1.destinationPort() == 0x0035 );
 			//check set dest source port
 			udp1.setDestinationPort( 0x1111 );
-			QUNIT_IS_TRUE( udp1.getDestinationPort() == 0x1111 );
+			QUNIT_IS_TRUE( udp1.destinationPort() == 0x1111 );
 
 			//check checksum
-			QUNIT_IS_TRUE( udp1.getChecksum() == 0x4b15 );
+			QUNIT_IS_TRUE( udp1.checksum() == 0x4b15 );
 			//check set checksum
 			udp1.setChecksum( 0x4b11 );
-			QUNIT_IS_TRUE( udp1.getChecksum() == 0x4b11 );
+			QUNIT_IS_TRUE( udp1.checksum() == 0x4b11 );
 
 			//check length
-			QUNIT_IS_TRUE( udp1.getLength() == 0x0027 );
+			QUNIT_IS_TRUE( udp1.length() == 0x0027 );
 			//set length
 			udp1.setLength( 0x0030 );
-			QUNIT_IS_TRUE( udp1.getLength() == 0x0030 );
+			QUNIT_IS_TRUE( udp1.length() == 0x0030 );
 
 			//check size
-			QUNIT_IS_TRUE( udp1.getSize() == 8 );
-			QUNIT_IS_EQUAL( udp1.getSize(), udp2.getSize() );
+			QUNIT_IS_TRUE( udp1.size() == 8 );
+			QUNIT_IS_EQUAL( udp1.size(), udp2.size() );
 
 			//check if UDP header
 			QUNIT_IS_TRUE( udp1.isUDP() );

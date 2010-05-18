@@ -58,7 +58,7 @@ class MACAddress : public LinkData
     //! Sets the address base on the bytes in mac
     void setMACAddress( std::vector< uint8_t > mac );
     //! Returns the size of a MAC address
-    int getSize() const;
+    int size() const;
     //! Returns a Packetbuffer with the MAC address
     PacketBuffer makePacket() const;
     //! Places the mac address in the array mac

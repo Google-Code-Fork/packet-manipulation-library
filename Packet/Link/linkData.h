@@ -48,7 +48,7 @@ class LinkData : public Encapsulateable
     //!Returns an empty packet buffer
     virtual PacketBuffer makePacket() const { return PacketBuffer(); }
     //!Returns 0
-    virtual int getSize() const { return 0; }
+    virtual int size() const { return 0; } //should be defined by base class//{ return 0; }
 };
 
 

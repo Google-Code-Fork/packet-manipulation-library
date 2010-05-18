@@ -30,9 +30,9 @@ private:
 	void testType()
 	{
 		Ethernet ethernet;
-		QUNIT_IS_EQUAL( ethernet.getType(), ethernetProtocol::ETH_P_IP );
+		QUNIT_IS_EQUAL( ethernet.type(), ethernetProtocol::ETH_P_IP );
 		ethernet.setType( ethernetProtocol::ETH_P_ARP );
-		QUNIT_IS_EQUAL( ethernet.getType(), ethernetProtocol::ETH_P_ARP );
+		QUNIT_IS_EQUAL( ethernet.type(), ethernetProtocol::ETH_P_ARP );
 	}
 
 	void testPacketCreation()
@@ -54,12 +54,12 @@ private:
 		//header capture from wireshark
 		Ethernet ethernet2( bytes );
 		//Test that the types of each header is correct
-		QUNIT_IS_EQUAL( ethernet1.getType(), ethernetProtocol::ETH_P_IP );
-		QUNIT_IS_EQUAL( ethernet2.getType(), ethernetProtocol::ETH_P_IP );
+		QUNIT_IS_EQUAL( ethernet1.type(), ethernetProtocol::ETH_P_IP );
+		QUNIT_IS_EQUAL( ethernet2.type(), ethernetProtocol::ETH_P_IP );
 
 		//Pulling out source Mac Addresses from headers
-		MACAddress source1 = ethernet1.getSourceMAC();
-		MACAddress source2 = ethernet2.getSourceMAC();
+		MACAddress source1 = ethernet1.sourceMAC();
+		MACAddress source2 = ethernet2.sourceMAC();
 
 		//Both headers should be the same
 		QUNIT_IS_TRUE( source1 == source2 );
@@ -78,8 +78,8 @@ private:
 		}
 
 		//Pulling out source Mac Addresses from headers
-		MACAddress destination1 = ethernet1.getDestinationMAC();
-		MACAddress destination2 = ethernet2.getDestinationMAC();
+		MACAddress destination1 = ethernet1.destinationMAC();
+		MACAddress destination2 = ethernet2.destinationMAC();
 
 		//Both headers should be the same
 		QUNIT_IS_TRUE( destination1 == destination2 );

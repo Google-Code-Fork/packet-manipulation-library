@@ -41,8 +41,8 @@ class RawTest
 			Raw raw2( raw1 );
 
 			//check to size of raw contents in bytes
-			QUNIT_IS_EQUAL( raw1.getSize(), raw2.getSize() );
-			QUNIT_IS_TRUE( raw1.getSize() == 25 );
+			QUNIT_IS_EQUAL( raw1.size(), raw2.size() );
+			QUNIT_IS_TRUE( raw1.size() == 25 );
 
 			//check to see if raw
 			QUNIT_IS_TRUE( raw1.isRaw() );

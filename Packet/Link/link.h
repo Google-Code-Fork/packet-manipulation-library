@@ -68,7 +68,7 @@ class Link : public Encapsulateable
     Link& operator=( const Link &n )
     {
       if( header_ )
-	delete header_;
+				delete header_;
       copy( n );
       return *this;
     }
@@ -91,7 +91,7 @@ class Link : public Encapsulateable
     {
       if( !( is<T>() ) )
       {
-	throw std::runtime_error("wrong type");
+				throw std::runtime_error("wrong type");
       }
       return T(*((T*)header_));
     }
@@ -100,7 +100,7 @@ class Link : public Encapsulateable
     template< class T > void set( T e )
     {
       if( header_ )
-	delete header_;
+				delete header_;
       header_ = new T;
       *header_ = e;
     }
@@ -112,9 +112,9 @@ class Link : public Encapsulateable
     }
 
     //!Returns the size of this Link
-    int getSize() const
+    int size() const
     {
-      return header_->getSize();
+      return header_->size();
     }
 
   private:
@@ -123,23 +123,23 @@ class Link : public Encapsulateable
     void copy( const Link &n )
     {
       if( n.header_ == NULL )
-      {
-	header_ = NULL;
-      }
-      else if( n.header_->isEthernet() )
-      {
-	header_ = new Ethernet( *((Ethernet*)n.header_) );
-      }
-      else if( n.header_->isMac() )
-      {
-	header_ = new MACAddress( *((MACAddress*)n.header_) );
-      }
-      else
-	header_ = NULL;
-    }
+			{
+				header_ = NULL;
+			}
+			else if( n.header_->isEthernet() )
+			{
+				header_ = new Ethernet( *((Ethernet*)n.header_) );
+			}
+			else if( n.header_->isMac() )
+			{
+				header_ = new MACAddress( *((MACAddress*)n.header_) );
+			}
+			else
+				header_ = NULL;
+		}
 
-    //!internal data
-    LinkData* header_;
+		//!internal data
+		LinkData* header_;
 };
 
 template<> bool Link::is<Ethernet>( ) const;

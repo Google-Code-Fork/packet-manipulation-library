@@ -56,7 +56,7 @@ UDP::~UDP()
 	delete header_;
 }
 
-uint16_t UDP::getSourcePort() const
+uint16_t UDP::sourcePort() const
 {
 	return ntohs( header_->sport );
 }
@@ -66,7 +66,7 @@ void UDP::setSourcePort( uint16_t port )
 	header_->sport = htons( port );
 }
 
-uint16_t UDP::getDestinationPort() const
+uint16_t UDP::destinationPort() const
 {
 	return ntohs( header_->dport );
 }
@@ -76,7 +76,7 @@ void UDP::setDestinationPort( uint16_t port )
 	header_->dport = htons( port );
 }
 
-uint16_t UDP::getChecksum() const
+uint16_t UDP::checksum() const
 {
 	return ntohs( header_->checksum );
 }
@@ -86,7 +86,7 @@ void UDP::setChecksum( uint16_t checksum )
 	header_->checksum = htons( checksum );
 }
 
-uint16_t UDP::getLength() const
+uint16_t UDP::length() const
 {
 	return ntohs( header_->length );
 }
@@ -96,7 +96,7 @@ void UDP::setLength( uint16_t length )
 	header_->length = htons( length );
 }
 
-int UDP::getSize() const
+int UDP::size() const
 {
   return UDPSize;
 }

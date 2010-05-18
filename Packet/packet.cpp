@@ -75,7 +75,7 @@ Packet& Packet::operator+=( const Packet &n )
   return *this;
 }
 
-int Packet::getSize() const
+int Packet::size() const
 {
   int size = 0;
   std::vector< Link >::const_iterator litr;
@@ -84,19 +84,19 @@ int Packet::getSize() const
   std::vector< App >::const_iterator aitr;
   for( litr = linkLayer_.begin(); litr != linkLayer_.end(); ++litr )
   {
-    size += litr->getSize();
+    size += litr->size();
   }
   for( iitr = inetLayer_.begin(); iitr != inetLayer_.end(); ++iitr )
   {
-    size += iitr->getSize();
+    size += iitr->size();
   }
   for( titr = transLayer_.begin(); titr != transLayer_.end(); ++titr )
   {
-    size += titr->getSize();
+    size += titr->size();
   }
   for( aitr = appLayer_.begin(); aitr != appLayer_.end(); ++aitr )
   {
-    size += aitr->getSize();
+    size += aitr->size();
   }
   return size;
 }

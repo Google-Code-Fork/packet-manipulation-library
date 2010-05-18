@@ -51,11 +51,11 @@ class Raw : public AppData
     //with other libraries or code
     PacketBuffer makePacket() const;
     //!Return the size of the Raw contents in bytes.
-    int getSize() const;
+    int size() const;
     //!Set the raw data
     void setData( std::vector< uint8_t > data );
     //!Get the raw data in a std::vector<uint8_t> format
-    std::vector< uint8_t > getData() const;
+    std::vector< uint8_t > data() const;
     //!Overloaded from App (returns true).
     bool isRaw() const {return true;}
 

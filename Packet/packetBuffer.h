@@ -57,7 +57,7 @@ class PacketBuffer
     void setBuffer( uint8_t* buff, int size );
     //!returns a pointer to the buffer (only lives as long as the Packet Buffer
     //so be careful...
-    uint8_t* getBuffer();
+    uint8_t* buffer();
     //!Returns the size...
     int size();
 

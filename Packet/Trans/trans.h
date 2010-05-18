@@ -105,9 +105,9 @@ class Trans : public Encapsulateable
 		}
 
 		//!returns the size in bytes of the underlying data
-		int getSize() const 
+		int size() const 
 		{
-			return header_->getSize();
+			return header_->size();
 		}
 
 		//!returns a packet buffer of the underlying datatype suitable for other
