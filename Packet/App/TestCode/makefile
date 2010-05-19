@@ -3,11 +3,11 @@ TESTRAWOBJS=../../packetBuffer.o testRaw.o
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) rawTest
+all: $(OBJS) testRaw
 
 clean:
 	-rm *.o rawTest example/*.o
 
-rawTest: $(OBJS) $(TESTRAWOBJS)
+testRaw: $(OBJS) $(TESTRAWOBJS)
 	g++ -ggdb $(OBJS) $(TESTRAWOBJS) -o $@
 
