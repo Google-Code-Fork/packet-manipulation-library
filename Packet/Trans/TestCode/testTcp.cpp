@@ -215,7 +215,9 @@ class TcpTest
 		}
 };
 
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return TcpTest( std::cerr ).run();
 }
+#endif
