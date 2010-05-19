@@ -1,17 +1,25 @@
-OBJS=../inet.o ../ipv4.o ../icmp.o
-PACKETBUILDEROBJS=../../packetBuilder.o ../../Link/ethernet.o ../../Link/mac.o ../../Link/link.o ../../Trans/udp.o ../../Trans/tcp.o ../../Trans/tcpOptions.o ../../Trans/trans.o ../../App/app.o ../../App/raw.o ../../packet.o
-TESTIPV4OBJS=../../packetBuffer.o testIPv4.o
-TESTICMPOBJS=../../packetBuffer.o testIcmp.o
-CFLAGS=-ggdb -fPIC
-CXXFLAGS=$(CFLAGS)
+include ../../../global.mk
+TESTIPV4OBJS=testIPv4.o
+TESTICMPOBJS=testIcmp.o
+SCOPE=local
+ifeq ($(SCOPE),global)
+	CFLAGS=-ggdb -fPIC -D GLOBAL_SCOPE
+	ALL=$(TESTIPV4OBJS) $(TESTICMPOBJS) $(PACKETOBJS)
+else
+	ALL=$(TESTIPV4OBJS) $(TESTICMPOBJS) $(PACKETOBJS) testIPv4 testIcmp
+	CFLAGS=-ggdb -fPIC
+endif
 
-all: $(OBJS) testIPv4 testIcmp
+CXXFLAGS=$(CFLAGS)
+	
+
+all: $(ALL) 
 
 clean: 
-	-rm *.o testIPv4 testIcmp example/*.o
+	-rm *.o testIPv4 testIcmp ../*.o
 
-testIPv4: $(OBJS) $(TESTIPV4OBJS) $(PACKETBUILDEROBJS) 
-	g++ -ggdb $(OBJS) $(TESTIPV4OBJS) $(PACKETBUILDEROBJS) -o $@
+testIPv4: $(TESTIPV4OBJS) $(PACKETOBJS)
+	g++ -ggdb $(TESTIPV4OBJS) $(PACKETOBJS) -o $@
 
-testIcmp: $(OBJS) $(TESTICMPOBJS) $(PACKETBUILDEROBJS)
-	g++ -ggdb $(OBJS) $(TESTICMPOBJS) $(PACKETBUILDEROBJS) -o $@
+testIcmp: $(TESTICMPOBJS) $(PACKETOBJS)
+	g++ -ggdb $(TESTICMPOBJS) $(PACKETOBJS) -o $@

@@ -154,7 +154,10 @@ class IPv4Test
 
 };
 
+
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return IPv4Test( std::cerr ).run();
 }
+#endif

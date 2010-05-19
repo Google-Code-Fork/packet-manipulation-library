@@ -59,7 +59,9 @@ class RawTest
 		}
 };
 
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return RawTest ( std::cerr ).run();
 }
+#endif

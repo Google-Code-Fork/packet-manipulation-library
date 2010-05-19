@@ -1,24 +1,23 @@
-OBJS=ipv4.o inet.o icmp.o ../packetBuffer.o ../packet.o
-PACKETBUILDEROBJS=../packetBuilder.o ../Link/ethernet.o ../Link/mac.o ../Link/link.o ../Trans/udp.o ../Trans/tcp.o ../Trans/tcpOptions.o ../Trans/trans.o ../App/app.o ../App/raw.o
-TESTOBJS=example/test.o 
+include ../../global.mk
+
+EXAMPLESOURCE=exampleCode/test.cpp
+EXAMPLEOBJS=$(EXAMPLESOURCE:%.cpp=%.o)
 
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) test
+all: deps $(INETOBJS) example 
 
 clean: 
-	-rm *.o test example/*.o
+	-rm *.o example exampleCode/*.o *.d 
 
-test: $(TESTOBJS) $(OBJS) $(PACKETBUILDEROBJS)
-	g++ $(TESTOBJS) $(OBJS) $(PACKETBUILDEROBJS) -o $@
+example: $(EXAMPLEOBJS) $(PACKETOBJS)
+	g++ $(EXAMPLEOBJS) $(PACKETOBJS) -o $@
 
-ipv4.o: ipv4.cpp ipv4.h inetData.h ../packetBuffer.h ../encapsulateable.h \
-  ../packetBuffer.h
-test.o: test.cpp ipv4.h inetData.h ../packetBuffer.h ../encapsulateable.h \
-  ../packetBuffer.h inet.h
-inetData.o: inetData.h ../packetBuffer.h
-inet.o: inet.h inetData.h ../packetBuffer.h ipv4.h ../encapsulateable.h \
-  ../packetBuffer.h
-ipv4.o: ipv4.h inetData.h ../packetBuffer.h ../encapsulateable.h \
-  ../packetBuffer.h
+deps: $(PACKETSOURCE) $(PACKETHEADER) $(TESTSOURCE)
+	g++ -MD -E $(PACKETSOURCE) $(PACKETHEADER) $(TESTSOURCE) > /dev/null
+
+*.d: deps
+
+
+include *.d

@@ -1,19 +1,22 @@
-OBJS=raw.o app.o
-TESTOBJS=example/test.o ../packetBuffer.o
+include ../../global.mk
+
+EXAMPLESOURCE=exampleCode/test.cpp ../packetBuffer.cpp
+EXAMPLEOBJS=$(EXAMPLESOURCE:%.cpp=%.o)
 
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) test
+all: $(APPOBJS) example 
 
 clean: 
 	-rm *.o test example/*.o
 
-test: $(TESTOBJS) $(OBJS)
-	g++ $(TESTOBJS) $(OBJS) -o $@
+example: $(EXAMPLEOBJS) $(APPOBJS)
+	g++ $(EXAMPLEOBJS) $(APPOBJS) -o $@
 
-raw.o: raw.cpp raw.h appData.h ../packetBuffer.h
-test.o: test.cpp raw.h appData.h ../packetBuffer.h app.h
-appData.o: appData.h ../packetBuffer.h
-app.o: app.h appData.h ../packetBuffer.h raw.h
-raw.o: raw.h appData.h ../packetBuffer.h
+deps: $(APPSOURCE) $(APPHEADERS) $(EXAMPLESOURCE)
+	g++ -MD -E $(APPSOURCE) $(EXAMPLESOURCE) > /dev/null
+
+*.d: deps
+
+include *.d
