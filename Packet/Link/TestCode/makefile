@@ -1,17 +1,25 @@
-OBJS=../mac.o ../ethernet.o ../link.o
+LINKOBJS=../mac.o ../ethernet.o ../link.o
 TESTETHEROBJS=../../packetBuffer.o ethernetTest.o
 TESTMACOBJS=../../packetBuffer.o macTest.o
-CFLAGS=-ggdb -fPIC
+
+ifeq ($(SCOPE),global)
+	CFLAGS=-ggdb -fPIC -D GLOBAL_SCOPE
+	ALL=$(LINKOBJS) $(TESTETHEROBJS) $(TESTMACOBJS) 
+else
+	ALL=$(LINKOBJS) $(TESTETHEROBJS) $(TESTMACOBJS) testEthernet testMac
+	CFLAGS=-ggdb -fPIC
+endif
+
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) testEthernet testMac
+all: $(ALL) 
 
 clean: 
 	-rm *.o testEthernet testMac example/*.o
 
-testMac: $(OBJS) $(TESTMACOBJS) 
-	g++ -ggdb $(OBJS) $(TESTMACOBJS) -o $@
+testMac: 
+	g++ -ggdb $(LINKOBJS) $(TESTMACOBJS) -o $@
 
-testEthernet: $(OBJS) $(TESTETHEROBJS) 
-	g++ -ggdb $(OBJS) $(TESTETHEROBJS) -o $@
+testEthernet:
+	g++ -ggdb $(LINKOBJS) $(TESTETHEROBJS) -o $@
 

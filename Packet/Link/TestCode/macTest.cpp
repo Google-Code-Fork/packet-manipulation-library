@@ -48,7 +48,9 @@ private:
 	}
 };
 
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return MacTest( std::cerr ).run();
 }
+#endif

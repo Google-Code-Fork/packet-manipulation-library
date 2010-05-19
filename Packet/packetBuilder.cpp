@@ -22,6 +22,7 @@
  * This is the definition for the class PacketBuilder
  */
 #include "packetBuilder.h"
+
 //template specialization must go outside of class def
 template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size )
 {

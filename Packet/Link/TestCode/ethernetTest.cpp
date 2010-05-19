@@ -105,8 +105,10 @@ private:
 };
 
 
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return EthernetTest( std::cerr ).run();
 }
+#endif
 

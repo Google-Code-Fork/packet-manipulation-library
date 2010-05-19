@@ -7,7 +7,7 @@ TESTDIR=example
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
 
 OBJS=packetBuilder.o packetBuffer.o packet.o
-TESTOBJS=example/test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/tcpOptions.o Trans/udp.o Trans/trans.o App/raw.o App/app.o
+TESTOBJS=example/test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/tcpOptions.o Trans/udp.o Trans/trans.o App/raw.o App/app.o Inet/icmp.o
 
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)

@@ -1,13 +1,22 @@
-OBJS=../raw.o
+APPOBJS=../raw.o
 TESTRAWOBJS=../../packetBuffer.o testRaw.o
-CFLAGS=-ggdb -fPIC
+SCOPE=local
+
+ifeq ($(SCOPE),global)
+	CFLAGS=-ggdb -fPIC -D GLOBAL_SCOPE
+	ALL=$(APPOBJS) $(TESTRAWOBJS)
+else
+	CFLAGS=-ggdb -fPIC 
+	ALL=$(APPOBJS) $(TESTRAWOBJS) testRaw
+endif
+	
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) testRaw
+all: $(ALL)
 
 clean:
-	-rm *.o rawTest example/*.o
+	-rm *.o rawTest ../*.o
 
-testRaw: $(OBJS) $(TESTRAWOBJS)
-	g++ -ggdb $(OBJS) $(TESTRAWOBJS) -o $@
+testRaw: $(APPOBJS) $(TESTRAWOBJS)
+	g++ -ggdb $(APPOBJS) $(TESTRAWOBJS) -o $@
 

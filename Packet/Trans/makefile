@@ -1,17 +1,17 @@
 include ../../global.mk
 
-EXAMPLESOURCE=example/test.cpp ../packetBuffer.cpp
+EXAMPLESOURCE=exampleCode/test.cpp ../packetBuffer.cpp
 EXAMPLEOBJS=$(EXAMPLESOURCE:%.cpp=%.o)
 
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
-all: $(TRANSOBJS) test 
+all: $(TRANSOBJS) example 
 
 clean: 
-	-rm *.o test example/*.o
+	-rm *.o example exampleCode/*.o *.d 
 
-test: $(EXAMPLEOBJS) $(TRANSOBJS)
+example: $(EXAMPLEOBJS) $(TRANSOBJS)
 	g++ $(EXAMPLEOBJS) $(TRANSOBJS) -o $@
 
 deps: $(TRANSSOURCE) $(TRANSHEADERS) $(EXAMPLESOURCE)

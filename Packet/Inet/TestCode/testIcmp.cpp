@@ -101,7 +101,9 @@ class IcmpTest
 		}
 };
 
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return IcmpTest( std::cerr ).run();
 }
+#endif
