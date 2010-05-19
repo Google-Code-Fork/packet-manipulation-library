@@ -1,17 +1,24 @@
-OBJS=../tcp.o ../udp.o ../tcpOptions.o ../trans.o
+TRANSOBJS=../tcp.o ../udp.o ../tcpOptions.o ../trans.o
 TESTTCPOBJS=../../packetBuffer.o testTcp.o
 TESTUDPOBJS=../../packetBuffer.o testUdp.o
-CFLAGS=-ggdb -fPIC
+SCOPE=local
+ifeq ($(SCOPE),global)
+	CFLAGS=-ggdb -fPIC -D GLOBAL_SCOPE
+	ALL=$(TRANSOBJS) $(TESTTCPOBJS) $(TESTUDPOBJS)
+else
+	ALL=$(TRANSOBJS) $(TESTTCPOBJS) $(TESTUDPOBJS) testTcp testUdp
+	CFLAGS=-ggdb -fPIC
+endif
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) testTcp testUdp
+all: $(ALL) 
 
 clean: 
-	-rm *.o testTcp testUdp example/*.o
+	-rm *.o testTcp testUdp ../*.o
 
-testTcp: $(OBJS) $(TESTTCPOBJS)
-	  g++ -ggdb $(OBJS) $(TESTTCPOBJS) -o $@
+testTcp:
+	  g++ -ggdb $(TRANSOBJS) $(TESTTCPOBJS) -o $@
 
-testUdp: $(OBJS) $(TESTUDPOBJS)
-	  g++ -ggdb $(OBJS) $(TESTUDPOBJS) -o $@
+testUdp:
+	  g++ -ggdb $(TRANSOBJS) $(TESTUDPOBJS) -o $@
 

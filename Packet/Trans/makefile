@@ -1,27 +1,22 @@
-OBJS=tcp.o tcpOptions.o udp.o trans.o
-TESTOBJS=example/test.o ../packetBuffer.o
+include ../../global.mk
+
+EXAMPLESOURCE=example/test.cpp ../packetBuffer.cpp
+EXAMPLEOBJS=$(EXAMPLESOURCE:%.cpp=%.o)
 
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
-all: $(OBJS) test
+all: $(TRANSOBJS) test 
 
 clean: 
 	-rm *.o test example/*.o
 
-test: $(TESTOBJS) $(OBJS)
-	g++ $(TESTOBJS) $(OBJS) -o $@
+test: $(EXAMPLEOBJS) $(TRANSOBJS)
+	g++ $(EXAMPLEOBJS) $(TRANSOBJS) -o $@
 
+deps: $(TRANSSOURCE) $(TRANSHEADERS) $(EXAMPLESOURCE)
+	g++ -MD -E $(TRANSSOURCE) $(TRANSHEADERS) $(EXAMPLESOURCE) > /dev/null
 
-tcp.o: tcp.cpp tcp.h transData.h ../packetBuffer.h
-udp.o: udp.cpp udp.h transData.h ../packetBuffer.h
-tcp.o: tcp.h transData.h ../packetBuffer.h
-transData.o: transData.h ../packetBuffer.h
-udp.o: udp.h transData.h ../packetBuffer.h
-tcp.o: tcp.cpp tcp.h transData.h ../packetBuffer.h
-test.o: test.cpp tcp.h transData.h ../packetBuffer.h udp.h trans.h
-udp.o: udp.cpp udp.h transData.h ../packetBuffer.h
-tcp.o: tcp.h transData.h ../packetBuffer.h
-transData.o: transData.h ../packetBuffer.h
-trans.o: trans.h transData.h ../packetBuffer.h tcp.h udp.h
-udp.o: udp.h transData.h ../packetBuffer.h
+*.d: deps
+
+include *.d

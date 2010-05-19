@@ -72,7 +72,9 @@ class UdpTest
 		}
 };
 
+#ifndef GLOBAL_SCOPE
 int main()
 {
 	return UdpTest( std::cerr ).run();
 }
+#endif
