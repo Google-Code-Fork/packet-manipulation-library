@@ -145,7 +145,10 @@ void ICMP::setType( uint8_t type )
 	else
 	{
 		if( request_ )
+		{
 			delete request_;
+			request_ = NULL;
+		}
 	}
 }
 
