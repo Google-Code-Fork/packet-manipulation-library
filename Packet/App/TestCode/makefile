@@ -15,7 +15,7 @@ CXXFLAGS=$(CFLAGS)
 all: $(ALL)
 
 clean:
-	-rm *.o rawTest ../*.o
+	-rm *.o testRaw ../*.o
 
 testRaw: $(APPOBJS) $(TESTRAWOBJS)
 	g++ -ggdb $(APPOBJS) $(TESTRAWOBJS) -o $@
