@@ -1,7 +1,4 @@
-#include "../../../Test/QUnit.hpp"
-#include "../ipv4.h"
-#include <iostream>
-#include <netinet/in.h>
+#include "testIPv4.h"
 
 //IPv4 packet used for test:
 //version - 4
@@ -17,96 +14,90 @@
 //Source IP - 0xA3F0A8E7 (163.240.168.231)
 //Dest IP - 0xC16E912E (193.110.145.46)
 
-class IPv4Test
+IPv4Test::IPv4Test( std::ostream &out, int verboseLevel ) : qunit(
+		out, verboseLevel)
 {
-	public:
-		IPv4Test( std::ostream &out, int verboseLevel = QUnit::verbose ) : qunit(
-				out, verboseLevel)
-	{
-	}
+}
 
-		int run()
-		{
-			testIsIpv4();
-			testPacketCreation();
-			return qunit.errors();
-		}
+int IPv4Test::run()
+{
+	testIsIpv4();
+	testPacketCreation();
+	return qunit.errors();
+}
 
-	private:
-		QUnit::UnitTest qunit;
+void IPv4Test::testIsIpv4()
+{
+	IPv4 ipv4;
+	QUNIT_IS_TRUE( ipv4.isIPv4() );
+}
 
-		void testIsIpv4()
-		{
-			IPv4 ipv4;
-			QUNIT_IS_TRUE( ipv4.isIPv4() );
-		}
+void IPv4Test::testPacketCreation()
+{
+	//20 bytes IPv4 header taken from a wireshark dump
+	uint8_t bits[] = { 0x45, 0x00, 0x00, 0x30, 0x62, 0xd7, 0x40, 0x00, 0x80,
+		0x06, 0xf8, 0x7b, 0xa3, 0xf0, 0xa8, 0xe7, 0xc1, 0x6e, 0x91, 0x2e};
 
-		void testPacketCreation()
-		{
-			//20 bytes IPv4 header taken from a wireshark dump
-			uint8_t bits[] = { 0x45, 0x00, 0x00, 0x30, 0x62, 0xd7, 0x40, 0x00, 0x80,
-				0x06, 0xf8, 0x7b, 0xa3, 0xf0, 0xa8, 0xe7, 0xc1, 0x6e, 0x91, 0x2e};
+	//construct IPv4 header from bytes above
+	IPv4 ipv4_1( bits, 20 );
 
-			//construct IPv4 header from bytes above
-			IPv4 ipv4_1( bits, 20 );
+	//copy
+	IPv4 ipv4_2( ipv4_1 );
 
-			//copy
-			IPv4 ipv4_2( ipv4_1 );
-		
-      //isIPv4
-		  QUNIT_IS_TRUE( ipv4_1.isIPv4() );
-			QUNIT_IS_TRUE( ipv4_2.isIPv4() );
+	//isIPv4
+	QUNIT_IS_TRUE( ipv4_1.isIPv4() );
+	QUNIT_IS_TRUE( ipv4_2.isIPv4() );
 
-			//size
-			QUNIT_IS_EQUAL( ipv4_1.size(), ipv4_2.size() );
-			QUNIT_IS_TRUE( ipv4_1.size() == 20 );
+	//size
+	QUNIT_IS_EQUAL( ipv4_1.size(), ipv4_2.size() );
+	QUNIT_IS_TRUE( ipv4_1.size() == 20 );
 
-			//version
-			QUNIT_IS_TRUE( ipv4_1.version() == 4);
+	//version
+	QUNIT_IS_TRUE( ipv4_1.version() == 4);
 
-			//setversion
-			ipv4_1.setVersion(0x06);
-			QUNIT_IS_TRUE( ipv4_1.version() == 6);
-			//change the version back to 4
-			ipv4_1.setVersion(0x04);
-			
-			//headerLength
-			QUNIT_IS_TRUE( ipv4_1.headerLength() == 20 );
+	//setversion
+	ipv4_1.setVersion(0x06);
+	QUNIT_IS_TRUE( ipv4_1.version() == 6);
+	//change the version back to 4
+	ipv4_1.setVersion(0x04);
 
-			//setHeaderLength
-			ipv4_1.setHeaderLength(12);
-			QUNIT_IS_TRUE( ipv4_1.headerLength() == 12);
-			//change the header length back to 20 (=5 words)
-			ipv4_1.setHeaderLength(20);
+	//headerLength
+	QUNIT_IS_TRUE( ipv4_1.headerLength() == 20 );
 
-			//totalLength
-			QUNIT_IS_TRUE( ipv4_1.totalLength() == 48 );
+	//setHeaderLength
+	ipv4_1.setHeaderLength(12);
+	QUNIT_IS_TRUE( ipv4_1.headerLength() == 12);
+	//change the header length back to 20 (=5 words)
+	ipv4_1.setHeaderLength(20);
 
-			//setTotalLength
-			ipv4_1.setTotalLength(0x0040);
-			QUNIT_IS_TRUE( ipv4_1.totalLength() == 64 );
-			//change the total length back to 48
-			ipv4_1.setTotalLength(48);
+	//totalLength
+	QUNIT_IS_TRUE( ipv4_1.totalLength() == 48 );
 
-			//identification
-			QUNIT_IS_TRUE( ipv4_1.identifaction() == 0x62d7 );
+	//setTotalLength
+	ipv4_1.setTotalLength(0x0040);
+	QUNIT_IS_TRUE( ipv4_1.totalLength() == 64 );
+	//change the total length back to 48
+	ipv4_1.setTotalLength(48);
 
-			//setIdentifaction
-			ipv4_1.setIdentifaction(0x6666);
-			QUNIT_IS_TRUE( ipv4_1.identifaction() == 0x6666 );
-			//change the identification field back to original (0x62d7)
-			ipv4_1.setIdentifaction(0x62d7);
+	//identification
+	QUNIT_IS_TRUE( ipv4_1.identifaction() == 0x62d7 );
 
-			//Flag - returns dontfragment flag (true|false)
-			QUNIT_IS_TRUE( ipv4_1.dontFragment() );
-			//set dontfragment flag
-			ipv4_1.setDontFragment( false );
-			QUNIT_IS_FALSE( ipv4_1.dontFragment() );
-			//set dontfragment -> true
-			ipv4_1.setDontFragment();
-			QUNIT_IS_TRUE( ipv4_1.dontFragment() );
+	//setIdentifaction
+	ipv4_1.setIdentifaction(0x6666);
+	QUNIT_IS_TRUE( ipv4_1.identifaction() == 0x6666 );
+	//change the identification field back to original (0x62d7)
+	ipv4_1.setIdentifaction(0x62d7);
 
-			//Flag - returns moreFragment flag (true|false)
+	//Flag - returns dontfragment flag (true|false)
+	QUNIT_IS_TRUE( ipv4_1.dontFragment() );
+	//set dontfragment flag
+	ipv4_1.setDontFragment( false );
+	QUNIT_IS_FALSE( ipv4_1.dontFragment() );
+	//set dontfragment -> true
+	ipv4_1.setDontFragment();
+	QUNIT_IS_TRUE( ipv4_1.dontFragment() );
+
+	//Flag - returns moreFragment flag (true|false)
 			QUNIT_IS_FALSE( ipv4_1.moreFragments() );
 			//set moreFragment flag to false
 			ipv4_1.setMoreFragments( false );
@@ -151,9 +142,6 @@ class IPv4Test
 			uint32_t correctDestination = 0xc16e912e;
 			QUNIT_IS_TRUE( ipv4_1.destinationAddress() == correctDestination );
 		}
-
-};
-
 
 #ifndef GLOBAL_SCOPE
 int main()
