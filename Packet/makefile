@@ -1,18 +1,15 @@
-LINKDIR=Link
-INETDIR=Inet
-TRANSDIR=Trans
-APPDIR=App
+include ../global.mk
 THIS=Packet
-TESTDIR=example
+EXAMPLEDIR=exampleCode
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
 
 OBJS=packetBuilder.o packetBuffer.o packet.o
-TESTOBJS=example/test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/tcpOptions.o Trans/udp.o Trans/trans.o App/raw.o App/app.o Inet/icmp.o
-
+EXAMPLEOBJS=exampleCode/test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/tcpOptions.o Trans/udp.o Trans/trans.o App/raw.o App/app.o Inet/icmp.o
+EXAMPLESOURCE=$(EXAMPLEOBJS:%.o=%.cpp)
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 
-all: subdir $(OBJS) test
+all: subdir $(OBJS) example 
 
 include: 
 	-mkdir ../include/$(THIS)
@@ -45,44 +42,14 @@ clean:
 	 for i in $(LAYERDIRS) ; do \
 	 ( cd $$i ; make clean ) ; \
 	 done
-	 cd $(TESTDIR) ; rm -f *.o
+	 cd $(EXAMPLEDIR) ; rm -f *.o
 
-test: $(OBJS) $(TESTOBJS)
-	g++ $(OBJS) $(TESTOBJS) -o $@
+example: $(OBJS) $(EXAMPLEOBJS)
+	g++ $(OBJS) $(EXAMPLEOBJS) -o $@
 
-packetBuffer.o: packetBuffer.cpp packetBuffer.h
-packet.o: packet.cpp packet.h encapsulateable.h packetBuffer.h \
-  Link/link.h Link/../encapsulateable.h Link/linkData.h \
-  Link/../packetBuffer.h Link/ethernet.h Link/mac.h App/app.h \
-  App/appData.h App/../packetBuffer.h App/../encapsulateable.h App/raw.h \
-  Inet/inet.h Inet/inetData.h Inet/../packetBuffer.h \
-  Inet/../encapsulateable.h Inet/ipv4.h Trans/trans.h Trans/transData.h \
-  Trans/../packetBuffer.h Trans/../encapsulateable.h Trans/tcp.h \
-  Trans/udp.h
-test.o: test.cpp packetBuilder.h packet.h encapsulateable.h \
-  packetBuffer.h Link/link.h Link/../encapsulateable.h Link/linkData.h \
-  Link/../packetBuffer.h Link/ethernet.h Link/mac.h App/app.h \
-  App/appData.h App/../packetBuffer.h App/../encapsulateable.h App/raw.h \
-  Inet/inet.h Inet/inetData.h Inet/../packetBuffer.h \
-  Inet/../encapsulateable.h Inet/ipv4.h Trans/trans.h Trans/transData.h \
-  Trans/../packetBuffer.h Trans/../encapsulateable.h Trans/tcp.h \
-  Trans/udp.h Link/ethernet.h Inet/ipv4.h Trans/tcp.h Trans/udp.h \
-  App/raw.h
-encapsulateable.o: encapsulateable.h packetBuffer.h
-packetBuffer.o: packetBuffer.h
-packetBuilder.o: packetBuilder.h packet.h encapsulateable.h \
-  packetBuffer.h Link/link.h Link/../encapsulateable.h Link/linkData.h \
-  Link/../packetBuffer.h Link/ethernet.h Link/mac.h App/app.h \
-  App/appData.h App/../packetBuffer.h App/../encapsulateable.h App/raw.h \
-  Inet/inet.h Inet/inetData.h Inet/../packetBuffer.h \
-  Inet/../encapsulateable.h Inet/ipv4.h Trans/trans.h Trans/transData.h \
-  Trans/../packetBuffer.h Trans/../encapsulateable.h Trans/tcp.h \
-  Trans/udp.h Link/ethernet.h Inet/ipv4.h Trans/tcp.h Trans/udp.h \
-  App/raw.h
-packet.o: packet.h encapsulateable.h packetBuffer.h Link/link.h \
-  Link/../encapsulateable.h Link/linkData.h Link/../packetBuffer.h \
-  Link/ethernet.h Link/mac.h App/app.h App/appData.h \
-  App/../packetBuffer.h App/../encapsulateable.h App/raw.h Inet/inet.h \
-  Inet/inetData.h Inet/../packetBuffer.h Inet/../encapsulateable.h \
-  Inet/ipv4.h Trans/trans.h Trans/transData.h Trans/../packetBuffer.h \
-  Trans/../encapsulateable.h Trans/tcp.h Trans/udp.h
+deps: $(EXAMPLESOURCE) $(PACKETSOURCE)
+	g++ -MD -E $(PACKETSOURCE) $(EXAMPLESOURCE) > /dev/null
+
+*.d: deps
+
+include *.d
