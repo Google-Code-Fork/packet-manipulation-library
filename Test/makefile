@@ -1,11 +1,9 @@
-LINKTESTDIR=../Packet/Link/TestCode
-INETTESTDIR=../Packet/Inet/TestCode
-TRANSTESTDIR=../Packet/Trans/TestCode
-APPTESTDIR=../Packet/App/TestCode
+include ../global.mk
+
 LAYERTESTDIRS= $(LINKTESTDIR) $(INETTESTDIR) $(TRANSTESTDIR) $(APPTESTDIR)
 
-TESTOBJS=$(LINKTESTDIR)/macTest.o $(LINKTESTDIR)/ethernetTest.o $(INETTESTDIR)/testIPv4.o $(INETTESTDIR)/testIcmp.o $(TRANSTESTDIR)/testUdp.o $(TRANSTESTDIR)/testTcp.o $(APPTESTDIR)/testRaw.o
-
+TESTOBJS=$(LINKTESTOBJS) $(INETTESTOBJS) $(TRANSTESTOBJS) $(APPTESTOBJS)
+OBJS=main.o
 CFLAGS=-ggdb -fPIC -D GLOBAL_SCOPE
 CXXFLAGS=$(CFLAGS)
 
@@ -44,6 +42,6 @@ clean:
 	 done
 	 
 
-test: $(OBJS) $(TESTOBJS)
-#	g++ $(OBJS) $(TESTOBJS) -o $@
+test: $(OBJS) $(TESTOBJS) $(PACKETOBJS)
+	g++ $(OBJS) $(TESTOBJS) $(PACKETOBJS) -o $@
 
