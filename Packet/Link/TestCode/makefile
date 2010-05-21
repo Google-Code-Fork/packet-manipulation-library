@@ -1,7 +1,8 @@
+include ../../../global.mk
 LINKOBJS=../mac.o ../ethernet.o ../link.o
 TESTETHEROBJS=../../packetBuffer.o ethernetTest.o
 TESTMACOBJS=../../packetBuffer.o macTest.o
-
+TESTSOURCE=../../packetBuffer.cpp ethernetTest.cpp macTest.cpp
 ifeq ($(SCOPE),global)
 	CFLAGS=-ggdb -fPIC -D GLOBAL_SCOPE
 	ALL=$(LINKOBJS) $(TESTETHEROBJS) $(TESTMACOBJS) 
@@ -23,3 +24,9 @@ testMac:
 testEthernet:
 	g++ -ggdb $(LINKOBJS) $(TESTETHEROBJS) -o $@
 
+deps: $(LINKSOURCE) $(TESTSOURCE)
+	g++ -MD -E $(LINKSOURCE) $(TESTSOURCE) > /dev/null
+
+*.d: deps
+
+include *.d

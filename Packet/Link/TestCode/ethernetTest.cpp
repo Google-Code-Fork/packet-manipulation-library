@@ -30,7 +30,7 @@ void EthernetTest::testPacketCreation()
 {
 	//14 bytes ethernet header taken from a wireshark dump 
 	uint8_t bits[] = { 0x00, 0x24, 0xe8, 0xa4, 0x57, 0x5f, 0xa4, 0xba, 0xdb,
-		0xf9, 0xfc, 0x6e, 0x80, 0x00 };
+		0xf9, 0xfc, 0x6e, 0x08, 0x00 };
 
 	//construct a ethernet header from bytes above
 	Ethernet ethernet1( bits, 14 );
@@ -47,6 +47,8 @@ void EthernetTest::testPacketCreation()
 	//Test that the types of each header is correct
 	QUNIT_IS_EQUAL( ethernet1.type(), ethernetProtocol::ETH_P_IP );
 	QUNIT_IS_EQUAL( ethernet2.type(), ethernetProtocol::ETH_P_IP );
+	ethernet1.setType( 0xDEAD );
+	QUNIT_IS_EQUAL( ethernet1.type(), 0xDEAD );
 
 	//Pulling out source Mac Addresses from headers
 	MACAddress source1 = ethernet1.sourceMAC();
@@ -56,7 +58,7 @@ void EthernetTest::testPacketCreation()
 	QUNIT_IS_TRUE( source1 == source2 );
 
 	//Correct value for the source MAC Address
-	uint8_t rightSourceMac[] = { 0x00, 0x24, 0xe8, 0xa4, 0x57, 0x5f };
+	uint8_t rightSourceMac[] = { 0xa4, 0xba, 0xdb, 0xf9, 0xfc, 0x6e };
 
 	//Store the sourceMac from created header for comparison
 	uint8_t sourceMac[6];
@@ -65,7 +67,8 @@ void EthernetTest::testPacketCreation()
 	//Compare all byte in arrays
 	for( int i = 0; i < 6; ++i )
 	{
-		QUNIT_IS_EQUAL( sourceMac[i], rightSourceMac[i] );
+		//casting for more readable output
+		QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac[i]), static_cast<uint16_t>(rightSourceMac[i]) );
 	}
 
 	//Pulling out source Mac Addresses from headers
@@ -76,7 +79,7 @@ void EthernetTest::testPacketCreation()
 	QUNIT_IS_TRUE( destination1 == destination2 );
 
 	//Correct value for the source MAC Address
-	uint8_t rightDestinationMac[] = { 0xa4, 0xba, 0xdb, 0xf9, 0xfc, 0x6e };
+	uint8_t rightDestinationMac[] = { 0x00, 0x24, 0xe8, 0xa4, 0x57, 0x5f };
 
 	//Store the sourceMac from created header for comparison
 	uint8_t destinationMac[6];
@@ -85,7 +88,7 @@ void EthernetTest::testPacketCreation()
 	//Compare all byte in arrays
 	for( int i = 0; i < 6; ++i )
 	{
-		QUNIT_IS_EQUAL( destinationMac[i], rightDestinationMac[i] );
+		QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac[i]), static_cast<uint16_t>(rightDestinationMac[i]) );
 	}
 
 }
