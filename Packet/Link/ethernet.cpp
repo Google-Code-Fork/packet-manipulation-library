@@ -33,7 +33,7 @@ Ethernet::Ethernet()
   MACAddress mac; //zero everything out
   mac.getMAC( header_.destination);
   mac.getMAC( header_.source );
-  header_.protocol = ethernetProtocol::ETH_P_IP; //default to IP
+  header_.protocol = htons(ethernetProtocol::ETH_P_IP); //default to IP
 }
 
 Ethernet::Ethernet( const Ethernet& n )
@@ -47,7 +47,7 @@ Ethernet::Ethernet( const uint8_t* buff, int size )
   if( size < EthernetSize )
     throw std::runtime_error( "Not enough to generate ethernet header" );
   header_ = *((EthernetHeader*)buff);
-  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+  if( header_.protocol == htons(ethernetProtocol::ETH_P_8021Q) )
   {
     //check to make sure the buff is big enough
     if( size < (EthernetSize + Dot1QSize) )
@@ -61,7 +61,23 @@ Ethernet::Ethernet( const uint8_t* buff, int size )
 
 Ethernet::Ethernet( const std::vector< uint8_t > &bytes )
 {
-	
+	int size = bytes.size();
+	uint8_t buff[size];
+	for( int i = 0; i < size; ++i )
+		buff[i] = bytes[i];
+  if( size < EthernetSize )
+    throw std::runtime_error( "Not enough to generate ethernet header" );
+  header_ = *((EthernetHeader*)buff);
+  if( header_.protocol == htons(ethernetProtocol::ETH_P_8021Q) )
+  {
+    //check to make sure the buff is big enough
+    if( size < (EthernetSize + Dot1QSize) )
+    {
+      throw std::runtime_error( "Not enough buffer for Dot1Q packet" );
+    }
+    const uint8_t* ptr = buff + EthernetSize;
+    vlanTag_ = *((VlanTag*)ptr);
+  }
 }
 
 Ethernet& Ethernet::operator =( const Ethernet &n )
@@ -96,12 +112,12 @@ void Ethernet::setSourceMAC( MACAddress mac )
 
 uint16_t Ethernet::type()
 {
-	return header_.protocol;
+	return ntohs(header_.protocol);
 }
 
 void Ethernet::setType( uint16_t type )
 {
-	header_.protocol =  type;
+	header_.protocol =  htons(type);
 }
 
 uint16_t Ethernet::dot1QType( )
