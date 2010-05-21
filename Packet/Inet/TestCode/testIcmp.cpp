@@ -31,13 +31,13 @@ void IcmpTest::testIsIcmp()
 void IcmpTest::testConstruction()
 {
 	//icmp taken from wireshark dump
-	uint8_t bits[] = { 0x08, 0x00, 0x8c, 0x53, 0x02, 0x00, 0xbf, 0x08, 0x61,
+	uint8_t bits[] = { 0x08, 0x00, 0x8c, 0x53, 0x02, 0x00, 0xbf, 0x08 }; /*, 0x61,
 		0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e,
 		0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x61, 0x62, 0x63,
-		0x64, 0x65, 0x66, 0x67, 0x68, 0x69 };
+		0x64, 0x65, 0x66, 0x67, 0x68, 0x69 };*/
 
 	//construct icmp header from bytes above
-	ICMP icmpA( bits, 40 );
+	ICMP icmpA( bits, 8 );
 
 	//copy icmp header
 	ICMP icmpB( icmpA );
@@ -47,7 +47,7 @@ void IcmpTest::testConstruction()
 	QUNIT_IS_TRUE( icmpB.isICMP() );
 	//check size of ICMP header in bytes
 	QUNIT_IS_EQUAL( icmpA.size(), icmpB.size() );
-	QUNIT_IS_TRUE( icmpA.size() == 40 );
+	QUNIT_IS_EQUAL( icmpA.size(),  8 );
 
 	//check ICMP type
 	QUNIT_IS_TRUE( icmpA.type() == 0x08 );
@@ -71,22 +71,22 @@ void IcmpTest::testConstruction()
 	QUNIT_IS_TRUE( icmpA.checksum() == 0x1122 );
 
 	//check header length
-	QUNIT_IS_TRUE( icmpA.headerLength() == icmpB.headerLength() );
-	QUNIT_IS_TRUE( icmpA.headerLength() == 40 );
+	QUNIT_IS_EQUAL( icmpA.headerLength(), icmpB.headerLength() );
+	QUNIT_IS_EQUAL( icmpA.headerLength(), 8 );
 
 	//set type to equal 8
 	icmpA.setType( 0x08 );
 	//check icmp identifier (request)
-	QUNIT_IS_TRUE( icmpA.identifier() == 0x0200 );
+	QUNIT_IS_EQUAL( icmpA.identifier(),  0x0200 );
 	//check set icmp identifier (request)
 	icmpA.setIdentifier( 0x0500 );
-	QUNIT_IS_TRUE( icmpA.identifier() == 0x0500 );
+	QUNIT_IS_EQUAL( icmpA.identifier(),  0x0500 );
 
 	//check icmp sequence number
-	QUNIT_IS_TRUE( icmpA.sequenceNum() == 0xbf08 );
+	QUNIT_IS_EQUAL( icmpA.sequenceNum(),  0xbf08 );
 	//check set sequence number
 	icmpA.setSequenceNum( 0xbf11 );
-	QUNIT_IS_TRUE( icmpA.sequenceNum() == 0xbf11 );
+	QUNIT_IS_EQUAL( icmpA.sequenceNum(),  0xbf11 );
 
 	//check generate checksum
 	icmpA.generateChecksum();

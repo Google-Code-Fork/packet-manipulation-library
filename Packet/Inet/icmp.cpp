@@ -138,9 +138,12 @@ void ICMP::setType( uint8_t type )
 	header_->type = type;
 	if( type == 8 || type == 0 )
 	{
-		request_ = new icmpRequest;
-		request_->identifier = 0;
-		request_->sequence = 0;
+		if( request_ == NULL )
+		{
+			request_ = new icmpRequest;
+			request_->identifier = 0;
+			request_->sequence = 0;
+		}
 	}
 	else
 	{
@@ -164,12 +167,12 @@ void ICMP::setCode( uint8_t code )
 
 uint16_t ICMP::checksum() const
 {
-	return header_->checkSum;
+	return ntohs(header_->checkSum);
 }
 
 void ICMP::setChecksum( uint16_t checksum )
 {
-	header_->checkSum = checksum;
+	header_->checkSum = htons(checksum);
 }
 
 void ICMP::generateChecksum()
@@ -218,14 +221,7 @@ uint16_t icmpChecksum (uint16_t * buffer, int numOfBytes)
 
 int ICMP::headerLength() const
 {
-	int size = 0;
-	if( header_ )
-		size += sizeof( icmpHeader );
-	if( request_ )
-	{
-		size += sizeof( icmpRequest );
-	}
-	return size;
+	return size();
 }
 
 
@@ -248,14 +244,14 @@ uint16_t ICMP::sequenceNum() const
 {
 	if( !request_ )
 		throw std::runtime_error( "ICMP WRONG TYPE" );
-	return request_->sequence;
+	return ntohs(request_->sequence);
 }
 
 void ICMP::setSequenceNum( uint16_t sequence )
 {
 	if( !request_ )
 		throw std::runtime_error( "ICMP WRONG TYPE" );
-	request_->sequence = sequence;
+	request_->sequence = htons(sequence);
 }
 
 Packet ICMP::orginalPacket() const
@@ -273,6 +269,12 @@ PacketBuffer ICMP::makePacket() const
 
 int ICMP::size() const
 {
-	//TODO: Make sure this is right..
-	return sizeof(header_); 
+	int size = 0;
+	if( header_ )
+		size += sizeof(header_);
+	if( orginal_ )
+		size += sizeof( orginal_ );
+	if( request_ )
+		size += sizeof( request_ );
+	return size;
 }
