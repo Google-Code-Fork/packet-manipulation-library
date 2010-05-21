@@ -2,6 +2,7 @@
 SCRIPT_DIRECTORY=/home/scap/scripts
 CHECKOUT_DIRECTORY=/tmp/pvat
 WEB_DIRECTORY=/var/www/pvatStatus
+MAIL=${SCRIPT_DIRECTORY}/mail.py
 
 rm -rf ${CHECKOUT_DIRECTORY}
 rm ${SCRIPT_DIRECTORY}/configure.txt
@@ -16,20 +17,24 @@ make &> ${SCRIPT_DIRECTORY}/make.txt
 if [ $? -ne 0 ];
 then
 	cp ${SCRIPT_DIRECTORY}/compileFail.html ${WEB_DIRECTORY}/index.html
+	${MAIL} compileFail
 fi
 
 cd ${CHECKOUT_DIRECTORY}/Test && make &> ${SCRIPT_DIRECTORY}/makeTest.txt
 if [ $? -ne 0 ];
 then 
 	cp ${SCRIPT_DIRECTORY}/compileTestFail.html ${WEB_DIRECTORY}/index.html
+	${MAIL} compileTestFail
 fi
 
 cd ${CHECKOUT_DIRECTORY}/Test && ./test &> ${SCRIPT_DIRECTORY}/test.txt
 if [ $? -ne 0 ];
 then
   cp ${SCRIPT_DIRECTORY}/testFail.html ${WEB_DIRECTORY}/index.html
+	${MAIL} testFail
 else
 	cp ${SCRIPT_DIRECTORY}/win.html ${WEB_DIRECTORY}/index.html
+	${MAIL} win
 fi
 
 cp ${SCRIPT_DIRECTORY}/configure.txt ${WEB_DIRECTORY}

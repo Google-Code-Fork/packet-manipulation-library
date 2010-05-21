@@ -4,7 +4,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
 fromaddr = "scaparra.jeffrey@mail.navy.mil"
-toaddrs  = ['scaparra.jeffrey@mail.navy.mil', 'kozma.michael@mail.navy.mil']
+toaddrs  = ['scaparra.jeffrey@mail.navy.mil', 'kozma.michael@mail.navy.mil', 'bullock.jeff@mail.navy.mil']
 scriptDirectory = "/home/scap/scripts"
 configureLog=scriptDirectory+"/configure.txt"
 makeLog = scriptDirectory+"/make.txt"
