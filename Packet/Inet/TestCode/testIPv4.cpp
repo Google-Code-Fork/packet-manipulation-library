@@ -58,6 +58,8 @@ void IPv4Test::testPacketCreation()
 	//setversion
 	ipv4_1.setVersion(0x06);
 	QUNIT_IS_TRUE( ipv4_1.version() == 6);
+	ipv4_1.setVersion(0x05);
+	QUNIT_IS_TRUE( ipv4_1.version() == 5);
 	//change the version back to 4
 	ipv4_1.setVersion(0x04);
 
