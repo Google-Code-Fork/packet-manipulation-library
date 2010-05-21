@@ -67,7 +67,7 @@ uint8_t IPv4::version() const
 
 void IPv4::setVersion( uint8_t version )
 {
-	if( 0 < 0xF0 & version )
+	if( 0 < (0xF0 & version) )
 		throw std::runtime_error( "Invaild IPv4 Version" );
 	header_->ip_vhl &= 0x0F; //Save the Header Length bits
 	header_->ip_vhl |= version << 4;
