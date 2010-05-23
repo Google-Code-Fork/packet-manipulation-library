@@ -67,6 +67,7 @@ uint8_t IPv4::version() const
 
 void IPv4::setVersion( uint8_t version )
 {
+	//if the version is too large to fit in the feild 
 	if( 0 < (0xF0 & version) )
 		throw std::runtime_error( "Invaild IPv4 Version" );
 	header_->ip_vhl &= 0x0F; //Save the Header Length bits
@@ -108,7 +109,7 @@ void IPv4::setIdentifaction( uint16_t id )
 
 bool IPv4::dontFragment() const
 {
-	return (  0 < (header_->ip_off & IP_DF) );
+	return (  0 < (ntohs(header_->ip_off) & IP_DF) );
 }
 
 void IPv4::setDontFragment()
@@ -118,17 +119,17 @@ void IPv4::setDontFragment()
 
 void IPv4::setDontFragment( bool set )
 {
-	set ? header_->ip_off |= IP_DF : header_->ip_off &= 0x3FFF;
+	set ? header_->ip_off |= htons(IP_DF) : header_->ip_off &= htons(0x3FFF);
 }
 
 bool IPv4::moreFragments() const
 {
-	return (  0 < (header_->ip_off & IP_MF) );
+	return (  0 < (ntohs(header_->ip_off) & IP_MF) );
 }
 
 void IPv4::setMoreFragments( bool set )
 {
-	set ? header_->ip_off |= IP_MF : header_->ip_off &= 0x5FFF;
+	set ? header_->ip_off |= htons(IP_MF) : header_->ip_off &= htons(0x5FFF);
 }
 
 void IPv4::setMoreFragments( )
@@ -138,14 +139,14 @@ void IPv4::setMoreFragments( )
 
 uint16_t IPv4::fragmentOffset() const
 {
-	return header_->ip_off & IP_OFFMASK;
+	return ntohs(header_->ip_off) & IP_OFFMASK;
 }
 
 void IPv4::setFragmentOffset( uint16_t fragmentOffset )
 {
-	if( fragmentOffset & 0x6000 )
+	if( fragmentOffset & 0x6000 ) //too large to fit
 		throw std::runtime_error( "Invalid Fragment Offset" );
-	header_->ip_off |= fragmentOffset & IP_OFFMASK;
+	header_->ip_off |= htons(fragmentOffset & IP_OFFMASK);
 }
 
 uint8_t IPv4::ttl() const
@@ -180,22 +181,22 @@ void IPv4::setChecksum( uint16_t checksum )
 
 uint32_t IPv4::sourceAddress() const
 {
-	return header_->ip_src.s_addr;
+	return ntohl(header_->ip_src.s_addr);
 }
 
 void IPv4::setSourceAddress( uint32_t ip )
 {
-	header_->ip_src.s_addr = ip;
+	header_->ip_src.s_addr = htonl(ip);
 }
 
 uint32_t IPv4::destinationAddress() const
 {
-	return header_->ip_dst.s_addr;
+	return ntohl(header_->ip_dst.s_addr);
 }
 
 void IPv4::setDestinationAddress( uint32_t ip )
 {
-	 header_->ip_dst.s_addr = ip;
+	 header_->ip_dst.s_addr = htonl(ip);
 }
 
 PacketBuffer IPv4::makePacket( ) const
@@ -212,6 +213,6 @@ PacketBuffer IPv4::makePacket( ) const
 
 int IPv4::size() const
 {
-  return static_cast< uint16_t >(headerLength( ));
+  return sizeof( *header_ );
 }
 
