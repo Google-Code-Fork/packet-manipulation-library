@@ -196,8 +196,6 @@ void ICMP::generateChecksum()
 	pointer = (uint8_t*)buffer + sizeof( icmpHeader );
 	*(icmpRequest*)pointer = *request_;
 	header_->checkSum = icmpChecksum( buffer, size );
-
-
 }
 
 
@@ -230,14 +228,14 @@ uint16_t ICMP::identifier() const
 {
 	if( request_ == NULL )
 		throw std::runtime_error( "ICMP WRONG TYPE" );
-	return request_->identifier;
+	return ntohs(request_->identifier);
 }
 
 void ICMP::setIdentifier( uint16_t identifier )
 {
 	if( !request_ )
 		throw std::runtime_error( "ICMP WRONG TYPE" );
-	request_->identifier = identifier;
+	request_->identifier = htons(identifier);
 }
 
 uint16_t ICMP::sequenceNum() const
@@ -271,10 +269,10 @@ int ICMP::size() const
 {
 	int size = 0;
 	if( header_ )
-		size += sizeof(header_);
+		size += sizeof( *header_);
 	if( orginal_ )
-		size += sizeof( orginal_ );
+		size += sizeof( *orginal_ );
 	if( request_ )
-		size += sizeof( request_ );
+		size += sizeof( *request_ );
 	return size;
 }
