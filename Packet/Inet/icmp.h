@@ -44,15 +44,14 @@ typedef struct icmpHeader
   uint8_t type;
   uint8_t code;
   uint16_t checkSum;
-} icmpHeader;
+}__attribute__((__packed__)) icmpHeader;
 
 //! icmpRequest data for use in ICMP
 typedef struct icmpRequest
 {
   uint16_t identifier;
   uint16_t sequence;
-}icmpRequest;
-
+} __attribute__((__packed__)) icmpRequest;
 
 namespace icmpTypes
 {
@@ -109,15 +108,24 @@ class ICMP : public InetData
 
     //!Return the ICMP type
     uint8_t type() const;
-    //!Set the ICMP type
+    
+		//!Set the ICMP type
+		/*! This can remove information. For example if a icmp header goes from a
+		 * type 8 echo request to something else it will lose its request header and 
+		 * everything associated with it.
+		 */
     void setType(uint8_t type);
-    //!Return the ICMP code
+   
+		//!Return the ICMP code
     uint8_t code() const;
-    //!set the ICMP code
+   
+		//!set the ICMP code
     void setCode(uint8_t code);
-    //!return the checksum field
+   
+		//!return the checksum field
     uint16_t checksum() const;
-    //!set the checksum
+   
+		//!set the checksum
     void setChecksum( uint16_t );
 
     //!return the length of the header
@@ -125,25 +133,31 @@ class ICMP : public InetData
 
     //!if a type 8 icmp request
     uint16_t identifier() const;
-    //!to set a type 8 icmp request
+   
+		//!to set a type 8 icmp request
     void setIdentifier( uint16_t ident );
-    //!return sequence number
+   
+		//!return sequence number
     uint16_t sequenceNum() const;
-    //!set the squence number
+   
+		//!set the squence number
     void setSequenceNum( uint16_t sequence );
-    //!generate the checksum
+   
+		//!generate the checksum
     void generateChecksum();
 
     //!This is for type 11 icmp time-to-live exceeded 
-    //!Returns a Packet object with the orginal content of the the exceeded
-    //packet.
+    /*!Returns a Packet object with the orginal content of the the exceeded
+    packet.*/
     Packet orginalPacket() const;
 
     //!Returns a PacketBuffer for use with other libraries and code
     PacketBuffer packet() const;
-    //!Returns the size in bytes of the ICMP header
+    
+		//!Returns the size in bytes of the ICMP header
     int size() const;
-    //!Returns true... overloaded from InetData
+   
+		//!Returns true... overloaded from InetData
     bool isICMP() const { return true; }
 
 		//! Make a PacketBuffer
@@ -152,9 +166,11 @@ class ICMP : public InetData
   private:
     //!internal data
     icmpHeader *header_;//All icmp packets :)
-    //!internal data
+   
+		//!internal data
     icmpRequest *request_; //type 8
-    //!internal data
+   
+		//!internal data
     Packet *orginal_; //type 11 copy of orginal packet ip header
 };
 
