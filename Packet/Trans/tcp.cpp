@@ -192,7 +192,7 @@ void TCP::setX2( uint8_t x2 )
 
 bool TCP::CWR_Flag() const
 {
-  return (( 0 < ( header_->flags & TCP_CWR ) ) );
+  return ( 0 < ( header_->flags & TCP_CWR ) );
 }
 
 void TCP::setCWR_Flag()
@@ -202,7 +202,7 @@ void TCP::setCWR_Flag()
 
 void TCP::setCWR_Flag( bool set )
 {
-  set ? header_->flags |= TCP_CWR : header_->flags & (TCP_CWR ^ 0xFF);
+  set ? header_->flags |= TCP_CWR : header_->flags &= (TCP_CWR ^ 0xFF);
 }
 
 bool TCP::ECE_Flag() const
@@ -217,7 +217,7 @@ void TCP::setECE_Flag()
 
 void TCP::setECE_Flag( bool set )
 {
-  set ? header_->flags |= TCP_ECE : header_->flags & (TCP_ECE ^ 0xFF);
+  set ? header_->flags |= TCP_ECE : header_->flags &= (TCP_ECE ^ 0xFF);
 }
 
 bool TCP::URG_Flag() const
@@ -232,7 +232,7 @@ void TCP::setURG_Flag()
 
 void TCP::setURG_Flag( bool set )
 {
-  set ? header_->flags |= TCP_URG : header_->flags & (TCP_URG ^ 0xFF);
+  set ? header_->flags |= TCP_URG : header_->flags &= (TCP_URG ^ 0xFF);
 }
 
 bool TCP::ACK_Flag() const
@@ -247,7 +247,7 @@ void TCP::setACK_Flag()
 
 void TCP::setACK_Flag( bool set )
 {
-  set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
+  set ? header_->flags |= TCP_ACK : header_->flags &= (TCP_ACK ^ 0xFF);
 }
 
 bool TCP::PSH_Flag() const
@@ -262,7 +262,7 @@ void TCP::setPSH_Flag( )
 
 void TCP::setPSH_Flag( bool set )
 {
-  set ? header_->flags |= TCP_ACK : header_->flags & (TCP_ACK ^ 0xFF);
+  set ? header_->flags |= TCP_PSH : header_->flags &= (TCP_PSH ^ 0xFF);
 }
 
 bool TCP::RST_Flag() const
@@ -277,7 +277,7 @@ void TCP::setRST_Flag( )
 
 void TCP::setRST_Flag( bool set )
 {
-  set ? header_->flags |= TCP_RST : header_->flags & (TCP_RST ^ 0xFF);
+  set ? header_->flags |= TCP_RST : header_->flags &= (TCP_RST ^ 0xFF);
 }
 
 bool TCP::SYN_Flag() const
@@ -292,7 +292,7 @@ void TCP::setSYN_Flag( )
 
 void TCP::setSYN_Flag( bool set )
 {
-  set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
+  set ? header_->flags |= TCP_SYN : header_->flags &= (TCP_SYN ^ 0xFF);
 }
 
 bool TCP::FIN_Flag() const
@@ -307,7 +307,7 @@ void TCP::setFIN_Flag( )
 
 void TCP::setFIN_Flag( bool set )
 {
-  set ? header_->flags |= TCP_SYN : header_->flags & (TCP_SYN ^ 0xFF);
+  set ? header_->flags |= TCP_FIN : header_->flags &= (TCP_FIN ^ 0xFF);
 }
 
 uint16_t TCP::windowSize() const
@@ -342,7 +342,14 @@ void TCP::setUrgentPointer( uint16_t urgentPointer )
 
 int TCP::size() const 
 {
-  return static_cast<int>( dataOffset() );
+  //return static_cast<int>( dataOffset() );
+	int size = 0;
+	size += sizeof( (*header_) );
+	for( int i = 0; i < options_.size(); ++i )
+	{
+		size += options_.at(i)->length();
+	}
+	return size;
 }
 
 PacketBuffer TCP::makePacket() const 
