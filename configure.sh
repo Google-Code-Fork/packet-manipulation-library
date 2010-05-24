@@ -1,7 +1,7 @@
 #!/bin/bash
 MAKEFILE=global.mk
 PWD=`pwd`
-
+echo `date`
 echo "Generating Makefile..."
 
 echo "PWD=${PWD}" > $MAKEFILE
