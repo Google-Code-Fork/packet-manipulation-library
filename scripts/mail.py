@@ -105,8 +105,8 @@ msg.attach( attach1 )
 msg.attach( attach2 )
 msg.attach( attach3 )
 msg.attach( attach4 )
-msg['From'] = "Captian Slow <Captain.Slow@KernelPanic.ncr.spawar.navy.mil>"
-msg['To'] = "YOU <A_DEVELOPER@PVAT.OUR.SYSTEM.IS.AWESOME>"
+msg['From'] = "PVAT Automated Build System <builder@KernelPanic.ncr.spawar.navy.mil>"
+msg['To'] = "Developer <A_DEVELOPER@PVAT.SYSTEM>"
 msg.preamble = "Use a better email client that accepts MIME"
 	
 try:
