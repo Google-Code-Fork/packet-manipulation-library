@@ -55,6 +55,7 @@ DO NOT Respond to this message. This is an automated message.
 """
 
 msg = MIMEMultipart()
+
 try:
 	attach1 = MIMEText( file(configureLog).read() )
 	attach1.add_header('Content-Disposition', 'attachment', filename="configure.log" ) 
@@ -83,10 +84,13 @@ except IOError:
 	attach4 = MIMEText( "" )
 	attach4.add_header('Content-Disposition', 'attachment', filename="test.log" ) 
 
-type = sys.argv[1]
+try:
+	type = sys.argv[1]
+except IndexError:
+	type = ""
 
 if type == "win": 
-	msg.attach( MIMEText( winMessage ).add_header('Content-Disposition', 'inline') )
+	msg.attach( MIMEText( winMessage ) )
 	msg['Subject'] = "PVAT Success"
 elif type == "compileFail":
 	msg.attach( MIMEText( compileFailMessage ) )
@@ -99,21 +103,20 @@ elif type == "testFail":
 	msg['Subject'] = "PVAT Test are FAILING"
 else:
 	print( "useage: mail.py win|compileFail|compileTestFail|testFail" )
-	exit 
+	sys.exit(0) 
 
 msg.attach( attach1 )
 msg.attach( attach2 )
 msg.attach( attach3 )
 msg.attach( attach4 )
 msg['From'] = "PVAT Automated Build System <builder@KernelPanic.ncr.spawar.navy.mil>"
-msg['To'] = "Developer <A_DEVELOPER@PVAT.SYSTEM>"
+msg['To'] = "Developer <DEVELOPER@PVAT.SYSTEM>"
 msg.preamble = "Use a better email client that accepts MIME"
 	
 try:
 	server = smtplib.SMTP('ins.ncr.spawar.navy.mil')
-	#server.sendmail(fromaddr, toaddrs, msg)
 	server.sendmail(fromaddr, toaddrs, msg.as_string() )
 	server.quit()
 	print( "Mail Sent " )
-except SMTPException:
+except smtplib.SMTPException:
 	print( "Unable to send" )
