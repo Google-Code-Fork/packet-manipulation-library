@@ -42,7 +42,7 @@ TCP::TCP( const uint8_t *packet, int size )
     throw std::runtime_error( "Packet capture too small to make packet" );
   *header_ = *((struct my_tcp*)packet);
 
-	int optionSize = header_->dataOffset - 5; //5 is the minimum size for tcp with NO options
+	int optionSize = OFFSET( header_ ) - 5; //5 is the minimum size for tcp with NO options
 	optionSize *= 4; //in bytes
 	optionSize = optionSize + TCPStructSize - size < optionSize ? 
 																		size - TCPStructSize : optionSize;
@@ -173,10 +173,10 @@ uint8_t TCP::dataOffset() const
 void TCP::setDataOffset( uint8_t dataOffset )
 {
   dataOffset /= 4;
-  if( dataOffset &0xF0 )
+  if( dataOffset & 0xF0 )
     throw std::runtime_error( "Invalid DataOffset" );
   header_->dataOffset &= 0xF;
-  header_->dataOffset |= dataOffset << 4;
+  header_->dataOffset |= ( dataOffset << 4 );
 }
 
 uint8_t TCP::x2() const

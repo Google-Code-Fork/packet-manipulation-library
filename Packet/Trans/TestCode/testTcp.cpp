@@ -36,7 +36,7 @@ void TcpTest::testConstruction()
 
 	//20 bytes tcp header taken from wireshark dump
 	uint8_t bits[] = { 0x00, 0x50, 0x60, 0x5d, 0x48, 0x5b, 0x27, 0xa6, 0xd3,
-		0xa5, 0xeb, 0xac, 0x70, 0x12, 0x16, 0x58, 0xd6, 0x59, 0x00, 0x00 };
+		0xa5, 0xeb, 0xac, 0x50, 0x12, 0x16, 0x58, 0xd6, 0x59, 0x00, 0x00 };
 
 	//construct tcp header from bytes above
 	TCP tcp_1( bits, 20 );
@@ -73,10 +73,10 @@ void TcpTest::testConstruction()
 	QUNIT_IS_TRUE( tcp_1.acknowledgementNumber() == 0x11223344 );
 
 	//check data offset
-	QUNIT_IS_TRUE( tcp_1.dataOffset() == 0x70 );
+	QUNIT_IS_TRUE( tcp_1.dataOffset() == 20 );
 	//check set data offset
-	tcp_1.setDataOffset( 0x50 );
-	QUNIT_IS_TRUE( tcp_1.dataOffset() == 0x50 );
+	tcp_1.setDataOffset( 28 );
+	QUNIT_IS_TRUE( tcp_1.dataOffset() == 28 );
 
 	//check return reserved data after data offset
 	QUNIT_IS_TRUE( tcp_1.x2() == 0x00 );
