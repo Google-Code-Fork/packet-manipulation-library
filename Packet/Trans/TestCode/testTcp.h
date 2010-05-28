@@ -30,6 +30,6 @@ class TcpTest
 		QUnit::UnitTest qunit;
 
 		void testConstruction();
-//		void testOptions();
+		void testOptions();
 };
 

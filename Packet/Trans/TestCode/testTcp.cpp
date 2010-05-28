@@ -1,4 +1,9 @@
 #include "testTcp.h"
+#include "../tcpOptions.h"
+#include "../mssOption.h"
+#include "../tcp.h"
+#include "../noopOption.h"
+#include "../sackPermittedOption.h"
 
 /*TCP packet used
  * Source Port: 80
@@ -24,16 +29,12 @@ TcpTest::TcpTest( std::ostream &out, int verboseLevel ) : qunit(
 int TcpTest::run()
 {
 	testConstruction();
-//	testOptions();
+	testOptions();
 	return qunit.errors();
 }
 
 void TcpTest::testConstruction()
 {
-	//20 bytes tcp header taken from wireshark dump
-	//			uint8_t bits[] = { 0x00, 0x50, 0x60, 0x5d, 0x48, 0x5b, 0x27, 0xa6, 0xd3,
-	//				0xa5, 0xeb, 0xac, 0x70, 0x12, 0x16, 0x58, 0xd6, 0x59, 0x00, 0x00 };
-
 	//20 bytes tcp header taken from wireshark dump
 	uint8_t bits[] = { 0x00, 0x50, 0x60, 0x5d, 0x48, 0x5b, 0x27, 0xa6, 0xd3,
 		0xa5, 0xeb, 0xac, 0x50, 0x12, 0x16, 0x58, 0xd6, 0x59, 0x00, 0x00 };
@@ -192,22 +193,54 @@ void TcpTest::testConstruction()
 	//check the size
 	QUNIT_IS_EQUAL( tcp_1.size(), tcp_2.size() );
 	QUNIT_IS_TRUE( tcp_1.size() == 20 );
-
-	//OPTIONS
-
 }
 
-//void testTcp::testOptions()
-//{
+void TcpTest::testOptions()
+{
 	//28 bytes tcp header taken from wireshark dump
 	//(min header size = 20bytes; max size = 60bytes)
-//	uint8_t bits[] = { 0x00, 0x50, 0x60, 0x5d, 0x48, 0x5b, 0x27, 0xa6, 0xd3,
-//		0xa5, 0xeb, 0xac, 0x70, 0x12, 0x16, 0x58, 0xd6, 0x59, 0x00, 0x00, 0x02,
-//		0x04, 0x05, 0x96, 0x01, 0x01, 0x04, 0x02 };
+		uint8_t bits[] = { 0x05, 0xde, 0x00, 0x50, 0xa9, 0xde, 0x0d, 0xd5, 0x00,
+			0x00, 0x00, 0x00, 0x60, 0x02, 0x40, 0x00, 0x37, 0xa4, 0x00, 0x00, 0x02,
+			0x04, 0x05, 0xa0 };
 
 	//construct tcp header from bytes above
-//	TCP tcp_1( bits, 28, );
-//}
+	TCP tcp_3( bits, 24 );
+
+	//copy tcp header
+	TCP tcp_3A( tcp_3 );
+
+	//check size
+	QUNIT_IS_TRUE( tcp_3.size() == 24 );
+	//check size of copy
+	QUNIT_IS_TRUE( tcp_3A.size() == 24 );
+
+	//check erase all options
+	tcp_3.clearOptions();
+
+	QUNIT_IS_EQUAL( tcp_3.size(), tcp_3A.size() );
+
+	//add Maximum Segment Size option
+	SmartPtr< TCPOption > mssOption = new MSSOption();
+	tcp_3.addOption( mssOption );
+	QUNIT_IS_TRUE( tcp_3.size() == 24 );
+
+	//add NOP Option
+	tcp_3.clearOptions();
+	SmartPtr< TCPOption > noopOption = new NOOPOption();
+	tcp_3.addOption( noopOption );
+	QUNIT_IS_TRUE( tcp_3.size() == 21 );
+
+	//add Sack Permitted option
+	tcp_3.clearOptions();
+	SmartPtr< TCPOption > sackPermittedOption = new SACKPremittedOption();
+	tcp_3.addOption( sackPermittedOption );
+	QUNIT_IS_TRUE( tcp_3.size() == 22 );
+
+
+//	SmartPtr< TCPOption > randomOpt = new TCPOption();
+//	randomOpt->setKind( 2 );
+//	randomOpt->
+}
 
 #ifndef GLOBAL_SCOPE
 int main()

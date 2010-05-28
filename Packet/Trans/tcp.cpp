@@ -373,3 +373,8 @@ PacketBuffer TCP::makePacket() const
 	}
   return PacketBuffer( packet );
 }
+
+void TCP::addOption( SmartPtr< TCPOption > option )
+{
+	options_.push_back(option);
+}
