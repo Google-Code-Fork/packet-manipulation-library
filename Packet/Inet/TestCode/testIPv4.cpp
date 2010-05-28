@@ -60,6 +60,8 @@ void IPv4Test::testPacketCreation()
 	QUNIT_IS_TRUE( ipv4_1.version() == 6);
 	ipv4_1.setVersion(0x05);
 	QUNIT_IS_TRUE( ipv4_1.version() == 5);
+	ipv4_1.setVersion(15);
+	QUNIT_IS_TRUE( ipv4_1.version() ==15);
 	//change the version back to 4
 	ipv4_1.setVersion(0x04);
 
@@ -69,6 +71,8 @@ void IPv4Test::testPacketCreation()
 	//setHeaderLength
 	ipv4_1.setHeaderLength(12);
 	QUNIT_IS_TRUE( ipv4_1.headerLength() == 12);
+	ipv4_1.setHeaderLength(24);
+	QUNIT_IS_TRUE( ipv4_1.headerLength() == 24);
 	//change the header length back to 20 (=5 words)
 	ipv4_1.setHeaderLength(20);
 
