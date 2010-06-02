@@ -113,6 +113,11 @@ TCP::TCP( const TCP &n )
 {
   header_ = new struct my_tcp;
   *header_ = *(n.header_);
+
+	for( int i = 0; i < n.options_.size(); ++i )
+	{
+		options_.push_back( n.options_[i].copy() );
+	}
 }
 
 TCP& TCP::operator =( const TCP &n )
