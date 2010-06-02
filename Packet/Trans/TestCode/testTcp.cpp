@@ -216,6 +216,7 @@ void TcpTest::testOptions()
 
 	//check erase all options
 	tcp_3.clearOptions();
+	tcp_3A.clearOptions();
 
 	QUNIT_IS_EQUAL( tcp_3.size(), tcp_3A.size() );
 
