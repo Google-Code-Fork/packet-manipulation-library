@@ -239,11 +239,6 @@ void TcpTest::testOptions()
 	tcp_3.addOption( sackPermittedOption );
 	QUNIT_IS_TRUE( tcp_3.size() == 22 );
 
-	//add eolOption
-//	tcp_3.clearOptions();
-//	SmartPtr< TCPOption > eolOption = new EOLOption();
-//	tcp_3.addOption( eolOption );
-
 	//add Time Stamp option
 	tcp_3.clearOptions();
 	SmartPtr< TCPOption > timeStampOption = new TimeStampOption();
@@ -262,10 +257,6 @@ void TcpTest::testOptions()
 	SmartPtr< TCPOption > sackOption = new SACKOption();
 	tcp_3.addOption( sackOption );
 	QUNIT_IS_TRUE( tcp_3.size() == 22 );
-	//method 2
-	tcp_3.clearOptions();
-//	uint8_t num[] = { 0x5b, 0xd3 };
-//	SmartPtr< TCPOption > sackOption = new SACKOption( num, 4 );
 	
 	//add eolOption
 	tcp_3.clearOptions();
