@@ -213,6 +213,8 @@ void TcpTest::testOptions()
 	QUNIT_IS_TRUE( tcp_3.size() == 24 );
 	//check size of copy
 	QUNIT_IS_TRUE( tcp_3A.size() == 24 );
+	//compare sizes
+	QUNIT_IS_EQUAL( tcp_3.size(), tcp_3A.size() );
 
 	//check erase all options
 	tcp_3.clearOptions();
@@ -237,6 +239,39 @@ void TcpTest::testOptions()
 	tcp_3.addOption( sackPermittedOption );
 	QUNIT_IS_TRUE( tcp_3.size() == 22 );
 
+	//add eolOption
+//	tcp_3.clearOptions();
+//	SmartPtr< TCPOption > eolOption = new EOLOption();
+//	tcp_3.addOption( eolOption );
+
+	//add Time Stamp option
+	tcp_3.clearOptions();
+	SmartPtr< TCPOption > timeStampOption = new TimeStampOption();
+	tcp_3.addOption( timeStampOption );
+	QUNIT_IS_TRUE( tcp_3.size() == 30 );
+
+	//add WSOPT - Window Scale option
+	tcp_3.clearOptions();
+	SmartPtr< TCPOption > wsOption = new WSOption();
+	tcp_3.addOption( wsOption );
+	QUNIT_IS_TRUE( tcp_3.size() == 23 );
+
+	//add Sack option
+	//method 1
+	tcp_3.clearOptions();
+	SmartPtr< TCPOption > sackOption = new SACKOption();
+	tcp_3.addOption( sackOption );
+	QUNIT_IS_TRUE( tcp_3.size() == 22 );
+	//method 2
+	tcp_3.clearOptions();
+//	uint8_t num[] = { 0x5b, 0xd3 };
+//	SmartPtr< TCPOption > sackOption = new SACKOption( num, 4 );
+	
+	//add eolOption
+	tcp_3.clearOptions();
+	SmartPtr< TCPOption > eolOption = new EOLOption();
+	tcp_3.addOption( eolOption );
+	QUNIT_IS_NOT_EQUAL( tcp_3.size(), tcp_3A.size() );
 
 //	SmartPtr< TCPOption > randomOpt = new TCPOption();
 //	randomOpt->setKind( 2 );
