@@ -72,6 +72,4 @@ class IPv6 : public InetData
 		uint8_t hopLimit() const;
 		//!Sets the Hop Limit field
 		uint8_t setHopLimit( uint8_t );
-		//!Return the Source Address
-		uint8_t srcAddr( 
 }
