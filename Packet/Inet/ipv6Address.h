@@ -1,8 +1,13 @@
+/*
+ * class IPv6Address
+ * This class is used in conjunction with IPv6 for handling IPv6 addresses
+*/
+
 #include <string>
 #include <vector>
-#include "ipv6Address.h"
+#include "inetData.h"
 
-class IPv6Address
+class IPv6Address : public InetData
 {
 	public: //constants
 		//! Size of a IPv6 address in bytes

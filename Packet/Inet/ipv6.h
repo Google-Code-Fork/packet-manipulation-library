@@ -8,14 +8,15 @@
  * This class is used in conjunction with Packet for handling IPv6
 */
 
-#ifndef IP_H
-#define IP_H
+#ifndef IPv6_H
+#define IPv6_H
 
 #include <string>
 #include <netinet/in.h>
 #include "inetData.h"
 #include "../encapsulateable.h"
 #include <vector>
+#include "IPv6Address.h"
 
 typedef struct IPv6Header
 {
@@ -28,8 +29,8 @@ typedef struct IPv6Header
 	u_int8_t ip_hl;			//!< hop limit
 //	std::vector< u_int8 > sourceAdd(16);	//!< source address
 //	std::vector< u_int8 > destAdd(16);		//!< destination address
-	u_int8_t srcAddr[16];	//!< source address
-	u_int8_t dstAddr[16];	//!< destination address
+	u_int8_t srcAddr[IPv6Address::IPv6AddressSize];	//!< src IPv6 address-16Bytes
+	u_int8_t dstAddr[IPv6Address::IPv6AddressSize];	//!< dst IPv6 address-16Bytes
 }IPv6Header;
 
 class IPv6 : public InetData
@@ -55,21 +56,36 @@ class IPv6 : public InetData
 		//!Returns the Traffic Class field
 		uint32_t trafficClass() const;
 		//!Sets the Traffic Class field
-		uint32_t setTrafficClass( uint32_t );
+		void setTrafficClass( uint32_t );
 		//!Return the Flow Label field
 		uint32_t flowLabel() const;
 		//!Sets the Flow Label field
-		uint32_t setFlowLabel( uint32_t );
+		void setFlowLabel( uint32_t );
 		//!Return the Payload Length field
 		uint16_t payloadLength() const;
 		//!Sets the Payload Length field
-		uint16_t setPayloadLength( uint16_t );
+		void setPayloadLength( uint16_t );
 		//!Return the Next Header field
 		uint8_t nextHeader() const;
 		//!Sets the Next Header field
-		uint16_t setNextHeader( uint8_t );
+		void setNextHeader( uint8_t );
 		//!Return the Hop Limit field
 		uint8_t hopLimit() const;
 		//!Sets the Hop Limit field
-		uint8_t setHopLimit( uint8_t );
-}
+		void setHopLimit( uint8_t );
+
+		//!Return the source IPv6 address in the IP header
+		IPv6Address sourceIPv6();
+		//!Sets the source IPv6 address in the IP header to v6
+		void setSourceV6( IPv6Address v6 );
+		//!Return the destination IPv6 address in the IP header
+		IPv6Address destinationIPv6();
+		//!Set the destination IPv6 address in the IP header to v6
+		void setDestination( IPv6Address v6 );
+
+	private:
+		//!Internal data for IPv6
+		IPv6Header header_;
+};
+
+#endif
