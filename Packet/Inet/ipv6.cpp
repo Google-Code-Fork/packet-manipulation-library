@@ -5,12 +5,17 @@
 
 #include <stdexcept>
 #include "ipv6.h"
+#include "ipv6Address.h"
 #include <arpa/inet.h>
 #include <iostream>
 #include <iomanip>
 
 IPv6::IPv6()
 {
+	IPv6Address v6;
+	v6.getIPv6( header_.srcAddr );
+	v6.getIPv6( header_.dstAddr );
+
 	header_ = new struct IPv6Header;
 	setHeaderLength( 40 );
 }
@@ -46,7 +51,7 @@ uint32_t IPv6::version() const
 	return ((version & 0xF0000000) >> 28);
 }
 
-uint32_t IPv6::setVersion( uint32_t version )
+void IPv6::setVersion( uint32_t version )
 {
 	//if version too large to fit in the field
 	if( 0 < (0xFFFFFFF0 & version) )
@@ -61,7 +66,7 @@ uint32_t IPv6::trafficClass() const
 	return ((trafficClass & 0x0FF00000 ) >> 20);
 }
 
-uint32_t IPv6::setTrafficClass( uint32_t tClass )
+void IPv6::setTrafficClass( uint32_t tClass )
 {
 	//if traffic class too large to fit in the field
 	if( 0 < (0xFFFFFF00 & tClass) )
@@ -76,7 +81,7 @@ uint32_t IPv6::flowLabel() const
 	return (flowLabel & 0x000FFFFF);
 }
 
-uint32_t IPv6::setFlowLabel( uint32_t fLabel )
+void IPv6::setFlowLabel( uint32_t fLabel )
 {
 	//if flow label too large to fit in the field
 	if( 0 < (0xFFF00000 & fLabel) )
@@ -90,7 +95,7 @@ uint16_t IPv6::payloadLength() const
 	return ntohs( header_->ip_len );
 }
 
-uint16_t IPv6::setPayloadLength( uint16_t length )
+void IPv6::setPayloadLength( uint16_t length )
 {
 	header_->ip_len = htons( length );
 }
@@ -100,7 +105,7 @@ uint8_t IPv6::nextHeader() const
 	return ntohs( header_->ip_nh );
 }
 
-uint8_t IPv6::setNextHeader( uint8_t nextHeader )
+void IPv6::setNextHeader( uint8_t nextHeader )
 {
 	header_->ip_nh = htons( nextHeader );
 }
@@ -110,8 +115,38 @@ uint8_t IPv6::hopLimit() const
 	return ntohs( header_->ip_hl );
 }
 
-uint8_t IPv6::setHopLimit( uint8_t hopLimit )
+void IPv6::setHopLimit( uint8_t hopLimit )
 {
 	header_->ip_hl = htons( hopLimit );
 }
+
+//**********************************
+
+IPv6Address IPv6::sourceIPv6()
+{
+	return IPv6Address( header_.srcAddr );
+}
+
+void IPv6::setSourceV6( IPv6Address v6 )
+{
+	v6.getIPv6( header_.srcAddr );
+}
+
+IPv6Address IPv6::destinationIPv6()
+{
+	return IPv6Address (header_.dstAddr );
+}
+
+void IPv6::setDestinationV6( IPv6Address v6 )
+{
+	v6.getIPv6( header_.dstAddr );
+}
+
+
+
+bool IPv6::isIPv6() const
+{
+	return true;
+}
+
 
