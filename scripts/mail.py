@@ -18,7 +18,7 @@ http://code.scaparra.com/PacMan was able to build and passed all test
 successfully. See Attached.
 
 Congrats,
-  Capt Slow
+  Tester 
 
 DO NOT Respond to this message. This is an automated message.
 """
@@ -28,7 +28,7 @@ This is a notice that a fresh checkout of the PVAT library PacMan from
 http://code.scaparra.com/PacMan was unable to build. See Attached.
 
 Please Fix,
-  Capt Slow
+   The Compilier
 
 DO NOT Respond to this message. This is an automated message.
 """
@@ -38,7 +38,7 @@ This is a notice that a fresh checkout of the PVAT library PacMan from
 http://code.scaparra.com/PacMan was unable to build. See Attached.
 
 Please Fix,
-  Capt Slow
+  The Test Compilier
 
 DO NOT Respond to this message. This is an automated message.
 """
@@ -49,7 +49,7 @@ http://code.scaparra.com/PacMan was able to build. However, the Unit Test have
 failed, See Attached.
 
 Please Fix,
-  Capt Slow
+  The Tester
 
 DO NOT Respond to this message. This is an automated message.
 """
