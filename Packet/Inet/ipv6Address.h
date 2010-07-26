@@ -1,7 +1,10 @@
 /*
- * class IPv6Address
+ * class IPv6Address.h
  * This class is used in conjunction with IPv6 for handling IPv6 addresses
 */
+
+#ifndef IPV6ADDRESS_H
+#define IPV6ADDRESS_H
 
 #include <string>
 #include <vector>
@@ -45,3 +48,4 @@ class IPv6Address : public InetData
 		std::vector< uint8_t > address_;
 };
 
+#endif

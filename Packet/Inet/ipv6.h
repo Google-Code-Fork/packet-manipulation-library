@@ -16,7 +16,7 @@
 #include "inetData.h"
 #include "../encapsulateable.h"
 #include <vector>
-#include "IPv6Address.h"
+#include "ipv6Address.h"
 
 typedef struct IPv6Header
 {
@@ -82,6 +82,9 @@ class IPv6 : public InetData
 		IPv6Address destinationIPv6();
 		//!Set the destination IPv6 address in the IP header to v6
 		void setDestination( IPv6Address v6 );
+		//!Returns true this is IP! Overloaded from InetData so we can tell we have
+		//an IP header in the packet
+		bool isIPv6() const{return true;};
 
 	private:
 		//!Internal data for IPv6
