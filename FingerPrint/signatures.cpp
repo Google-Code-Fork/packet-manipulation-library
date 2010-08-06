@@ -460,3 +460,9 @@ void Signature::setDetailsSignature( std::string fp )
 {
 	desc_ = fp;
 }
+
+//TODO Add More Comparisons
+bool Signature::operator== ( const Signature &packetSignature ) const
+{
+	return ( ttl_ == packetSignature.ttl_ );
+}
