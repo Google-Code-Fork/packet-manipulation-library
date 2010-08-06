@@ -228,31 +228,26 @@ Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const
 		//find match :)
 		Signature packetSignature( p );
 
-		sigp_Hash = sighash( packetSignature.size(), packetSignature.optCount(),
+		int sigp_Hash = sighash( packetSignature.size(), packetSignature.optCount(),
 				packetSignature.dontFragment(), packetSignature.quirks() );
 
 		if( type == PacketFingerprint::SynAckSignatures )
-		{
-			for( int i = 0; i<SIGHASH; i++ )
-			{
-				if ( sigp_Hash == synAckHashLookup_(i) )
-				{
-					//put pointer at location i
-					Signature* hashptr = &synAckHashLookup_.at(i);
+		{					
+			Signature* sigptr = synAckHashLookup_.at(sigp_Hash);
 
-					while (strcmp (packetSignature, hashptr) != 0 && hashptr != NULL)
-					{
-						hashptr = hashptr -> next();
-					}	
-				}
-			}
-			if (hashptr == NULL)
+			while ( sigptr != NULL)
 			{
-				//return default packer?
-			}
-			else
-				return //packet match
+				if ( packetSignature == *sigptr )
+					return *sigptr;
+				sigptr = sigptr -> next();
+			}	
 		}
+/*		else// (sigptr == NULL)
+		{
+			//return default packet?
+		}
+		*/
+		
 		else if( type == PacketFingerprint::SynSignatures )
 		{
 		}

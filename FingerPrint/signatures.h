@@ -70,6 +70,7 @@ class Signature
 		void setConfigFileLine( uint32_t line ) { configFileLine_ = line; }
 		void setNext( Signature* next ) { next_ = next; }
 
+		bool operator== ( const Signature &packetSignature ) const;
 
 	private:
 		std::string os_;
