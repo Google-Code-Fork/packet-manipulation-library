@@ -85,7 +85,7 @@ PacketBuffer::PacketBuffer Injector::getPacketBuffer()
 
 int Injector::inject()
 {
-	return pcap_inject(handle, packetBuffer.getBuffer(), packetBuffer.size());
+	return pcap_inject(handle, packetBuffer.buffer(), packetBuffer.size());
 }
 
 
