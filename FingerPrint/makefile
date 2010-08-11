@@ -2,7 +2,7 @@ OBJS=packetfingerprint.o signatures.o
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-lpcap
-THIS=Classifier
+THIS=FingerPrinter
 
 all: $(OBJS) 
 
