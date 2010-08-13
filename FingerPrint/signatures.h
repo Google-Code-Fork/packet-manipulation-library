@@ -125,6 +125,10 @@ class Signature
 		void setQuirksSignature( std::string fp );
 		void setOSGenreSignature( std::string fp );
 		void setDetailsSignature( std::string fp );
+
+		bool windowSizeMatch( const Signature &packetSignature ) const;
+		bool mssSizeMatch( const Signature &packetSignature ) const;
+		bool tcpOptionMatch( const Signature &packetSignature ) const;
 };
 
 #endif
