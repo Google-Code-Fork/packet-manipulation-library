@@ -116,7 +116,7 @@ class Signature
 		static const uint32_t MOD_NULL; //No Mod set window size constant.
 
 		//Private Functions
-		uint32_t checkForQuirks( const TCPOption *option ) const; 
+		void checkForQuirks( const Packet &packet );
 		void setWindowSignature( std::string fp );
 		void setTTLSignature( std::string fp );
 		void setDontFragmentSignature( std::string fp );
@@ -129,6 +129,16 @@ class Signature
 		bool windowSizeMatch( const Signature &packetSignature ) const;
 		bool mssSizeMatch( const Signature &packetSignature ) const;
 		bool tcpOptionMatch( const Signature &packetSignature ) const;
+
+		bool quirkPast( const Packet &p ) const;
+		bool quirkZeroId( const Packet &p ) const;
+		bool quirkIPOpt( const Packet &p ) const;
+		bool quirkUrg( const Packet &p ) const;
+		bool quirkX2( const Packet &p ) const;
+		bool quirkAck( const Packet &p ) const;
+		bool quirkT2( const Packet &p ) const; 
+		bool quirkFlags( const Packet &p ) const;
+		bool quirkData( const Packet &p ) const; 
 };
 
 #endif
