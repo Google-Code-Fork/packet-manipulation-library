@@ -37,7 +37,7 @@ Signature::Signature( const std::string &fingerPrint ):
 	size_(0),
 	optCount_(0),
 	wsc_(0),
-	MSS_(0),
+	mss_(0),
 	wscMod_(0),
 	mssMod_(0),
 	quirks_(0),
@@ -139,25 +139,170 @@ void Signature::setFromPacket( const Packet &p )
 		for( itr = options.begin(); itr != options.end(); ++itr )
 		{
 			uint8_t kind = (*itr)->kind();
-			quirks |= checkForQuirks( *itr ); 
+			if( kind == TCPOption::MAXIMUM_SEGMENT_SIZE )
+			{
+				MSSOption* mss = static_cast<MSSOption*>((*itr).data());
+				mss_ = mss->mss(); 
+			}
+		  checkForQuirks( p ); 
 			tcpOptions.push_back( kind );
 		}
 		setTcpOptions( tcpOptions );
-
 	}
-
 }
 
-uint32_t Signature::checkForQuirks( const TCPOption *option ) const 
+void Signature::checkForQuirks( const Packet &packet ) 
 {
-	if( option->kind() == TCPOption::TIME_STAMP_OPTION )
+	quirks_ = 0;
+
+	//TODO: check for more than just SYN packet quirks.
+
+	if( quirkPast( packet ) )
+		quirks_ |= QUIRK_PAST;
+
+	if( quirkZeroId( packet ) )
+		quirks_ |= QUIRK_ZEROID;
+
+	if( quirkIPOpt( packet ) )
+		quirks_ |= QUIRK_IPOPT;
+
+	if( quirkUrg( packet ) )
+		quirks_ |= QUIRK_URG;
+
+	if( quirkX2( packet ) )
+		quirks_ |= QUIRK_X2;
+
+	if( quirkAck( packet ) )
+		quirks_ |= QUIRK_ACK;
+
+	if( quirkT2( packet ) )
+		quirks_ |= QUIRK_T2;
+
+	if( quirkFlags( packet ) )
+		quirks_ |= QUIRK_FLAGS;
+
+	if( quirkData( packet ) )
+		quirks_ |= QUIRK_DATA;
+}
+
+bool Signature::quirkPast( const Packet &p ) const
+{
+	//Checks for options after EOL
+	
+	bool eol = false;
+
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
 	{
+		IPv4 ip = p.getInet<IPv4>( 0 );
+		TCP tcp = p.getTrans<TCP>( 0 );
+		std::vector< SmartPtr< TCPOption > > options = tcp.options();
+	
+		for( int i = 0; i < options.size(); ++i )
+		{
+			TCPOption * opt = options[i];
 
+			if( !eol && opt->kind() == TCPOption::END_OF_LIST )
+			{
+				eol = true; 
+			}
+			else if( eol && opt->kind() != TCPOption::END_OF_LIST )
+			{
+				return true;
+			}
+		} 
+	}
+	return false;
+}
 
-//CONTINUE WORKING HERE
+bool Signature::quirkZeroId( const Packet &p ) const
+{
+	if( p.inetIs< IPv4 >( 0 ) )
+	{
+		return p.getInet<IPv4>( 0 ).identification() == 0;
+	}
+	return false;
+}
+
+bool Signature::quirkIPOpt( const Packet &p ) const
+{
+	//TODO: IP packets can't currently have options! :(
+	
+	if( p.inetIs< IPv4 >( 0 ) )
+	{
+		IPv4 ip = p.getInet< IPv4 >( 0 );
+		
 	}
 }
 
+bool Signature::quirkUrg( const Packet &p ) const 
+{
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
+	{
+		TCP tcp = p.getTrans<TCP>( 0 );
+		return tcp.URG_Flag();
+	}
+}
+
+bool Signature::quirkX2( const Packet &p ) const
+{
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
+	{
+		TCP tcp = p.getTrans<TCP>( 0 );
+		if( tcp.x2() != 0 )
+			return true;
+	}
+	return false;
+}
+
+bool Signature::quirkAck( const Packet &p ) const
+{
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
+	{
+		TCP tcp = p.getTrans<TCP>( 0 );
+		if( tcp.acknowledgementNumber() != 0 )
+			return true;
+	}
+	return false;
+}
+
+bool Signature::quirkT2( const Packet &p ) const
+{
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
+	{
+		TCP tcp = p.getTrans<TCP>( 0 );
+		std::vector< SmartPtr< TCPOption > > options = tcp.options();
+		for( int i = 0; i < options.size(); ++i )
+		{
+			if( options[i]->kind() == TCPOption::TIME_STAMP_OPTION )
+			{
+				TimeStampOption* tsopt = static_cast<TimeStampOption*>(options[i].data());
+				if( tsopt->tsecr() != 0 )
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+
+bool Signature::quirkFlags( const Packet &p ) const 
+{
+	if( p.inetIs< IPv4 >( 0 ) && p.transIs< TCP >( 0 ) )
+	{
+		TCP tcp = p.getTrans<TCP>( 0 );
+		if( tcp.URG_Flag() || tcp.PSH_Flag() )
+			return true;
+	}
+	return false;
+}
+
+bool Signature::quirkData( const Packet &p ) const 
+{
+	if( p.appSize() > 0 ) 
+		return true;
+	return false;
+}
 void Signature::setFromSignature( const std::string &fingerPrint )
 {
 	std::string windowSignature;
@@ -466,10 +611,9 @@ bool Signature::operator== ( const Signature &packetSignature ) const
   if( dontFragment_ == packetSignature.dontFragment_ &&
 			ttl_ == packetSignature.ttl_ &&
 			quirks_ == packetSignature.quirks_ &&
-			optCount_ == packetSignature.optCount_ && )
+			optCount_ == packetSignature.optCount_ )
 	{
 		if( windowSizeMatch( packetSignature ) &&
-				mssSizeMatch( packetSignature ) &&
 				tcpOptionMatch( packetSignature ) )
 			return true;
 	}
@@ -478,12 +622,36 @@ bool Signature::operator== ( const Signature &packetSignature ) const
 
 bool Signature::windowSizeMatch( const Signature &packetSignature ) const 
 {
-
-}
-
-bool Signature::mssSizeMatch( const Signature &packetSignature ) const 
-{
-
+	if( wscMod_ == MOD_CONST )
+	{
+		if( packetSignature.wsc_ % wsc_ == 0 )
+			return true;
+	}
+	else if( wscMod_ == MOD_MSS )
+	{
+		if( packetSignature.wsc_ % packetSignature.mss_ == 0 )
+		{
+			if( packetSignature.wsc_ / packetSignature.mss_ == wsc_ )
+				return true;
+		}
+	}
+	else if( wscMod_ == MOD_MTU )
+	{
+		int segmentSize = 1460; //Maximum MSS for Ethernet V2 (Most Common)
+		if( packetSignature.mss_ > 0 )
+			segmentSize = packetSignature.mss_;
+		int mtu = segmentSize + 40; 
+		if( packetSignature.wsc_ % mtu == 0 )
+		{
+			if( packetSignature.wsc_ / mtu == wsc_ )
+				return true;
+		}
+	}
+	else if ( wscMod_ == MOD_NULL )
+	{
+		return wsc_ == packetSignature.wsc_;
+	}
+	return false;
 }
 
 bool Signature::tcpOptionMatch( const Signature &packetSignature ) const
