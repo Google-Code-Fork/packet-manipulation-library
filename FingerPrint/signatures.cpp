@@ -37,7 +37,7 @@ Signature::Signature( const std::string &fingerPrint ):
 	size_(0),
 	optCount_(0),
 	wsc_(0),
-	mss_(0),
+	MSS_(0),
 	wscMod_(0),
 	mssMod_(0),
 	quirks_(0),
@@ -461,8 +461,41 @@ void Signature::setDetailsSignature( std::string fp )
 	desc_ = fp;
 }
 
-//TODO Add More Comparisons
 bool Signature::operator== ( const Signature &packetSignature ) const
 {
-	return ( ttl_ == packetSignature.ttl_ );
+  if( dontFragment_ == packetSignature.dontFragment_ &&
+			ttl_ == packetSignature.ttl_ &&
+			quirks_ == packetSignature.quirks_ &&
+			optCount_ == packetSignature.optCount_ && )
+	{
+		if( windowSizeMatch( packetSignature ) &&
+				mssSizeMatch( packetSignature ) &&
+				tcpOptionMatch( packetSignature ) )
+			return true;
+	}
+	return false;
+}
+
+bool Signature::windowSizeMatch( const Signature &packetSignature ) const 
+{
+
+}
+
+bool Signature::mssSizeMatch( const Signature &packetSignature ) const 
+{
+
+}
+
+bool Signature::tcpOptionMatch( const Signature &packetSignature ) const
+{
+	if( tcpOptions_.size() != packetSignature.tcpOptions_.size() )
+		return false;
+
+	for( int i = 0; i < tcpOptions_.size(); ++i )
+	{
+		if( tcpOptions_[i] != packetSignature.tcpOptions_[i] )
+			return false;
+	}
+
+	return true;
 }
