@@ -53,6 +53,14 @@ class MSSOption : public TCPOption
 			data_.push_back( static_cast<uint8_t>( networkOrder >> 8 ) );
 			data_.push_back( static_cast<uint8_t>( networkOrder & 0xFF ) );
 		}
+
+		uint16_t mss( ) const 
+		{
+			uint16_t networkOrder = static_cast<uint16_t>(data_[0]) << 8;
+			networkOrder |= static_cast<uint16_t>(data_[1]);
+			return ntohs(networkOrder);
+		}
+
 };
 
 

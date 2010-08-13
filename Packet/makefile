@@ -2,7 +2,7 @@ include ../global.mk
 THIS=Packet
 EXAMPLEDIR=exampleCode
 LAYERDIRS= $(LINKDIR) $(INETDIR) $(TRANSDIR) $(APPDIR)
-
+INCLUDEDIRS=Link Trans Inet App
 OBJS=packetBuilder.o packetBuffer.o packet.o
 EXAMPLEOBJS=exampleCode/test.o Link/ethernet.o Link/mac.o Link/link.o Inet/ipv4.o Inet/inet.o Trans/tcp.o Trans/tcpOptions.o Trans/udp.o Trans/trans.o App/raw.o App/app.o Inet/icmp.o
 EXAMPLESOURCE=$(EXAMPLEOBJS:%.o=%.cpp)
@@ -11,12 +11,12 @@ CXXFLAGS=$(CFLAGS)
 
 all: subdir $(OBJS) example 
 
-include: 
+include: subdir $(OBJS) 
 	-mkdir ../include/$(THIS)
-	-for i in $(LAYERDIRS) ; do \
+	-for i in $(INCLUDEDIRS) ; do \
 	( mkdir ../include/$(THIS)/$$i ) ; \
 	done
-	-for i in $(LAYERDIRS) ; do \
+	-for i in $(INCLUDEDIRS) ; do \
 	( cd $$i ; cp *.h ../../include/$(THIS)/$$i/ ) ; \
 	done
 	-cp *.h ../include/$(THIS)

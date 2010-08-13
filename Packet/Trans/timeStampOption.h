@@ -53,6 +53,18 @@ class TimeStampOption : public TCPOption
 		data_[3] = static_cast<uint8_t>( value & 0xFF );
 	}
 
+	uint32_t tsval( ) const
+	{
+		uint32_t value = 0;
+		value |= static_cast<uint32_t>(data_[0]) << 24;
+		value |= static_cast<uint32_t>(data_[1]) << 16;
+		value |= static_cast<uint32_t>(data_[2]) << 8;
+		value |= static_cast<uint32_t>(data_[3]);
+
+		return value;
+
+	}
+
 	void setTSecr( uint32_t value )
 	{
 		data_[4] = static_cast<uint8_t>( (value & 0xFF000000) >> 24 );
@@ -61,6 +73,16 @@ class TimeStampOption : public TCPOption
 		data_[7] = static_cast<uint8_t>( value & 0xFF );
 	}
 
+	uint32_t tsecr() const 
+	{
+		uint32_t value = 0;
+		value |= static_cast<uint32_t>(data_[4]) << 24;
+		value |= static_cast<uint32_t>(data_[5]) << 16;
+		value |= static_cast<uint32_t>(data_[6]) << 8;
+		value |= static_cast<uint32_t>(data_[7]);
+
+		return value;
+	}
 };
 
 
