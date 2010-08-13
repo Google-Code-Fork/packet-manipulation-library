@@ -97,12 +97,12 @@ void IPv4::setTotalLength( uint16_t length )
 	header_->ip_len = htons(length);
 }
 
-uint16_t IPv4::identifaction() const
+uint16_t IPv4::identification() const
 {
 	return ntohs( header_->ip_id);
 }
 
-void IPv4::setIdentifaction( uint16_t id )
+void IPv4::setIdentification( uint16_t id )
 {
 	header_->ip_id = htons( id );
 }
