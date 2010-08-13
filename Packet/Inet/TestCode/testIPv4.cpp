@@ -86,13 +86,13 @@ void IPv4Test::testPacketCreation()
 	ipv4_1.setTotalLength(48);
 
 	//identification
-	QUNIT_IS_TRUE( ipv4_1.identifaction() == 0x62d7 );
+	QUNIT_IS_TRUE( ipv4_1.identification() == 0x62d7 );
 
 	//setIdentifaction
-	ipv4_1.setIdentifaction(0x6666);
-	QUNIT_IS_TRUE( ipv4_1.identifaction() == 0x6666 );
+	ipv4_1.setIdentification(0x6666);
+	QUNIT_IS_TRUE( ipv4_1.identification() == 0x6666 );
 	//change the identification field back to original (0x62d7)
-	ipv4_1.setIdentifaction(0x62d7);
+	ipv4_1.setIdentification(0x62d7);
 
 	//Flag - returns dontfragment flag (true|false)
 	QUNIT_IS_TRUE( ipv4_1.dontFragment() );

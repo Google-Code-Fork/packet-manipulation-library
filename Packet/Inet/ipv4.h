@@ -124,10 +124,10 @@ class IPv4 : public InetData
 	  uint16_t totalLength() const;
 	  //!Sets the total length field 
 	  void setTotalLength( uint16_t );
-	  //!returns the identifacation field
-	  uint16_t identifaction() const;
+	  //!returns the identification field
+	  uint16_t identification() const;
 	  //!sets the identification field
-	  void setIdentifaction( uint16_t );
+	  void setIdentification( uint16_t );
 	  //!Returns flag (true|false)
 	  bool dontFragment() const;
 	  //!Set flag (true|false)
