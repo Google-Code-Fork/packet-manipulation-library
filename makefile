@@ -6,7 +6,7 @@ COMMONDIR=common
 FINGERPRINT=FingerPrint
 MODULES = $(PACKETDIR) $(DEVICEDIR) $(SNIFFERDIR) $(INJECTORDIR) $(COMMONDIR) $(FINGERPRINT)
 
-INSTALL_LIB=/usr/local/lib
+INSTALL_LIB=/usr/lib/
 INSTALL_INCLUDE=/usr/local/include/PacMan/
 all: pacman lib
 
