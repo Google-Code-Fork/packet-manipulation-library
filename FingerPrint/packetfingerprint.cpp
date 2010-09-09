@@ -209,6 +209,8 @@ Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const
 {
 	uint16_t type = PacketFingerprint::NoSignature;
 
+	std::cout<<"PLEASE WORK"<<std::endl;
+
 	if( p.transIs<TCP>( 0 ) )
 	{
 		//Which Database
@@ -218,6 +220,7 @@ Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const
 				type = PacketFingerprint::SynAckSignatures;
 			else
 				type = PacketFingerprint::SynSignatures;
+			std::cout<<"************"<<std::endl;
 		}
 		else if( p.getTrans<TCP>(0).RST_Flag() )
 		{
