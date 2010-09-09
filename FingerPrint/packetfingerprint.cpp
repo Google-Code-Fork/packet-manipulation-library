@@ -208,6 +208,7 @@ const std::string PacketFingerprint::trim(const std::string& pString,
 Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const 
 {
 	uint16_t type = PacketFingerprint::NoSignature;
+
 	if( p.transIs<TCP>( 0 ) )
 	{
 		//Which Database
@@ -250,6 +251,7 @@ Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const
 		
 		else if( type == PacketFingerprint::SynSignatures )
 		{
+			std::cout<<"Goodbye World!"<<std::endl;
 		}
 		else if( type == PacketFingerprint::RstSignatures )
 		{
