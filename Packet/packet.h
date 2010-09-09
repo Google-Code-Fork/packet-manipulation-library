@@ -88,6 +88,8 @@ class Packet : public AppData
     //!example: linkIs<Ethernet> returns true if Ethernet
     template < class T > bool linkIs( int i ) const
     {
+			if( i >= linkLayer_.size() )
+				return false;
       return linkLayer_.at( i ).is< T >();
     }
 
@@ -95,6 +97,8 @@ class Packet : public AppData
     //!example: inetIs<IPv4> returns true if IPv4 
     template < class T > bool inetIs( int i ) const
     {
+			if( i >= inetLayer_.size() )
+				return false;
       return inetLayer_.at( i ).is< T >();
     }
 
@@ -102,6 +106,8 @@ class Packet : public AppData
     //!example: transIs<TCP> returns true if TCP
     template < class T > bool transIs( int i ) const
     {
+			if( i >= transLayer_.size() )
+				return false;
       return transLayer_.at( i ).is< T >();
     }
 
@@ -109,6 +115,8 @@ class Packet : public AppData
     //!example: appIs<Raw> returns true if Raw 
     template < class T > bool appIs( int i ) const
     {
+			if( i >= appLayer_.size() )
+				return false;
       return appLayer_.at( i ).is< T >();
     }
 
