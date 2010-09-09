@@ -5,6 +5,8 @@
 
 #include <stdexcept>
 #include "ipv6Address.h"
+#include "inetData.h"
+#include "../packetBuffer.h"
 
 IPv6Address::IPv6Address() : address_( std::vector< uint8_t >(16,0) )
 {

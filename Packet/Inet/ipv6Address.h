@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include "inetData.h"
+#include "../packetBuffer.h"
 
 class IPv6Address : public InetData
 {
@@ -33,7 +34,7 @@ class IPv6Address : public InetData
 		virtual ~IPv6Address();
 		
 		//! Sets the address base on the bytes in IPv6
-		void setAddress( std::vector< uint8_t > address );
+		void setIPv6Address( std::vector< uint8_t > address );
 		//! Returns the size of the IPv6 address
 		int size() const;
 		//! Returns a Packetbuffer with the IPv6 address
