@@ -255,6 +255,14 @@ Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const
 		else if( type == PacketFingerprint::SynSignatures )
 		{
 			std::cout<<"***INCOMPLETE***"<<std::endl;
+			
+			Signature* sigptr = synHashLookup_.at(sigp_Hash);
+			while ( sigptr != NULL )
+			{
+				if ( packetSignature == *sigptr )
+					return *sigptr;
+				sigptr = sigptr -> next();
+			}
 		}
 		else if( type == PacketFingerprint::RstSignatures )
 		{
