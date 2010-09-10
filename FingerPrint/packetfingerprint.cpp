@@ -232,7 +232,6 @@ Signature PacketFingerprint::fingerprintPacket( const Packet& p ) const
 		int sigp_Hash = sighash( packetSignature.size(), packetSignature.optCount(),
 				packetSignature.dontFragment(), packetSignature.quirks() );
 
-		std::cout<<type<<std::endl;
 		std::cout<<sigp_Hash<<std::endl;
 
 		if( type == PacketFingerprint::SynAckSignatures )
