@@ -69,7 +69,7 @@ template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size )
       p2 = build< TCP >( newbuff, newsize );
       break;
     case ipProtocols::IPPROTO_UDP:
-      p2 = build< TCP >( newbuff, newsize );
+      p2 = build< UDP >( newbuff, newsize );
       break;
     default:
       p2 = build< Raw >( newbuff, newsize );
