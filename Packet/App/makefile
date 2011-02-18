@@ -9,7 +9,7 @@ CXXFLAGS=$(CFLAGS)
 all: $(APPOBJS) example 
 
 clean: 
-	-rm *.o test example/*.o
+	-rm *.o test example/*.o *.d
 
 example: $(EXAMPLEOBJS) $(APPOBJS)
 	g++ $(EXAMPLEOBJS) $(APPOBJS) -o $@
