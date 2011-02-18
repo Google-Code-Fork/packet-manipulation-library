@@ -336,4 +336,5 @@ class DNSPacket : public AppData
 
 };
 
+typedef DNSPacket DNS;
 #endif

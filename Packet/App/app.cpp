@@ -29,5 +29,10 @@ template<> bool App::is<Raw>( ) const
   return header_->isRaw();
 }
 
+template<> bool App::is<DNS>( ) const 
+{
+  return header_->isDNS();
+}
+
 
 
