@@ -86,7 +86,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: linkIs<Ethernet> returns true if Ethernet
-    template < class T > bool linkIs( int i = 0 ) const
+    template < class T > bool linkIs( uint32_t i = 0 ) const
     {
 			if( i >= linkLayer_.size() )
 				return false;
@@ -95,7 +95,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: inetIs<IPv4> returns true if IPv4 
-    template < class T > bool inetIs( int i = 0 ) const
+    template < class T > bool inetIs( uint32_t i = 0 ) const
     {
 			if( i >= inetLayer_.size() )
 				return false;
@@ -104,7 +104,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: transIs<TCP> returns true if TCP
-    template < class T > bool transIs( int i = 0 ) const
+    template < class T > bool transIs( uint32_t i = 0 ) const
     {
 			if( i >= transLayer_.size() )
 				return false;
@@ -113,7 +113,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: appIs<Raw> returns true if Raw 
-    template < class T > bool appIs( int i = 0 ) const
+    template < class T > bool appIs( uint32_t i = 0 ) const
     {
 			if( i >= appLayer_.size() )
 				return false;
