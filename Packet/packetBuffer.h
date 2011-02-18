@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra
  *
  * This file is a part of PacMan.
  *
@@ -57,9 +57,10 @@ class PacketBuffer
     void setBuffer( uint8_t* buff, int size );
     //!returns a pointer to the buffer (only lives as long as the Packet Buffer
     //so be careful...
-    uint8_t* buffer();
+    uint8_t* buffer() const;
     //!Returns the size...
-    int size();
+    int size() const;
+		std::vector< uint8_t > vector() const;
 
   private:
     //!Internal Data

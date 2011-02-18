@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra
  *
  * This file is a part of PacMan.
  *
@@ -151,12 +151,22 @@ void PacketBuffer::setBuffer( uint8_t* buff, int size )
   }
 }
 
-uint8_t* PacketBuffer::buffer()
+uint8_t* PacketBuffer::buffer() const
 {
   return buff_;
 }
 
-int PacketBuffer::size()
+int PacketBuffer::size() const
 {
   return size_;
+}
+
+std::vector< uint8_t > PacketBuffer::vector() const
+{
+	std::vector< uint8_t > vector;
+	for( int i = 0; i < size_; ++i )
+	{
+		vector.push_back( buff_[i] );
+	}
+	return vector;
 }

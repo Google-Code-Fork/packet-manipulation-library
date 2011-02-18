@@ -48,6 +48,8 @@ class AppData : public Encapsulateable
     virtual bool isRaw() const {return false;}
 		//!HTTP Overloads this, return false;
 		virtual bool isHTTP() const {return false;}
+		//!DNS Overloads this, return false;
+		virtual bool isDNS() const {return false;}
     //!Packet Overloads this, returns false;
     virtual bool isPacket() const { return false; }
 };

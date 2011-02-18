@@ -1,95 +1,96 @@
-/*
- * PacMan - Packet Manipulation Library 
- * Copyright Â© 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
- *
- * This file is a part of PacMan.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+/**
+ * * INAV - Interactive Network Active-traffic Visualization
+ * * Copyright © 2007  Nathan Robinson, Jeff Scaparra
+ * *
+ * * This file is a part of INAV.
+ * *
+ * * This program is free software: you can redistribute it and/or modify
+ * * it under the terms of the GNU General Public License as published by
+ * * the Free Software Foundation, either version 3 of the License, or
+ * * (at your option) any later version.
+ * *
+ * * This program is distributed in the hope that it will be useful,
+ * * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * * GNU General Public License for more details.
+ * *
+ * * You should have received a copy of the GNU General Public License
+ * * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * */
 
 #include "threads.h"
 #include <stdexcept>
 #include <errno.h>
-
-/**
-	Constructor to initialize member data
-*/
-Mutex::Mutex()
+Mutex::Mutex( MutexType type )
 {
 #ifndef WIN32 // UNIX
-	mutex_ = new pthread_mutex_t;
-	int err = pthread_mutex_init( mutex_, NULL );
-	if( err )
-		throw std::runtime_error( "Can not init mutex" );
+
+  mutexAttr_ = new pthread_mutexattr_t;
+  //Create a default mutex attribute
+  pthread_mutexattr_init(mutexAttr_);
+
+  if( type == Normal )
+    pthread_mutexattr_settype(mutexAttr_, PTHREAD_MUTEX_NORMAL);
+  
+  mutex_ = new pthread_mutex_t;
+  int err = pthread_mutex_init( mutex_, mutexAttr_ );
+  //int err = pthread_mutex_init( mutex_, NULL );
+  if( err )
+    throw std::runtime_error( "Can not init mutex" );
+
 #endif
 }
 
-/**
-	Destructor to release mutex
-*/
 Mutex::~Mutex()
 {
-	#ifndef WIN32 // UNIX
-	int err = pthread_mutex_destroy( mutex_ );
-	if ( err == EBUSY)
-	  throw std::runtime_error( "Can not destroy mutex: Locked by other thread");
-	if ( err == EINVAL )
-	  throw std::runtime_error( "Mutex has invalid value and cannot be destroyed" );
-	if( err )
-		throw std::runtime_error( "Can not destroy mutex" );
-	#endif
+  #ifndef WIN32 // UNIX
+
+  int err = pthread_mutex_destroy( mutex_ );
+  if ( err == EBUSY)
+    throw std::runtime_error( "Can not destroy mutex: Locked by other thread");
+  if ( err == EINVAL )
+    throw std::runtime_error( "Mutex has invalid value and cannot be destroyed" );
+  if( err )
+    throw std::runtime_error( "Can not destroy mutex" );
+
+  pthread_mutexattr_destroy( mutexAttr_ );
+  #endif
 }
 
-/**
-	Copy constructor 
-*/
 Mutex::Mutex( const Mutex& mutex )
 {
-	#ifndef WIN32 //UNIX
-	mutex_ = new pthread_mutex_t;
-	mutex_ = mutex.mutex_;
-	#endif
+  #ifndef WIN32 //UNIX
+  mutex_ = mutex.mutex_;
+  #endif
 }
 
-/**
-	Acquire a lock
-*/
+Mutex& Mutex::operator=(const Mutex& mutex )
+{
+  #ifndef WIN32 //UNIX
+  mutex_ = mutex.mutex_;
+  #endif
+  return *this;
+}
+
 void Mutex::lock()
 {
-	#ifndef WIN32 // UNIX
-	pthread_mutex_lock( mutex_ );
-	#endif
+  #ifndef WIN32 // UNIX
+  if( pthread_mutex_lock( mutex_ ) != 0 )
+    throw std::runtime_error( "Can't lock Mutex" );
+  #endif
 }
 
-/**
-	Unlock 'this' lock 
-*/
 void Mutex::unlock()
 {
-	#ifndef WIN32 //UNIX
-	pthread_mutex_unlock( mutex_ );
-	#endif
+  #ifndef WIN32 //UNIX
+  pthread_mutex_unlock( mutex_ );
+  #endif
 }
 
-/**
-	Try to acuire 'this' lock only if it is free at the time of invocation
-*/
 int Mutex::trylock()
 {
-	#ifndef WIN32 //UNIX
-	int val = pthread_mutex_trylock( mutex_ );
-	#endif
-	return val;
+  #ifndef WIN32 //UNIX
+  int val = pthread_mutex_trylock( mutex_ );
+  #endif
+  return val;
 }
