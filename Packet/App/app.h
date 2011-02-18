@@ -32,6 +32,7 @@
 #include <stdexcept>
 #include "appData.h"
 #include "raw.h"
+#include "dnsPacket.h"
 #include "../encapsulateable.h"
 
 class App : public Encapsulateable
@@ -131,5 +132,5 @@ class App : public Encapsulateable
 };
 
 template<> bool App::is<Raw>( ) const;
-
+template<> bool App::is<DNS>( ) const;
 #endif
