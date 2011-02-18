@@ -86,7 +86,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: linkIs<Ethernet> returns true if Ethernet
-    template < class T > bool linkIs( int i ) const
+    template < class T > bool linkIs( int i = 0 ) const
     {
 			if( i >= linkLayer_.size() )
 				return false;
@@ -95,7 +95,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: inetIs<IPv4> returns true if IPv4 
-    template < class T > bool inetIs( int i ) const
+    template < class T > bool inetIs( int i = 0 ) const
     {
 			if( i >= inetLayer_.size() )
 				return false;
@@ -104,7 +104,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: transIs<TCP> returns true if TCP
-    template < class T > bool transIs( int i ) const
+    template < class T > bool transIs( int i = 0 ) const
     {
 			if( i >= transLayer_.size() )
 				return false;
@@ -113,7 +113,7 @@ class Packet : public AppData
 
     //!is<some class> returns true if this is of that type 
     //!example: appIs<Raw> returns true if Raw 
-    template < class T > bool appIs( int i ) const
+    template < class T > bool appIs( int i = 0 ) const
     {
 			if( i >= appLayer_.size() )
 				return false;
@@ -132,7 +132,7 @@ class Packet : public AppData
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
     //!example: getLink<Ethernet> returns an Ethernet object 
-    template < class T > T getLink( int i ) const 
+    template < class T > T getLink( int i = 0 ) const 
     { 
       Link l = linkLayer_.at( i );
       return l.get<T>();
@@ -141,7 +141,7 @@ class Packet : public AppData
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
     //!example: getInet<IPv4> returns an IPv4 object
-    template < class T > T getInet( int i ) const
+    template < class T > T getInet( int i = 0 ) const
     { 
       Inet l = inetLayer_.at( i );
       return l.get<T>();
@@ -150,7 +150,7 @@ class Packet : public AppData
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
     //!example: getTrans<TCP> returns a TCP object
-    template < class T > T getTrans( int i ) const
+    template < class T > T getTrans( int i = 0 ) const
     { 
       Trans l = transLayer_.at( i );
       return l.get<T>();
@@ -159,7 +159,7 @@ class Packet : public AppData
     //!returns a T object
     //!If this isn't a T object we throw runtime_error
     //!example: getApp<Raw> returns a Raw object
-    template < class T > T getApp( int i ) const
+    template < class T > T getApp( int i = 0 ) const
     { 
       App l = appLayer_.at( i );
       return l.get<T>();
