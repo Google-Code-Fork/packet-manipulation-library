@@ -42,7 +42,7 @@ const std::string sniffer::logFile = "./sniffer.log";
 /**
 	Constructor to initialize member data and base class data
 */
-sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
+sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream ), sniffing_(false)
 {
 	filterData = new FilterData ( coutMutex, logMutex, &log_stream );
 	setStartRoutine(run_sniffer);
@@ -53,7 +53,7 @@ sniffer::sniffer():snifferData( coutMutex, logMutex, &log_stream )
 */
 Packet sniffer::popPacket()
 {
-	return filterData->popPacket();
+	return filterData->popPacket( );
 }
 
 /**
@@ -61,6 +61,9 @@ Packet sniffer::popPacket()
 */
 void sniffer::start()
 {
+	MutexLocker lock( sniffingMutex_ );
+  sniffing_=true;
+	lock.unlock();
 	Thread::start(this);
 }
 
@@ -251,7 +254,18 @@ void* sniffer::packetSniffer()
 		}
 	}
 
+	MutexLocker lock( sniffingMutex_ );
+	sniffing_ = false;
+	filterData->pushPacket( Packet() );
+	
+
 	snifferData.log( "SnifferOffline Stopping!" );
+}
+
+bool sniffer::sniffing() 
+{
+	MutexLocker lock( sniffingMutex_ );
+	return sniffing_;
 }
 
 /**

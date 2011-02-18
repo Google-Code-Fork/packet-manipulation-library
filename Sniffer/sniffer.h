@@ -37,6 +37,8 @@ class sniffer : public Thread
 		static std::ofstream log_stream;
 		Device inDev_;
 		Device outDev_;
+		Mutex sniffingMutex_;
+		bool sniffing_;
 
 	public:
 		sniffer();
@@ -48,6 +50,7 @@ class sniffer : public Thread
 		void setInputPcapFile(std::string);
 		std::string getInputDevice();
 		Packet popPacket();
+		bool sniffing();
 		void log( std::string );
 		void start( );
 		void printDevices();
