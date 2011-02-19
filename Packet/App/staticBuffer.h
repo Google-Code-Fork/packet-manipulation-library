@@ -23,6 +23,7 @@ class StaticBuffer
 		StaticBuffer( const StaticBuffer &n );
 		StaticBuffer( const std::string &s );
 		StaticBuffer( const std::vector< uint8_t > &b );
+		StaticBuffer& operator=( const StaticBuffer &n );
 
 		std::string toSTDString( ) const; 
 		std::vector< uint8_t > toVector( ) const;

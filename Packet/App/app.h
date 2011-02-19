@@ -50,6 +50,12 @@ class App : public Encapsulateable
 			header_ = new Raw( p );
 		}
 
+		//!build an App from DNS 
+		App( const DNS &dns )
+		{
+			header_ = new DNS( dns );
+		}
+
 		//!copy constructor
 		App( const App &n )
 		{
@@ -122,6 +128,10 @@ class App : public Encapsulateable
 			else if( n.header_->isRaw() )
 			{
 				header_ = new Raw( *((Raw*)n.header_) );
+			}
+			else if( n.header_->isDNS() )
+			{
+				header_ = new DNS( *((DNS*)n.header_) );
 			}
 			else
 				header_ = NULL;

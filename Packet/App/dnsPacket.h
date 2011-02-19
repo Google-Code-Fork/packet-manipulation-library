@@ -243,6 +243,7 @@ class DNSPacket : public AppData
 {
   public:
     DNSPacket( );
+		DNSPacket( const uint8_t *data, int size );
     DNSPacket( const std::vector<uint8_t> packet );
     DNSPacket( const DNSPacket &n );
     DNSPacket& operator=( const DNSPacket &n );

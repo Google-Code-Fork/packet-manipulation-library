@@ -34,6 +34,7 @@
 #include "Trans/tcp.h"
 #include "Trans/udp.h"
 #include "App/raw.h"
+#include "App/dnsPacket.h"
 
 class PacketBuilder
 {
@@ -51,6 +52,7 @@ class PacketBuilder
 };
 
 //template specialization must go outside of class def
+template <> Packet PacketBuilder::build<DNS>( const  uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<Raw>( const  uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<UDP>( const  uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<TCP>( const  uint8_t* buff, int size );

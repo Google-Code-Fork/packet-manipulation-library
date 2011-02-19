@@ -26,12 +26,16 @@
 
 template<> bool Trans::is<UDP>( ) const
 {
-  return header_->isUDP();
+	if( header_ )
+		return header_->isUDP();
+	return false;
 }
 
 template<> bool Trans::is<TCP>( ) const
 {
-  return header_->isTCP();
+	if( header_ )
+		return header_->isTCP();
+	return false;
 }
 
 
