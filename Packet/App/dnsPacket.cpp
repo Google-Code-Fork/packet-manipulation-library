@@ -8,6 +8,16 @@ DNSPacket::DNSPacket()
 {
 }
 
+DNSPacket::DNSPacket( const uint8_t *data, int size )
+{
+	std::vector< uint8_t > packet;
+	for( int i = 0; i < size; ++i )
+	{
+		packet.push_back( data[i] );
+	}
+	init( packet );
+}
+
 DNSPacket::DNSPacket( const std::vector<uint8_t> packet )
 {
   init( packet );
@@ -40,65 +50,110 @@ void DNSPacket::init( std::vector<uint8_t> packet )
 
   uint16_t tmp = 0;
   //identification
-  tmp = packet.at(0);
-  tmp <<=8;
-  tmp |= packet.at(1);
-  header_.identification = tmp;
+	if( packet.size() > 2 )
+	{
+		tmp = packet.at(0);
+		tmp <<=8;
+		tmp |= packet.at(1);
+		header_.identification = tmp;
+	}
+	else
+		return;
 
   //flags
-  tmp = packet.at(2);
-  tmp <<= 8;
-  tmp |= packet.at(3);// & 0x00FF;
-  header_.flags = tmp;
-  //std::cerr<< "packet[2]: 0x" << std::hex << (uint16_t)( packet.at(2) ) << std::dec << std::endl;
-  //std::cerr<< "flags: 0x" << std::hex << header_.flags << std::endl << std::dec;
+	if( packet.size() > 4 )
+	{
+		tmp = packet.at(2);
+		tmp <<= 8;
+		tmp |= packet.at(3);// & 0x00FF;
+		header_.flags = tmp;
+	}
+	else
+		return;
 
   //numberOfQuestions
-  tmp = packet.at(4);
-  tmp <<= 8;
-  tmp |= packet.at(5);
-  header_.numberQuestions = tmp; 
+	if( packet.size() > 12 )
+	{
+		tmp = packet.at(4);
+		tmp <<= 8;
+		tmp |= packet.at(5);
+		header_.numberQuestions = tmp; 
+	}
+	else
+		return;
 
   //numberOFAnswers
-  tmp = packet.at(6);
-  tmp <<=8;
-  tmp |= packet.at(7);
-  header_.numberAnswers = tmp;
+	if( packet.size() > 8 )
+	{
+		tmp = packet.at(6);
+		tmp <<=8;
+		tmp |= packet.at(7);
+		header_.numberAnswers = tmp;
+	}
+	else
+		return;
 
   //numberOfAuthority
-  tmp = packet.at(8);
-  tmp <<= 8;
-  tmp |= packet.at(9);
-  header_.numberAuthority = tmp;
+	if( packet.size() > 10 )
+	{
+		tmp = packet.at(8);
+		tmp <<= 8;
+		tmp |= packet.at(9);
+		header_.numberAuthority = tmp;
+	}
+	else
+		return;
 
   //number of additional
-  tmp = packet.at(10);
-  tmp <<= 8;
-  tmp |= packet.at(11);
-  header_.numberAdditional = tmp;
+	if( packet.size() > 12 )
+	{
+		tmp = packet.at(10);
+		tmp <<= 8;
+		tmp |= packet.at(11);
+		header_.numberAdditional = tmp;
+	}
+	else
+		return;
   
-  //std::cerr << "Parsed Header" << std::endl;
 
   uint16_t index = 12;
   for( int i = 0; i < header_.numberQuestions; ++i )
   {
-    DNSQuestion question;
-    question.setQueryName( domainParser( packet, index ));
-    
+		DNSQuestion question;
+		if( index < packet.size() )
+		{
+			question.setQueryName( domainParser( packet, index ));
+		}
+		else
+			return;
+			
     //query type
-    tmp = packet.at(index);
-    tmp <<=8;
-    tmp |= packet.at(++index);
-    question.setType( tmp );
+		if( index + 1 < packet.size() )
+		{
+			tmp = packet.at(index);
+			tmp <<=8;
+			tmp |= packet.at(++index);
+			question.setType( tmp );
+		}
+		else 
+			return;
 
     //query class
-    tmp = packet.at( ++index );
-    tmp <<= 8;
-    tmp |= packet.at( ++index );
-    question.setDnsClass( tmp );
+		if( index + 2 < packet.size() )
+		{
+			tmp = packet.at( ++index );
+			tmp <<= 8;
+			tmp |= packet.at( ++index );
+			question.setDnsClass( tmp );
+		}
+		else
+			return;
 
     questions_.push_back( question );
-    ++index;
+		if( index + 1 < packet.size() )
+			++index;
+		else
+			return;
   }
 
   //std::cerr << "Parsed Questions" << std::endl;
@@ -130,51 +185,95 @@ void DNSPacket::init( std::vector<uint8_t> packet )
 
 DNSRecord DNSPacket::dnsResponseParser( std::vector<uint8_t> packet, uint16_t &index )
 {
+	/***************************************************************************
+	 * Checking of index size is needed in case of only partial packet captures
+	 * *************************************************************************/
   uint16_t tmp;
   DNSRecord response;
   response.setDomainName( domainParser( packet, index ) );
 
   //std::cerr << "domain name: " << response.domainName << std::endl;
   //dns type
-  tmp = packet.at(index);
-  tmp <<= 8;
-  tmp |= packet.at( ++index );
-  response.setType( tmp );
+	if( index + 2 < packet.size() )
+	{
+		tmp = packet.at(index);
+		tmp <<= 8;
+		tmp |= packet.at( ++index );
+		response.setType( tmp );
+	}
+	else
+	{
+		index = packet.size();
+		return response;
+	}
 
   //dnsClass
-  tmp = packet.at( ++index );
-  tmp <<= 8;
-  tmp |= packet.at( ++index );
-  response.setDnsClass( tmp );
+	if( index + 2 < packet.size() )
+	{
+		tmp = packet.at( ++index );
+		tmp <<= 8;
+		tmp |= packet.at( ++index );
+		response.setDnsClass( tmp );
+	}
+	else
+	{
+		index = packet.size();
+		return response;
+	}
 
   //timeToLive 4 bytes
-  tmp = packet.at( ++index );
-  tmp <<= 8;
-  tmp |= packet.at( ++index );
-  tmp <<= 8;
-  tmp |= packet.at( ++index );
-  tmp <<= 8;
-  tmp |= packet.at( ++index );
-  response.setTimeToLive( tmp );
+	if( index + 4 < packet.size() )
+	{
+		tmp = packet.at( ++index );
+		tmp <<= 8;
+		tmp |= packet.at( ++index );
+		tmp <<= 8;
+		tmp |= packet.at( ++index );
+		tmp <<= 8;
+		tmp |= packet.at( ++index );
+		response.setTimeToLive( tmp );
+	}
+	else
+	{
+		index = packet.size();
+		return response;
+	}
 
   //resource data length
 
-  tmp = packet.at( ++index );
-  tmp <<= 8;
-  tmp |= packet.at( ++index );
-  uint16_t dataLength = tmp;
+	uint16_t dataLength = 0;
+	if( index + 2 < packet.size() )
+	{
+		tmp = packet.at( ++index );
+		tmp <<= 8;
+		tmp |= packet.at( ++index );
+		dataLength = tmp;
+	}
+	else
+	{
+		index = packet.size();
+		return response;
+	}
 
   //std::cerr << "dataLength: " << response.dataLength << std::endl;
 
   //data storage
-	std::vector< uint8_t > data;
-  for( int k = 0; k < dataLength; ++k )
-  {
-    //response.pushDataBack( packet.at( ++index ));
-		data.push_back( packet.at( ++index ) );
-  }
-	response.setData( data );
-  index++;
+	if( index + dataLength < packet.size() )
+	{
+		std::vector< uint8_t > data;
+		for( int k = 0; k < dataLength; ++k )
+		{
+			//response.pushDataBack( packet.at( ++index ));
+			data.push_back( packet.at( ++index ) );
+		}
+		response.setData( data );
+		index++;
+	}
+	else
+	{
+		index = packet.size();
+		return response;
+	}
 
   return response;
 }
@@ -194,27 +293,46 @@ std::string DNSPacket::domainParser( std::vector<uint8_t> packet, uint16_t &inde
   //either a complete domain name or just the ending portion of a name. 
 
   std::string domain;
+	if( index >= packet.size() )
+		return domain;
   while( packet.at(index) != 0 )
   {
     int size = packet[index]; //safe because we used at above
     //check for compression
     if( size & 0xC0 ) //compression used b/c two high bits on.
     {
-      uint16_t offset = size & 0x3F;
-      offset <<= 8;
-      offset |= packet.at( ++index );
-      domain += domainParser( packet, offset );
-      ++index;
+			if( index + 2 < packet.size() )
+			{
+				uint16_t offset = size & 0x3F;
+				offset <<= 8;
+				offset |= packet.at( ++index );
+				domain += domainParser( packet, offset );
+				++index;
+			}
       return domain;
     }
-    for( int k = 0; k < size; ++k )
-    {
-      index++;
-      domain.push_back( packet.at( index ) );
-    }
-    index++;
+
+		if( index + size + 1 < packet.size() )
+		{
+			for( int k = 0; k < size; ++k )
+			{
+				index++;
+				domain.push_back( packet.at( index ) );
+			}
+			index++;
+		}
+		else
+		{
+			index = packet.size();
+			return domain;
+		}
+
+
     if( packet.at(index) != 0 )
       domain.push_back( '.' );
+		
+		if( index + 1 >= packet.size() )
+			return domain;
   }
   index++;
 

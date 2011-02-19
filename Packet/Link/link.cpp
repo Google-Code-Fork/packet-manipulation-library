@@ -2,6 +2,8 @@
 
 template<> bool Link::is<Ethernet>( ) const
 {
-  return header_->isEthernet();
+	if( header_ )
+		return header_->isEthernet();
+	return false;
 }
 

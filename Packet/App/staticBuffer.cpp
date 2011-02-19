@@ -34,6 +34,23 @@ StaticBuffer::StaticBuffer( const std::vector< uint8_t > &b ):str_(NULL), size_(
 	setData( b );
 }
 
+StaticBuffer& StaticBuffer::operator=( const StaticBuffer &n )
+{
+	if( str_ )
+	{
+		delete [] str_;
+	}
+
+	str_ = new uint8_t [n.size_];
+	size_ = n.size_;
+	for( uint32_t i = 0; i < size_; ++i )
+	{
+		str_[i] = n.str_[i];
+	}
+
+	return *this;
+}
+
 std::string StaticBuffer::toSTDString( ) const
 {
 	return std::string( (const char*) (str_) ); //null terminated so it acts like a c_str
@@ -43,7 +60,7 @@ void StaticBuffer::setString( const std::string &s )
 {
 	if( str_ )
 		delete [] str_;
-	
+
 	size_ = s.size();
 	str_  = new uint8_t [size_ + 1]; //+1 for NULL char
 	for( uint32_t i = 0; i < s.size(); ++i )

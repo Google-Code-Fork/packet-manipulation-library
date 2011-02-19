@@ -26,12 +26,16 @@
 
 template<> bool App::is<Raw>( ) const 
 {
-  return header_->isRaw();
+	if( header_ )
+		return header_->isRaw();
+	return false;
 }
 
 template<> bool App::is<DNS>( ) const 
 {
-  return header_->isDNS();
+	if( header_ )
+		return header_->isDNS();
+	return false;
 }
 
 

@@ -87,8 +87,14 @@ template <> Packet PacketBuilder::build<TCP>( const  uint8_t* buff, int size )
   const uint8_t* newbuff = buff + tcp.size();
   int newsize = size - tcp.size();
 
-  //NO TCP APPLICATION LAYER SUPPORTED ATM
-  p2 = build< Raw >( newbuff, newsize );
+  if( tcp.sourcePort() == 53 || tcp.destinationPort() == 53 )
+	{ //DNS
+		p2 = build< DNS >( newbuff, newsize );
+	}
+	else
+	{
+		p2 = build< Raw >( newbuff, newsize );
+	}
 
   return p + p2;
 }
@@ -102,8 +108,14 @@ template <> Packet PacketBuilder::build<UDP>( const  uint8_t* buff, int size )
   const uint8_t* newbuff = buff + udp.size();
   int newsize = size - udp.size();
 
-  //NO UDP APPLICATION LAYER SUPPORTED ATM
-  p2 = build< Raw >( newbuff, newsize );
+	if( udp.sourcePort() == 53 || udp.destinationPort() == 53 )
+	{ //DNS
+		p2 = build< DNS >( newbuff, newsize );
+	}
+	else
+	{
+		p2 = build< Raw >( newbuff, newsize );
+	}
 
   return p + p2;
 }
@@ -115,5 +127,14 @@ template <> Packet PacketBuilder::build<Raw>( const  uint8_t* buff, int size )
   p.pushBackApp( r );
 
   return p;
+}
+
+template <> Packet PacketBuilder::build<DNS>( const uint8_t* buff, int size )
+{
+	DNS dns( buff, size );
+	Packet p;
+	p.pushBackApp( dns );
+
+	return p;
 }
 
