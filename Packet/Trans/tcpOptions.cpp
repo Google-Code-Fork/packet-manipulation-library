@@ -257,7 +257,7 @@ const uint8_t TCPOption::RFC_3692_EXPERIMENT_1 = 253;
 const uint8_t TCPOption::RFC_3692_EXPERIEMNT_2 = 254;
 
 
-TCPOption::TCPOption( ): kind_(0), length_(0), isSingleOctet_(true) 
+TCPOption::TCPOption( ): kind_(0), length_(0), isSingleOctet_(false) 
 {
 }
 

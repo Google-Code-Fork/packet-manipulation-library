@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
  *
  * This file is a part of PacMan.
  *
@@ -52,56 +52,90 @@ TCP::TCP( const uint8_t *packet, int size )
 		switch( packet[ i + TCPStructSize ] )
 		{
 			case 0: //END OF LIST
-				{
+				{ //1 Byte
 					SmartPtr< TCPOption > option0( new EOLOption() );
 					options_.push_back( option0 );
 					i = i + option0->length();
 				}
 				break;
 			case 1: //NO-OP
-				{
+				{ //1 Byte
 					SmartPtr< TCPOption > option1( new NOOPOption() );
 					options_.push_back( option1 );
 					i = i + option1->length();
 				}
 				break;
 			case 2: //MSS
-				{
+				if( i+3 < optionSize )
+				{ //4 bytes
 					SmartPtr< TCPOption > option2( new MSSOption( packet+(i+TCPStructSize), optionSize - i) );
 					options_.push_back( option2 );
 					i = i + option2->length();
 				}
+				else
+					i = optionSize;
 				break;
 			case 3: //Window Scale
-				{
+				if( i+2 < optionSize )
+				{ //3 bytes
 					SmartPtr< TCPOption > option3( new WSOption( packet+(i + TCPStructSize),
 								optionSize - i ) );
 					options_.push_back( option3 );
 					i = i + option3->length();
 				}
+				else
+					i = optionSize;
 				break;
 			case 4: //SACK PREMITTED
-				{
+				if( i+1 < optionSize )
+				{ //2 Bytes
 					SmartPtr< TCPOption > option4( new SACKPremittedOption() ); 
 					options_.push_back( option4 );
 					i = i + option4->length();
 				}
+				else
+					i = optionSize;
 				break;
 			case 5: //SACK 
-				{
+				{ //N Bytes
 					SmartPtr< TCPOption > option5( new SACKOption( packet+(i+TCPStructSize), optionSize - i) ); 
 					options_.push_back( option5 );
 					i = i + option5->length();
 				}
 				break;
 			case 8: //Time Stamp Option
-				{
+				if( i + 9 < optionSize )
+				{ //10 Bytes
 					SmartPtr< TCPOption > option8( new TimeStampOption( packet+(i+TCPStructSize), optionSize - i) ); 
 					options_.push_back( option8 );
 					i = i + option8->length();
 				}
+				else
+					i = optionSize;
 				break;
-		//	default:
+			default:
+				if( i + 1 < optionSize )
+				{ //Generic parser for options that have a type lenght data format
+					SmartPtr< TCPOption > option( new TCPOption() );
+					option->setKind( TCPOption::TCP_ALTERNATE_CHECKSUM_DATA );
+					option->setLength( packet[ ++i + TCPStructSize ] );
+					std::vector< uint8_t > data;
+					if( i + option->length() < optionSize )
+					{
+						for( int k = 0; k < option->length(); ++k )
+						{
+							data.push_back( packet[ ++i + TCPStructSize ] );
+						}
+						option->setData( data );
+					}
+					else
+						i = optionSize;
+					options_.push_back( option ); 
+					++i;
+				}
+				else
+					i = optionSize;
+				break;
 		};
 
 
