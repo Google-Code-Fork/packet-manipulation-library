@@ -155,4 +155,12 @@ int Packet::appSize() const
   return appLayer_.size();
 }
 
+void Packet::setTimestamp( const struct timeval &time  )
+{
+	timeStamp_ = time;
+}
 
+struct timeval Packet::timestamp( ) const
+{
+	return timeStamp_;
+}
