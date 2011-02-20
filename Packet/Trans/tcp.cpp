@@ -100,7 +100,7 @@ TCP::TCP( const uint8_t *packet, int size )
 				{ //N Bytes
 					SmartPtr< TCPOption > option5( new SACKOption( packet+(i+TCPStructSize), optionSize - i) ); 
 					options_.push_back( option5 );
-					i = i + option5->length();
+					i = i + 2 + option5->data().size();
 				}
 				break;
 			case 8: //Time Stamp Option

@@ -1,6 +1,7 @@
+include ../../global.mk
 INCLUDE=-I../../Device/ -I../ 
 OBJS=../baseData.o ../sniffer.o ../filterData.o ../snifferData.o 
-PACKETOBJS=../../Device/device.o ../../Device/devicesLookup.o ../../Packet/packetBuilder.o ../../Packet/packet.o ../../Packet/packetBuffer.o ../../Packet/Link/ethernet.o ../../Packet/Link/mac.o ../../Packet/Link/link.o ../../Packet/Inet/ipv4.o ../../Packet/Inet/inet.o ../../Packet/Trans/tcp.o ../../Packet/Trans/udp.o ../../Packet/Trans/trans.o ../../Packet/App/raw.o ../../Packet/App/app.o ../../common/threads.o ../../common/mutex.o ../../common/semaphore.o ../../Packet/Trans/tcpOptions.o
+PACKETOBJS=../../Device/device.o ../../Device/devicesLookup.o ../../Packet/packetBuilder.o ../../Packet/packet.o ../../Packet/packetBuffer.o ../../Packet/Link/ethernet.o ../../Packet/Link/mac.o ../../Packet/Link/link.o ../../Packet/Inet/ipv4.o ../../Packet/Inet/inet.o ../../Packet/Trans/tcp.o ../../Packet/Trans/udp.o ../../Packet/Trans/trans.o  ../../common/threads.o ../../common/mutex.o ../../common/semaphore.o ../../Packet/Trans/tcpOptions.o ${APPOBJS}
 TCPDUMP=$(PACKETOBJS) tcpDump.o
 CFLAGS=-ggdb $(INCLUDE) -fPIC
 CXXFLAGS=$(CFLAGS) 

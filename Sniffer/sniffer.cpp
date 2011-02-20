@@ -139,6 +139,7 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 	{
 		PacketBuilder pb;
 		Packet packet = pb.buildPacket<Ethernet>(PacketBuffer(packetCapture, pkthdr->caplen));
+		packet.setTimestamp( pkthdr->ts );
 		filterData->pushPacket( packet );
 	}
 	catch( std::runtime_error e )

@@ -37,6 +37,7 @@
 #include "Trans/trans.h"
 #include <vector>
 #include <stdexcept>
+#include <sys/time.h>
 
 class Packet : public AppData
 {
@@ -171,6 +172,9 @@ class Packet : public AppData
       return true;
     }
 
+		void setTimestamp( const struct timeval &time );
+		struct timeval timestamp( ) const;
+
   private:
     //!internal data
     std::vector< Link >linkLayer_;
@@ -180,6 +184,7 @@ class Packet : public AppData
     std::vector< Trans >transLayer_;
     //!internal data
     std::vector< App >appLayer_;
+    struct timeval timeStamp_;
 };
 
 //!Addition of two packets in the same manner as operator+=
