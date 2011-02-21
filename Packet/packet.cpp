@@ -37,6 +37,7 @@ Packet::Packet( const Packet &p )
   inetLayer_ = p.inetLayer_;
   transLayer_ = p.transLayer_;
   appLayer_ = p.appLayer_;
+	timeStamp_ = p.timeStamp_;
 }
 
 Packet& Packet::operator=( const Packet &p )
@@ -45,6 +46,7 @@ Packet& Packet::operator=( const Packet &p )
   inetLayer_ = p.inetLayer_;
   transLayer_ = p.transLayer_;
   appLayer_ = p.appLayer_;
+	timeStamp_ = p.timeStamp_;
 
   return *this;
 }
