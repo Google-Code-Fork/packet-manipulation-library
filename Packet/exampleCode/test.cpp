@@ -32,7 +32,7 @@ int main()
   Packet p;
   e.setType( ethernetProtocol::ETH_P_IP );
   p.pushBackLink( e );
-  ip.setProtocol( ipProtocols::IPPROTO_TCP );
+  ip.setProtocol( ipProtocol::TCP );
   p.pushBackInet( ip );
   p.pushBackTrans( tcp );
   std::vector< uint8_t > data( 100 );
