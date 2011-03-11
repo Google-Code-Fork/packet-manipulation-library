@@ -29,7 +29,7 @@ lib: pacman
 	-for i in $(MODULES) ; do \
 	( cd $$i; make include ) ; \
 	done
-	-( cd lib; g++ -shared -o libpacman.so *.o ) ; 
+	-( cd lib; g++ -lpcap -shared -o libpacman.so *.o; rm *.o ) ; 
 #	-( cd lib; g++ -shared -o libpacman.so *.o; rm *.o ) ; 
 
 packet:

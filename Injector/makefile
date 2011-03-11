@@ -1,7 +1,8 @@
+include ../global.mk
+
 OBJS=injector.o
-PACKETOBJS=../Packet/packetBuilder.o ../Packet/packetBuffer.o ../Packet/packet.o ../Packet/Link/ethernet.o ../Packet/Link/mac.o ../Packet/Link/link.o ../Packet/Inet/ipv4.o ../Packet/Inet/inet.o ../Packet/Trans/tcp.o ../Packet/Trans/udp.o ../Packet/Trans/trans.o ../Packet/App/raw.o ../Packet/App/app.o ../Packet/Trans/tcpOptions.o 
-DEVICEOBJS=../Device/devicesLookup.o ../Device/device.o
 TESTOBJS=example/test.o 
+DEVICEOBJS=../Device/device.o ../Device/devicesLookup.o
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-lpcap
