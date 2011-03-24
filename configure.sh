@@ -21,7 +21,7 @@ APPDIR="${PACKETDIR}/App"
 #  Different Object Groups that might be useful
 #
 #######################################################
-APPSOURCE="${APPDIR}/app.cpp ${APPDIR}/raw.cpp ${APPDIR}/dnsPacket.cpp ${APPDIR}/staticBuffer.cpp ${APPDIR}/dnsRecord.cpp ${APPDIR}/dnsQuestion.cpp"
+APPSOURCE="${APPDIR}/app.cpp ${APPDIR}/raw.cpp ${APPDIR}/dnsPacket.cpp ${APPDIR}/staticBuffer.cpp ${APPDIR}/dnsRecord.cpp ${APPDIR}/dnsQuestion.cpp ${APPDIR}/arp.cpp"
 TRANSSOURCE="${TRANSDIR}/tcp.cpp ${TRANSDIR}/udp.cpp ${TRANSDIR}/tcpOptions.cpp ${TRANSDIR}/trans.cpp"
 INETSOURCE="${INETDIR}/inet.cpp ${INETDIR}/ipv4.cpp ${INETDIR}/icmp.cpp"
 LINKSOURCE="${LINKDIR}/link.cpp ${LINKDIR}/ethernet.cpp ${LINKDIR}/mac.cpp"
@@ -40,7 +40,7 @@ echo "PACKETOBJS=\$(PACKETSOURCE:%.cpp=%.o)" >> $MAKEFILE
 
 ############ HEADERS ##############
 
-APPHEADERS="${APPDIR}/appData.h ${APPDIR}/app.h ${APPDIR}/raw.h ${APPDIR}/dnsPacket.h ${APPDIR}/staticBuffer.h ${APPDIR}/dnsRecord.cpp ${APPDIR}/dnsQuestion.cpp"
+APPHEADERS="${APPDIR}/appData.h ${APPDIR}/app.h ${APPDIR}/raw.h ${APPDIR}/dnsPacket.h ${APPDIR}/staticBuffer.h ${APPDIR}/dnsRecord.cpp ${APPDIR}/dnsQuestion.cpp ${APPDIR}/arp.h"
 
 TRANSHEADERS="${TRANSDIR}/tcp.h ${TRANSDIR}/udp.h ${TRANSDIR}/tcpOptions.h ${TRANSDIR}/trans.h ${TRANSDIR}/transData.h ${TRANSDIR}/eolOption.h ${TRANSDIR}/mssOption.h ${TRANSDIR}/noopOption.h ${TRANSDIR}/sackOption.h ${TRANSDIR}/sackPermittedOption.h ${TRANSDIR}/timeStampOption.h ${TRANSDIR}/wsOption.h"
 
