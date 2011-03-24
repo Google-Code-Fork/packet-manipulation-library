@@ -38,7 +38,7 @@ subdir:
 	done
 
 clean:
-	 -rm -f *.o test
+	 -rm -f *.o *.d test
 	 for i in $(LAYERDIRS) ; do \
 	 ( cd $$i ; make clean ) ; \
 	 done
