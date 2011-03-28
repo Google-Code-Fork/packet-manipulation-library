@@ -189,7 +189,7 @@ class Arp : public AppData
 		std::vector< uint8_t > data() const;
 		PacketBuffer makePacket() const;
 
-		bool isARP() const { return true; }
+		bool isArp() const { return true; }
 
 
 	private:
