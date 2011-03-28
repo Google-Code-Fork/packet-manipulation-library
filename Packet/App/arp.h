@@ -186,6 +186,8 @@ class Arp : public AppData
 		PacketBuffer targetIPAddress( ) const;
 		void setTargetIPAddress( const PacketBuffer &pb );
 
+    int size() const;
+
 		std::vector< uint8_t > data() const;
 		PacketBuffer makePacket() const;
 
