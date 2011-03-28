@@ -116,6 +116,7 @@ void Arp::init( const std::vector< uint8_t > &packet )
 			buff.push_back( packet[index + i] );
 		}
 		senderMacAddress_.setBuffer( buff );
+		index += header_.hardwareSize;
 	}
 
 	if( packet.size() - index > header_.protocolSize )
@@ -126,6 +127,7 @@ void Arp::init( const std::vector< uint8_t > &packet )
 			buff.push_back( packet[index + i] );
 		}
 		senderIPAddress_.setBuffer( buff );
+		index += header_.protocolSize;
 	}
 	
 	if( packet.size() - index > header_.hardwareSize )
@@ -136,9 +138,10 @@ void Arp::init( const std::vector< uint8_t > &packet )
 			buff.push_back( packet[index + i] );
 		}
 		targetMacAddress_.setBuffer( buff );
+		index += header_.hardwareSize;
 	}
 
-	if( packet.size() - index > header_.protocolSize )
+	if( packet.size() - index >= header_.protocolSize )
 	{
 		std::vector< uint8_t > buff;
 		for( int i = 0; i < header_.protocolSize; ++i )
@@ -146,6 +149,7 @@ void Arp::init( const std::vector< uint8_t > &packet )
 			buff.push_back( packet[index + i] );
 		}
 		targetIPAddress_.setBuffer( buff );
+		index += header_.protocolSize;
 	}
 }
 
@@ -289,4 +293,13 @@ PacketBuffer Arp::makePacket() const
 	return PacketBuffer( data() );
 }
 
-
+int Arp::size() const
+{
+	int size = 0;
+	size += sizeof( header_ );
+	size += senderMacAddress_.size();
+	size += senderIPAddress_.size();
+	size += targetMacAddress_.size();
+	size += targetIPAddress_.size();
+	return size;
+}
