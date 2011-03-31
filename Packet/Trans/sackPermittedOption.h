@@ -13,17 +13,17 @@ class SACKPremittedOption : public TCPOption
 			length_ = 2; 
 		}
 
-		SACKPremittedOption( const EOLOption & o ) 
+		SACKPremittedOption( const EOLOption &  ):TCPOption()
 		{ 
 			kind_ = SACK_PERMITTED; 
 			isSingleOctet_ = false; 
 			length_ = 2;
 		}
 
-		void setKind( uint8_t kind ) {} //don't do anything
-		void setLength( uint8_t length ) {}
-		void setData( std::vector< uint8_t > data ) {}
-		void singleOctet( bool isit ) {}
+		void setKind( const uint8_t &/*kind*/ ) {} //don't do anything
+		void setLength( const uint8_t &/*length*/ ) {}
+		void setData( const std::vector< uint8_t > &/*data*/ ) {}
+		void singleOctet( const bool &/*isit*/ ) {}
 
 };
 

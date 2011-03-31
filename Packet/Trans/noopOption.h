@@ -13,17 +13,17 @@ class NOOPOption : public TCPOption
 		  length_ = 1;
 		}
 
-		NOOPOption( const NOOPOption & o ) 
+		NOOPOption( const NOOPOption & ):TCPOption()
 		{ 
 			kind_ = NO_OPERATION; 
 			isSingleOctet_ = true; 
 			length_ = 1;
 		}
 
-		void setKind( uint8_t kind ) {} //don't do anything
-		void setLength( uint8_t length ) {}
-		void setData( std::vector< uint8_t > data ) {}
-		void singleOctet( bool isit ) {}
+		void setKind( const uint8_t &/*kind*/ ) {} //don't do anything
+		void setLength( const uint8_t &/*length*/ ) {}
+		void setData( const std::vector< uint8_t > &/*data*/ ) {}
+		void singleOctet( const bool &/*isit*/ ) {}
 
 };
 

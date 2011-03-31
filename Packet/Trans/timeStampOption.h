@@ -32,7 +32,7 @@ class TimeStampOption : public TCPOption
 		}
 	}
 
-	TimeStampOption( const TimeStampOption & o ) 
+	TimeStampOption( const TimeStampOption & o ):TCPOption()
 	{
 		kind_ = TIME_STAMP_OPTION;
 		isSingleOctet_ = true;
@@ -40,12 +40,12 @@ class TimeStampOption : public TCPOption
 		data_ = o.data_;
 	}
 
-	void setKind( uint8_t kind ) {} //don't do anything
-	void setLength( uint8_t length ) {}
-	void setData( std::vector< uint8_t > data ) {}
-	void singleOctet( bool isit ) {}
+	void setKind( const uint8_t &/*kind*/ ) {} //don't do anything
+	void setLength( const uint8_t & /*length*/ ) {}
+	void setData( const std::vector< uint8_t > &/*data*/ ) {}
+	void singleOctet( const bool &/*isit*/ ) {}
 
-	void setTSVAL( uint32_t value )
+	void setTSVAL( const uint32_t &value )
 	{
 		data_[0] = static_cast<uint8_t>( (value & 0xFF000000) >> 24 );
 		data_[1] = static_cast<uint8_t>( (value & 0x00FF0000) >> 16 );
@@ -65,7 +65,7 @@ class TimeStampOption : public TCPOption
 
 	}
 
-	void setTSecr( uint32_t value )
+	void setTSecr( const uint32_t &value )
 	{
 		data_[4] = static_cast<uint8_t>( (value & 0xFF000000) >> 24 );
 		data_[5] = static_cast<uint8_t>( (value & 0x00FF0000) >> 16 );

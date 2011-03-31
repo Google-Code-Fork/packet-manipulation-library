@@ -31,7 +31,7 @@ class WSOption : public TCPOption
 			}
 		}
 
-		WSOption( const WSOption & o ) 
+		WSOption( const WSOption & o ):TCPOption() 
 		{ 
 			kind_ = WINDOW_SCALE; 
 			isSingleOctet_ = false;
@@ -39,12 +39,12 @@ class WSOption : public TCPOption
 			data_.push_back( o.data_[0] );
 		}
 
-		void setKind( uint8_t kind ) {} //don't do anything
-		void setLength( uint8_t length ) {}
-		void setData( std::vector< uint8_t > data ) {}
-		void singleOctet( bool isit ) {}
+		void setKind( const uint8_t &/*kind*/ ) {} //don't do anything
+		void setLength( const uint8_t &/*length*/ ) {}
+		void setData( const std::vector< uint8_t > &/*data*/ ) {}
+		void singleOctet( const bool &/*isit*/ ) {}
 
-		void setScaleFactor( uint8_t factor )
+		void setScaleFactor( const uint8_t &factor )
 		{
 			data_[0] = factor;
 		}

@@ -48,10 +48,10 @@ class TCPOption
 		TCPOption( const TCPOption &t );
 		virtual ~TCPOption( );
 
-		virtual void setKind( uint8_t kind );
-		virtual void setLength( uint8_t length );
-		virtual void setData( std::vector< uint8_t > data );
-		virtual void singleOctet( bool isit );
+		virtual void setKind( const uint8_t &kind );
+		virtual void setLength( const uint8_t &length );
+		virtual void setData( const std::vector< uint8_t > &data );
+		virtual void singleOctet( const bool &isit );
 
 		virtual bool isSingleOctet( ) const { return isSingleOctet_; }
 		virtual uint8_t kind() const { return kind_; }
