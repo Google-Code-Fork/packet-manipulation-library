@@ -45,7 +45,7 @@ class SACKOption : public TCPOption
 			}
 		}
 
-		SACKOption( const SACKOption & o ) 
+		SACKOption( const SACKOption & o ):TCPOption()
 		{ 
 			kind_ = SACK; 
 			isSingleOctet_ = false;
@@ -53,10 +53,10 @@ class SACKOption : public TCPOption
 			data_ = o.data_;
 		}
 
-		void setKind( const uint8_t &kind ) {} //don't do anything
-		void setLength( const uint8_t &length ) {}
-		void setData( const std::vector< uint8_t > &data ) {}
-		void singleOctet( const bool &isit ) {}
+		void setKind( const uint8_t &/*kind*/ ) {} //don't do anything
+		void setLength( const uint8_t &/*length*/ ) {}
+		void setData( const std::vector< uint8_t > &/*data*/ ) {}
+		void singleOctet( const bool &/*isit*/ ) {}
 
 		void clear()
 		{

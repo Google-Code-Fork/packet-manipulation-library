@@ -32,7 +32,7 @@ class MSSOption : public TCPOption
 			}
 		}
 
-		MSSOption( const MSSOption & o ) 
+		MSSOption( const MSSOption & o ):TCPOption()
 		{ 
 			kind_ = MAXIMUM_SEGMENT_SIZE; 
 			isSingleOctet_ = false; 
@@ -41,12 +41,12 @@ class MSSOption : public TCPOption
 			data_.push_back( o.data_[1] );
 		}
 
-		void setKind( uint8_t kind ) {} //don't do anything
-		void setLength( uint8_t length ) {}
-		void setData( std::vector< uint8_t > data ) {}
-		void singleOctet( bool isit ) {}
+		void setKind( const uint8_t &/*kind*/ ) {} //don't do anything
+		void setLength( const uint8_t &/*length*/ ) {}
+		void setData( const std::vector< uint8_t > &/*data*/ ) {}
+		void singleOctet( const bool &/*isit*/ ) {}
 
-		void setMSS( uint16_t size )
+		void setMSS( const uint16_t &size )
 		{
 			uint16_t networkOrder = htons( size );
 			data_.clear();

@@ -273,22 +273,22 @@ TCPOption::~TCPOption()
 {
 }
 
-void TCPOption::setKind( uint8_t kind )
+void TCPOption::setKind( const uint8_t &kind )
 {
 	kind_ = kind;
 }
 
-void TCPOption::setLength( uint8_t length )
+void TCPOption::setLength( const uint8_t &length )
 {
 	length_ = length;
 }
 
-void TCPOption::setData( std::vector< uint8_t > data ) 
+void TCPOption::setData( const std::vector< uint8_t > &data ) 
 {
 	data_ = data;
 }
 
-void TCPOption::singleOctet( bool isit )
+void TCPOption::singleOctet( const bool &isit )
 {
 	isSingleOctet_ = isit;
 }
