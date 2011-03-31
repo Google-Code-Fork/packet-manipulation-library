@@ -1,4 +1,10 @@
-To build type make in the top directory:
+To build:
+type ./configure
+type make in the top directory:
+
+To Install
+sudo make install
+
 To generate documentation type 'make docs' in the top directory
 
 Readme for the different modules of the libraries are available in their
