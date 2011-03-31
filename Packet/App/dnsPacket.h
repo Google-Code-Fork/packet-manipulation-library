@@ -256,6 +256,8 @@ class DNSPacket : public AppData
 
     void setQRFlag( const bool &isResponse ); //true if response;
     bool qrFlag() const;
+		bool isQuery() const { return qrFlag() ? false : true; }
+		bool isResponse() const { return qrFlag() ? true : false; }
     void setOpcodeFlag( const uint8_t &code ); //see codes above...
     uint8_t opcodeFlag() const;
     void setAAFlag( const bool &aa );
