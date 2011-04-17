@@ -73,10 +73,10 @@ class DevicesLookup
 
 	private:
 		//!Converts IP to string
-		std::string iptos(const uint32_t &in);
+		std::string iptos(const uint32_t &in) const;
 
 		//!Stores all devices
-		pcap_if_t *alldevs;
+		pcap_if_t *alldevs_;
 };
 
 #endif

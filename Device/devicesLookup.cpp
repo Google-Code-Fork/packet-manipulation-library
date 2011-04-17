@@ -36,7 +36,7 @@ DevicesLookup::DevicesLookup()
 {
 	char errbuf[PCAP_ERRBUF_SIZE+1];
 	/* Retrieve the device list */
-	if(pcap_findalldevs(&alldevs, errbuf) == -1)
+	if(pcap_findalldevs(&alldevs_, errbuf) == -1)
 	{
 		std::cerr << "Error in pcap_findalldevs: " << errbuf << std::endl;
 		exit(1);
@@ -45,7 +45,7 @@ DevicesLookup::DevicesLookup()
 
 pcap_if_t* DevicesLookup::operator[](const int &index)
 {
-	pcap_if_t *dev = alldevs;
+	pcap_if_t *dev = alldevs_;
 	int count = 0;		/* device traversal index */
 
 	while(count != index && dev != NULL)
@@ -59,9 +59,9 @@ pcap_if_t* DevicesLookup::operator[](const int &index)
 
 pcap_if_t* DevicesLookup::operator[](const std::string &name)
 {
-	pcap_if_t *dev = alldevs;
+	pcap_if_t *dev = alldevs_;
 
-	for(dev = alldevs; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next)
+	for(dev = alldevs_; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next);
 
 	return dev;
 }
@@ -69,18 +69,23 @@ pcap_if_t* DevicesLookup::operator[](const std::string &name)
 DevicesLookup::~DevicesLookup()
 {
 	std::cout << "Freeing the device list..." << std::endl;
-	pcap_freealldevs(alldevs);		/* Free the device list */
+	pcap_freealldevs(alldevs_);		/* Free the device list */
 }
 
 bool DevicesLookup::isValid(const std::string &name) const
 {
-        return ( DevicesLookup::operator[](name) != NULL);
+	pcap_if_t *dev = alldevs_;
+
+	for(dev = alldevs_; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next);
+
+	return (dev != NULL); 
+
 }
 
 void DevicesLookup::printAllDevices() const
 {
 	/* Scan the list printing every entry */
-	for(pcap_if_t* dev=alldevs;dev != NULL;dev=dev->next)
+	for(pcap_if_t* dev=alldevs_;dev != NULL;dev=dev->next)
 	{
 		/* Name */
 		std::cout << dev->name << std::endl;
@@ -130,7 +135,7 @@ void DevicesLookup::printAllDevices() const
 bool DevicesLookup::isLoopback( const std::string &device ) const
 {
 	/* Scan the list printing every entry */
-	for( pcap_if_t* dev=alldevs; dev != NULL; dev=dev->next)
+	for( pcap_if_t* dev=alldevs_; dev != NULL; dev=dev->next)
 	{
 		
 		std::string name = dev->name;
@@ -144,7 +149,7 @@ bool DevicesLookup::isLoopback( const std::string &device ) const
 	return false;
 }
 
-std::string DevicesLookup::iptos(const uint32_t &in)
+std::string DevicesLookup::iptos(const uint32_t &in) const
 {
 	std::stringstream output;
 	u_char *pByte;

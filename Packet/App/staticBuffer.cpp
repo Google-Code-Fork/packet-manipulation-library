@@ -61,13 +61,13 @@ void StaticBuffer::setString( const std::string &s )
 	if( str_ )
 		delete [] str_;
 
-	size_ = s.size();
-	str_  = new uint8_t [size_ + 1]; //+1 for NULL char
+	size_ = s.size() + 1; //+1 for NULL char
+	str_  = new uint8_t [size_];
 	for( uint32_t i = 0; i < s.size(); ++i )
 	{
 		str_[i] = s[i];
 	}
-	str_[size_] = NULL;
+	str_[size_ - 1] = NULL;
 }
 
 uint64_t StaticBuffer::memorySize() const
