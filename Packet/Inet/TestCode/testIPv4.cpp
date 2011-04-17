@@ -127,10 +127,10 @@ void IPv4Test::testPacketCreation()
 			ipv4_1.setTtl( 0x80 );
 			
 			//check protocol field
-			QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocols::IPPROTO_TCP );
+			QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocol::TCP );
 			//set protocol field
-			ipv4_1.setProtocol( ipProtocols::IPPROTO_ICMP );
-			QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocols::IPPROTO_ICMP );
+			ipv4_1.setProtocol( ipProtocol::ICMP );
+			QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocol::ICMP );
 			
 
 			//check checksum value (both are OK!)
