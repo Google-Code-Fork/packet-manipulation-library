@@ -70,7 +70,7 @@ void sniffer::start()
 /**
     set pcap file as logical input device for sniffing packets
 */
-void sniffer::setInputPcapFile(std::string pcapFile)
+void sniffer::setInputPcapFile( const std::string &pcapFile)
 {
 	inDev_.setDevice( pcapFile, 0);
 }
@@ -78,15 +78,15 @@ void sniffer::setInputPcapFile(std::string pcapFile)
 /**
 	Return input device name used for packet sniffing
 */
-std::string sniffer::getInputDevice( )
+std::string sniffer::inputDevice( ) const
 {
-	return inDev_.getDevice();
+	return inDev_.device();
 }
 
 /**
 	set pcap file as an output for sniffed packets
 */
-void sniffer::setOutPcapFile(std::string pcapFile)
+void sniffer::setOutPcapFile( const std::string &pcapFile )
 {
 	outDev_.setDevice( pcapFile, 0);
 }
@@ -94,15 +94,15 @@ void sniffer::setOutPcapFile(std::string pcapFile)
 /**
 	return name of output device used for dumping sniffed packets
 */
-std::string sniffer::getOutputDevice( )
+std::string sniffer::outputDevice( ) const
 {
-	return outDev_.getDevice();
+	return outDev_.device();
 }
 
 /**
 	Set filter expression for sniffing packets
 */
-void sniffer::setFilter(std::string filter)
+void sniffer::setFilter(const std::string &filter)
 {
 	filter_ = filter;
 }
@@ -110,7 +110,7 @@ void sniffer::setFilter(std::string filter)
 /**
 	Log intermediate messages in a thread-safe manner 
 */
-void sniffer::log( std::string message )
+void sniffer::log( const std::string &message )
 {
 	logMutex.lock();
 	log_stream << message << std::endl;
@@ -120,7 +120,7 @@ void sniffer::log( std::string message )
 /**
 	Set input device which should be used for sniffing packets
 */
-void sniffer::setInputDevice( std::string device )
+void sniffer::setInputDevice( const std::string &device )
 {
 	inDev_.setDevice( device , 1);
 }
@@ -171,19 +171,19 @@ void* sniffer::packetSniffer()
 	uint8_t* args = (uint8_t*)filterData;
 
 	snifferData.log( "SnifferOffline Started!" ); 
-	snifferData.log( "Opening File: " + inDev_.getDevice() );
+	snifferData.log( "Opening File: " + inDev_.device() );
 
 	// 65535 from pcap man page...
 	pcap_t* pcap_ptr;
 	//if(inPcapFile_.size())
 	if(!inDev_.isDevice())
-		pcap_ptr = pcap_open_offline( (inDev_.getDevice()).c_str(), errbuf );
+		pcap_ptr = pcap_open_offline( (inDev_.device()).c_str(), errbuf );
 	else
 	{
-		if( inDev_.getDevice() == "any" )
+		if( inDev_.device() == "any" )
 			pcap_ptr = pcap_open_live( "any", 65535, 1, -1, errbuf );
 		else
-			pcap_ptr = pcap_open_live( (inDev_.getDevice()).c_str(), 500, 1, 40, errbuf );
+			pcap_ptr = pcap_open_live( (inDev_.device()).c_str(), 500, 1, 40, errbuf );
 	}
 
 	if ( pcap_ptr == NULL )
@@ -215,12 +215,12 @@ void* sniffer::packetSniffer()
 		}
 	}
 
-	if ((outDev_.getDevice()).size() != 0)
+	if ((outDev_.device()).size() != 0)
 	{
 		pcap_dumper_t *dumpfile; 
 		struct pcap_pkthdr *header;
 		const u_char *pkt_data;
-		dumpfile= pcap_dump_open(pcap_ptr, (outDev_.getDevice()).c_str());
+		dumpfile= pcap_dump_open(pcap_ptr, (outDev_.device()).c_str());
 
 		if (dumpfile == NULL)
 		{
@@ -263,7 +263,7 @@ void* sniffer::packetSniffer()
 	snifferData.log( "SnifferOffline Stopping!" );
 }
 
-bool sniffer::sniffing() 
+bool sniffer::sniffing() const 
 {
 	MutexLocker lock( sniffingMutex_ );
 	return sniffing_;
@@ -272,72 +272,16 @@ bool sniffer::sniffing()
 /**
 	Method to print all the devices in the system 
 */
-void sniffer::printDevices()
+void sniffer::printDevices() const
 {
-	
-	pcap_if_t *alldevs;
-	char errbuf[PCAP_ERRBUF_SIZE+1];
-	/* Retrieve the device list */
-	if(pcap_findalldevs(&alldevs, errbuf) == -1)
-	{
-		std::cerr << "Error in pcap_findalldevs: " << errbuf << std::endl;
-		std::exit(1);
-	}
-	/* Scan the list printing every entry */
-	for(pcap_if_t* dev=alldevs;dev != NULL;dev=dev->next)
-	{
-		/* Name */
-		std::cout << dev->name << std::endl;
-		/* Description */
-		if (dev->description)
-		{
-			std::cout << "\tDescription: " << dev->description << std::endl;
-		}
-		/* Loopback Address*/
-		std::cout << "\tLoopback: " << ((dev->flags & PCAP_IF_LOOPBACK)?"yes":"no") << std::endl;
-		/* IP addresses */
-		for(pcap_addr_t *addrEl=dev->addresses;addrEl != NULL;addrEl=addrEl->next)
-		{
-			if( addrEl->addr )//Needed incase of a tun interface
-			{
-				std::cout << "\tAddress Family: " << addrEl->addr->sa_family << std::endl;
-				switch(addrEl->addr->sa_family)
-				{
-					case AF_INET:
-						std::cout << "\tAddress Family Name: AF_INET" << std::endl;
-						if (addrEl->addr)
-							std::cout << "\tAddress: " << 
-								iptos(((struct sockaddr_in *)addrEl->addr)->sin_addr.s_addr) << std::endl;
-						if (addrEl->netmask)
-							std::cout << "\tNetmask: " << 
-								iptos(((struct sockaddr_in *)addrEl->netmask)->sin_addr.s_addr) << std::endl;
-						if (addrEl->broadaddr)
-							std::cout << "\tBroadcast Address: " << 
-								iptos(((struct sockaddr_in *)addrEl->broadaddr)->sin_addr.s_addr) << std::endl;
-						if (addrEl->dstaddr)
-							std::cout << "\tDestination Address: " << 
-								iptos(((struct sockaddr_in *)addrEl->dstaddr)->sin_addr.s_addr) << std::endl;
-						break;
-					case AF_INET6:
-						std::cout << "\tAddress Family Name: AF_INET6" << std::endl;
-						break;
-					default:
-						std::cout << "\tAddress Family Name: Unknown" << std::endl;
-						break;
-				}
-			}
-			std::cout << std::endl;
-		} 
-	}
-
-	/* Free the device list */
-
-	pcap_freealldevs(alldevs);
+	DevicesLookup lookup;
+	lookup.printAllDevices();
 } 
 
 /**
 	Converts an input ip in decimal format into human-readable string format
 */
+/*
 std::string sniffer::iptos(u_long in)
 {
 	std::stringstream output;
@@ -349,4 +293,4 @@ std::string sniffer::iptos(u_long in)
 		<< "." << (unsigned int) pByte[3] << std::flush;
 	return output.str();
 } 
-
+*/

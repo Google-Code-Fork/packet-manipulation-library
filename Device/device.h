@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra SPAWAR Atlantic
  *
  * This file is a part of PacMan.
  *
@@ -17,6 +17,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/*****************************************************************
+Last Edited:
+Apr 6, 2011  --- Jeff Scaparra
+
+
+
+*****************************************************************/
 
 /** \file device.h
  * This is the declaration for the class Device
@@ -40,26 +48,34 @@
 class Device
 {
 	public:
-                //!Default constructor
+		//!Default constructor
 		Device();
-                //!Constructor
-		Device(std::string dev, int isDev);
-                //!Set device name and whether it is a device (isDev = 1) or it is a Pcap file (isDev = 0)
-		void setDevice(std::string dev, int isDev);
-                //!Get device name
-		std::string getDevice();
-                //!Returns 1 if it is a device, 0 if it is a pcap file
-		int isDevice();
-                //!Returns 1 if device exists, 0 otherwise
-		int isValid();
-                //!Destructor
+		//!Constructor
+		Device( const std::string &dev, const bool &isDev);
+		//!Set device name and whether it is a device (isDev = 1) or it is a Pcap file (isDev = 0)
+		void setDevice( const std::string &dev, const bool &isDev);
+		//!Get device name
+		std::string device() const;
+		//!Get device address
+		std::string address() const;
+		//!True if a loopback device
+		bool isLoopback() const;
+		//!AF_INET, AF_INET6, etc...
+		std::string addressFamily() const;
+		//!Get device netmask
+		std::string netmask() const; 
+		//!Returns 1 if it is a device, 0 if it is a pcap file
+		bool isDevice() const;
+		//!Returns 1 if device exists, 0 otherwise
+		bool isValid() const;
+		//!Destructor
 		~Device();
 
 	private:
                 //!Device name
 		std::string dev;
                 //!Indicates 1 if it is a device, 0 if it is a pcap file
-		int isDev;
+		bool isDev;
 };
 
 #endif

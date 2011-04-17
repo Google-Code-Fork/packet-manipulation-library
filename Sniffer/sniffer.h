@@ -21,15 +21,36 @@
 #include "snifferData.h"
 #include "filterData.h"
 #include "../Device/device.h"
+#include <string>
+#include <vector>
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
 void* run_sniffer(void* data);
 
 class sniffer : public Thread
 {
+	public:
+		sniffer();
+		void *packetSniffer();
+		void setInputDevice( const std::string &device );
+		void setFilter( const std::string &filter);
+		void setOutPcapFile( const std::string &file);
+		std::string outputDevice( ) const;
+		void setInputPcapFile(const std::string &file);
+		std::string inputDevice() const;
+		Packet popPacket();
+		bool sniffing() const;
+		void log( const std::string &logfile );
+		void start( );
+		void printDevices() const;
+		std::vector< std::string > availableDevices() const;
+		//std::string iptos(u_long in); //?
+		~sniffer(){ delete filterData; }
+	
+	
 	private:
-		Mutex coutMutex;
-		Mutex logMutex;
+		mutable Mutex coutMutex;
+		mutable Mutex logMutex;
 		std::string filter_;
 		FilterData *filterData;
 		SnifferData snifferData;
@@ -37,24 +58,8 @@ class sniffer : public Thread
 		static std::ofstream log_stream;
 		Device inDev_;
 		Device outDev_;
-		Mutex sniffingMutex_;
+		mutable Mutex sniffingMutex_;
 		bool sniffing_;
 
-	public:
-		sniffer();
-		void *packetSniffer();
-		void setInputDevice( std::string device );
-		void setFilter(std::string filter);
-		void setOutPcapFile(std::string);
-		std::string getOutputDevice( );
-		void setInputPcapFile(std::string);
-		std::string getInputDevice();
-		Packet popPacket();
-		bool sniffing();
-		void log( std::string );
-		void start( );
-		void printDevices();
-		std::string iptos(u_long in);
-		~sniffer(){ delete filterData; }
 };
 
