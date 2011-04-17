@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra
  *
  * This file is a part of PacMan.
  *
@@ -17,6 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/***********************************************************************
+ * Last Edited:
+ * Apr 6, 2011 --- Jeff Scaparra
+ *
+ *
+ * ********************************************************************/
 
 /** \file devicesLookup.cpp
  * This is the definition for the class DevicesLookup
@@ -36,9 +43,9 @@ DevicesLookup::DevicesLookup()
 	}
 }
 
-pcap_if_t*& DevicesLookup::operator[](int index)
+pcap_if_t* DevicesLookup::operator[](const int &index)
 {
-	dev = alldevs;
+	pcap_if_t *dev = alldevs;
 	int count = 0;		/* device traversal index */
 
 	while(count != index && dev != NULL)
@@ -50,9 +57,9 @@ pcap_if_t*& DevicesLookup::operator[](int index)
 	return dev;
 }
 
-pcap_if_t*& DevicesLookup::operator[](std::string name)
+pcap_if_t* DevicesLookup::operator[](const std::string &name)
 {
-	dev = alldevs;
+	pcap_if_t *dev = alldevs;
 
 	for(dev = alldevs; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next)
 
@@ -65,12 +72,12 @@ DevicesLookup::~DevicesLookup()
 	pcap_freealldevs(alldevs);		/* Free the device list */
 }
 
-int DevicesLookup::isValid(std::string name)
+bool DevicesLookup::isValid(const std::string &name) const
 {
-        return (DevicesLookup::operator[](name) != NULL);
+        return ( DevicesLookup::operator[](name) != NULL);
 }
 
-void DevicesLookup::printAllDevices()
+void DevicesLookup::printAllDevices() const
 {
 	/* Scan the list printing every entry */
 	for(pcap_if_t* dev=alldevs;dev != NULL;dev=dev->next)
@@ -89,7 +96,7 @@ void DevicesLookup::printAllDevices()
 		{
 			if( addrEl->addr )//Needed incase of a tun interface
 			{
-				std::cout << "\tAddress Family: " << addrEl->addr->sa_family << std::endl;
+				std::cout << "\tAddress Family: " << static_cast<uint16_t>(addrEl->addr->sa_family) << std::endl;
 				switch(addrEl->addr->sa_family)
 				{
 					case AF_INET:
@@ -120,7 +127,24 @@ void DevicesLookup::printAllDevices()
 	}
 }
 
-std::string DevicesLookup::iptos(u_long in)
+bool DevicesLookup::isLoopback( const std::string &device ) const
+{
+	/* Scan the list printing every entry */
+	for( pcap_if_t* dev=alldevs; dev != NULL; dev=dev->next)
+	{
+		
+		std::string name = dev->name;
+		if( name == device )
+		{
+			return ((dev->flags & PCAP_IF_LOOPBACK) ? true : false);
+		}
+		else
+			continue;
+	}
+	return false;
+}
+
+std::string DevicesLookup::iptos(const uint32_t &in)
 {
 	std::stringstream output;
 	u_char *pByte;

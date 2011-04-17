@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra SPAWAR Atlantic
  *
  * This file is a part of PacMan.
  *
@@ -18,6 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*****************************************************************
+Last Edited:
+Apr 6, 2011  --- Jeff Scaparra
+
+
+
+*****************************************************************/
+
+
 /** \file device.cpp
  * This is the definition for the class Packet 
  */
@@ -29,33 +38,56 @@ Device::Device()
 {
 }
 
-Device::Device(std::string dev, int isDev)
+Device::Device( const std::string &dev, const bool &isDev )
 {
         Device::setDevice(dev, isDev);
 }
 
-void Device::setDevice(std::string dev, int isDev)
+void Device::setDevice( const std::string &dev, const bool &isDev )
 {
 	this->dev = dev;
 	this->isDev = isDev;
 }
 
-std::string Device::getDevice()
+std::string Device::device() const
 {
 	return this->dev;
 }
 
-int Device::isDevice()
+bool Device::isDevice() const
 {
 	return this->isDev;
 }
 
-int Device::isValid()
+bool Device::isValid() const
 {
         DevicesLookup::DevicesLookup deviceslookup;
-        return deviceslookup.isValid(this->getDevice());
+        return deviceslookup.isValid(this->device());
+}
+
+bool Device::isLoopback() const
+{
+	DevicesLookup lookup;
+
+}
+
+std::string Device::address() const
+{
+
+}
+
+std::string Device::addressFamily() const
+{
+
+}
+
+std::string Device::netmask() const
+{
+
 }
 
 Device::~Device()
 {
 }
+
+

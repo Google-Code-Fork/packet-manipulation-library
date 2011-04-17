@@ -18,6 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/***********************************************************************
+ * Last Edited:
+ * Apr 6, 2011 --- Jeff Scaparra
+ *
+ *
+ * ********************************************************************/
+
 /** \file devicesLookup.h
  * This is the declaration for the class DevicesLookup
  */
@@ -43,27 +50,33 @@
 class DevicesLookup
 {
 	public:
-                //!Default constructor
+		//!Default constructor
 		DevicesLookup();
-                //!Index specifies the index of Device in alldevs
-		pcap_if_t*& operator[](int index);
+		//!Index specifies the index of Device in alldevs
+		pcap_if_t* operator[](const int &index);
 		//!name specifies the name of Device in alldevs
-		pcap_if_t*& operator[](std::string name);
+		pcap_if_t* operator[](const std::string &name);
 		//!Destructor
 		~DevicesLookup();
-		//!Returns 1 if device exists in the system, 0 otherwise
-		int isValid(std::string name);
+		//!Returns true if device exists in the system, false otherwise
+		bool isValid(const std::string &name) const;
 		//!Prints all existing devices to the screen
-		void printAllDevices();
+		void printAllDevices() const;
+		//!Returns true if device is a loopback device
+		bool isLoopback(const std::string &device) const;
+		//!Returns the address of the device
+		std::string address(const std::string &device) const;
+		//!Returns the address family of the device
+		std::string addressFamily( const std::string &device) const;
+		//!Returns the netmask of the device
+		std::string netmask( const std::string &device );
 
 	private:
-                //!Converts IP to string
-		std::string iptos(u_long in);
+		//!Converts IP to string
+		std::string iptos(const uint32_t &in);
 
 		//!Stores all devices
 		pcap_if_t *alldevs;
-                //!Pointer to current device
-		pcap_if_t *dev;
 };
 
 #endif
