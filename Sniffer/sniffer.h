@@ -27,10 +27,10 @@
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
 void* run_sniffer(void* data);
 
-class sniffer : public Thread
+class Sniffer : public Thread
 {
 	public:
-		sniffer();
+		Sniffer();
 		void *packetSniffer();
 		void setInputDevice( const std::string &device );
 		void setFilter( const std::string &filter);
@@ -45,17 +45,17 @@ class sniffer : public Thread
 		void printDevices() const;
 		std::vector< std::string > availableDevices() const;
 		//std::string iptos(u_long in); //?
-		~sniffer(){ delete filterData; }
+		~Sniffer(){ delete filterData_; }
 	
 	
 	private:
-		mutable Mutex coutMutex;
-		mutable Mutex logMutex;
+		mutable Mutex coutMutex_;
+		mutable Mutex logMutex_;
 		std::string filter_;
-		FilterData *filterData;
-		SnifferData snifferData;
-		static const std::string logFile;
-		static std::ofstream log_stream;
+		FilterData *filterData_;
+		SnifferData snifferData_;
+		static const std::string logFile_;
+		static std::ofstream log_stream_;
 		Device inDev_;
 		Device outDev_;
 		mutable Mutex sniffingMutex_;

@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra
  *
  * This file is a part of PacMan.
  *

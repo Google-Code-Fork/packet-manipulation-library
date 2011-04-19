@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 	tcpOptions.get_options(argc, argv);
 	tcpOptions.print_options();
 
-	sniffer mySniffer;
+	Sniffer mySniffer;
 
 	mySniffer.log("tcpdump starting up!");
 
