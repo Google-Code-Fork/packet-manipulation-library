@@ -1,3 +1,15 @@
+Required Packages:
+
+For the library:
+libpcap-dev
+
+For Creating Documentation:
+doxygen
+graphviz
+texlive-latex-base
+texlive-latex-recommended
+texlive-latex-extra
+
 To build:
 type ./configure
 type make in the top directory:
