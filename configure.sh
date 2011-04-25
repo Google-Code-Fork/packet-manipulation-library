@@ -23,7 +23,7 @@ APPDIR="${PACKETDIR}/App"
 #######################################################
 APPSOURCE="${APPDIR}/app.cpp ${APPDIR}/raw.cpp ${APPDIR}/dnsPacket.cpp ${APPDIR}/staticBuffer.cpp ${APPDIR}/dnsRecord.cpp ${APPDIR}/dnsQuestion.cpp ${APPDIR}/arp.cpp"
 TRANSSOURCE="${TRANSDIR}/tcp.cpp ${TRANSDIR}/udp.cpp ${TRANSDIR}/tcpOptions.cpp ${TRANSDIR}/trans.cpp"
-INETSOURCE="${INETDIR}/inet.cpp ${INETDIR}/ipv4.cpp ${INETDIR}/icmp.cpp"
+INETSOURCE="${INETDIR}/inet.cpp ${INETDIR}/ipv4.cpp ${INETDIR}/icmp.cpp ${INETDIR}/ipv6.cpp ${INETDIR}/ipv6Address.cpp"
 LINKSOURCE="${LINKDIR}/link.cpp ${LINKDIR}/ethernet.cpp ${LINKDIR}/mac.cpp"
 PACKETSOURCE="${PACKETDIR}/packetBuilder.cpp ${PACKETDIR}/packet.cpp ${PACKETDIR}/packetBuffer.cpp ${APPSOURCE} ${TRANSSOURCE} ${INETSOURCE} ${LINKSOURCE}"
 echo "APPSOURCE=${APPSOURCE}" >> $MAKEFILE
@@ -44,7 +44,7 @@ APPHEADERS="${APPDIR}/appData.h ${APPDIR}/app.h ${APPDIR}/raw.h ${APPDIR}/dnsPac
 
 TRANSHEADERS="${TRANSDIR}/tcp.h ${TRANSDIR}/udp.h ${TRANSDIR}/tcpOptions.h ${TRANSDIR}/trans.h ${TRANSDIR}/transData.h ${TRANSDIR}/eolOption.h ${TRANSDIR}/mssOption.h ${TRANSDIR}/noopOption.h ${TRANSDIR}/sackOption.h ${TRANSDIR}/sackPermittedOption.h ${TRANSDIR}/timeStampOption.h ${TRANSDIR}/wsOption.h"
 
-INETHEADERS="${INETDIR}/inetData.h ${INETDIR}/inet.h ${INETDIR}/ipv4.h ${INETDIR}/icmp.h"
+INETHEADERS="${INETDIR}/inetData.h ${INETDIR}/inet.h ${INETDIR}/ipv4.h ${INETDIR}/icmp.h ${INETDIR}/ipv6.h ${INETDIR}/ipv6Address.h"
 
 LINKHEADERS="${LINKDIR}/linkData.h ${LINKDIR}/link.h ${LINKDIR}/ethernet.h ${LINKDIR}/mac.h"
 

@@ -34,14 +34,34 @@
 
 #include "tcpStream.h"
 #include "../Sniffer/sniffer.h"
+#include "StreamData.h"
 
-class StreamProcessor
+/* Use much like the sniffer class except that we can get streams instead of
+ * packets
+ */
+
+void* run_streamer( void *data );
+
+class StreamProcessor : public Sniffer
 {
 	public:
-		StreamProcessor();
+		StreamProcessor( );
 		virtual ~StreamProcessor();
+		void *streamer();
+		void start();
+		int numberOfCurrentStreams() const;
+		int numberOfFishishedStreams() const;
+		TCPStream popFinishedStream() const;
+		TCPStream currentStream( const int &index ) const;
 
 	private:
+		std::string buildStreamName( const Packet &p ) const;
+		Thread streamThread_;
+		StreamData currentStreams_;
+		StreamData finishedStreams_;
+		mutable Mutex streamingMutex_;
+		bool streaming_;
+
 
 };
 
