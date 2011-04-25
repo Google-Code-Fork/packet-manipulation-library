@@ -35,13 +35,14 @@
 #include "../Packet/packet.h"
 #include <vector>
 #include <stdint.h>
+#include "Stream.h"
 
-class TCPSegment
+
+class TCPSegment 
 {
 public:
 	TCPSegment();
 	virtual ~TCPSegment();
-
 	void setData( const std::vector< uint8_t > &data );
 	std::vector< uint8_t > data() const;
 	void setSource( const uint32_t &source );
@@ -52,11 +53,12 @@ private:
 	uint8_t source_;
 };
 
-class TCPStream
+class TCPStream : public Stream
 {
 public:
 	TCPStream();
 	virtual ~TCPStream();
+	std::string name() const;
 	void processPacket( const Packet &p );
 	void setServerIP( const uint32_t &ip );
 	uint32_t serverIP() const;
