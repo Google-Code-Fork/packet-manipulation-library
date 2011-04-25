@@ -51,8 +51,8 @@ class StreamProcessor : public Sniffer
 		void start();
 		int numberOfCurrentStreams() const;
 		int numberOfFishishedStreams() const;
-		TCPStream popFinishedStream() const;
-		TCPStream currentStream( const int &index ) const;
+		Stream popFinishedStream() const;
+		Stream currentStream( const int &index ) const;
 
 	private:
 		std::string buildStreamName( const Packet &p ) const;

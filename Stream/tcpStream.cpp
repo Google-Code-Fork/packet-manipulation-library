@@ -55,7 +55,7 @@ uint32_t TCPSegment::source() const
 
 TCPStream::TCPStream():serverIp_(0),clientIp_(0),serverPort_(0),clientPort_(0),serverSequenceNumber_(0),
 	serverAcknowledgeNumber_(0),clientSequenceNumber_(0),clientAcknowledgeNumber_(0),initialClientSequenceNumber_( 0 ), 
-	initialServerSequencenumber_(0)
+	initialServerSequencenumber_(0), finished_( false )
 {
 }
 
@@ -105,6 +105,8 @@ void TCPStream::processPacket( const Packet &p )
 				stream_.push_back( segment );
 			}
 		}
+		if( tcp.FIN_Flag() || tcp.RST_Flag() )
+			finished_ = true;
 	}
 }
 
@@ -227,4 +229,8 @@ TCPSegment TCPStream::segment( const int &index ) const
 {
 	return stream_[index];
 }
-		
+	
+bool TCPStream::finished() const
+{
+	return finished_;
+}
