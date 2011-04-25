@@ -27,8 +27,9 @@
 
 class Stream
 {
+	public:
 	Stream();
-	virtual ~Segment();
+	virtual ~Stream();
 	virtual std::string name( ) const = 0;
 	virtual void processPacket( const Packet &p );
 };

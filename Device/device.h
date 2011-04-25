@@ -51,9 +51,9 @@ class Device
 		//!Default constructor
 		Device();
 		//!Constructor
-		Device( const std::string &dev, const bool &isDev);
-		//!Set device name and whether it is a device (isDev = 1) or it is a Pcap file (isDev = 0)
-		void setDevice( const std::string &dev, const bool &isDev);
+		Device( const std::string &dev, const bool &isDev = true);
+		//!Set device name and whether it is a device (isDev = true) or it is a Pcap file (isDev = false)
+		void setDevice( const std::string &dev, const bool &isDev = true);
 		//!Get device name
 		std::string device() const;
 		//!Get device address

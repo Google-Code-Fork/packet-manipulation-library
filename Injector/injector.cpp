@@ -24,72 +24,62 @@
 
 #include "injector.h"
 
-Injector::Injector()
+Injector::Injector(): handle_(NULL)
 {
 }
 
-Injector::Injector(std::string deviceName, Packet::Packet packet)
+Injector::Injector( const std::string &deviceName )
 {
-	dev.setDevice(deviceName, 1);
-	handle = pcap_open_live(dev.getDevice().c_str(), BUFSIZ, 1, 1000, errbuf);
-	if (handle == NULL)
+	char errbuf[PCAP_ERRBUF_SIZE];
+	dev_.setDevice(deviceName);
+	handle_ = pcap_open_live(dev_.device().c_str(), BUFSIZ, 1, 1000, errbuf);
+	if (handle_ == NULL)
 	{
-		std::cout << "Couldn't open device " << dev.getDevice() << std::endl;
+		std::cerr << "Couldn't open device " << dev_.device() << std::endl;
+		std::cerr << "ERROR: " << errbuf << std::endl;
 		exit(2);
 	}
-	this->packet = packet;
-	this->packetBuffer = packet.makePacket();
 }
 
-Injector::Injector(std::string deviceName, PacketBuffer::PacketBuffer packetBuffer)
+void Injector::setDevice(const std::string &deviceName)
 {
-	dev.setDevice(deviceName, 1);
-	handle = pcap_open_live(dev.getDevice().c_str(), BUFSIZ, 1, 1000, errbuf);
-	if (handle == NULL)
+	char errbuf[PCAP_ERRBUF_SIZE];
+	if( handle_ )
+		pcap_close( handle_ );
+	dev_.setDevice(deviceName);
+	handle_ = pcap_open_live(dev_.device().c_str(), BUFSIZ, 1, 1000, errbuf);
+	if (handle_ == NULL)
 	{
-		std::cout << "Couldn't open device " << dev.getDevice() << std::endl;
+		std::cerr << "Couldn't open device " << dev_.device() << std::endl;
+		std::cerr << "ERROR: " << errbuf << std::endl;
 		exit(2);
 	}
-	this->packetBuffer = packetBuffer;
 }
 
-int Injector::setDevice(std::string deviceName)
+std::string Injector::device() const
 {
-        dev.setDevice(deviceName, 1);
+	return dev_.device();
 }
 
-std::string Injector::getDevice()
+void Injector::inject( const Packet &p ) const
 {
-        return dev.getDevice();
+	inject( p.makePacket() );
 }
 
-int Injector::setPacket(Packet::Packet packet)
+void Injector::inject(const PacketBuffer &pb ) const
 {
-        this->packet = packet;
-}
-
-Packet::Packet Injector::getPacket()
-{
-        return this->packet;
-}
-
-int Injector::setPacketBuffer(PacketBuffer::PacketBuffer packetBuffer)
-{
-        this->packetBuffer = packetBuffer;
-}
-
-PacketBuffer::PacketBuffer Injector::getPacketBuffer()
-{
-        return this->packetBuffer;
-}
-
-int Injector::inject()
-{
-	return pcap_inject(handle, packetBuffer.buffer(), packetBuffer.size());
+	int err = pcap_sendpacket(handle_, pb.buffer(), pb.size());
+	if( err )
+	{ //clean up
+		std::cerr << "ERROR: Problems injecting packet " << std::endl;
+		std::cerr << pcap_geterr( handle_ ) << std::endl;
+		exit( 2 );
+	}
 }
 
 
 Injector::~Injector()
 {
-	pcap_close(handle);
+	if( handle_ )
+		pcap_close(handle_);
 }
