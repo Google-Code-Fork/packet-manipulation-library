@@ -40,7 +40,7 @@ class IPv6Address : public InetData
 		//! Returns a Packetbuffer with the IPv6 address
 		PacketBuffer makePacket() const;
 		//! Places the IPv6 address in the array IPv6
-		void getIPv6( uint8_t (&address) [IPv6AddressSize]);
+		void ipv6Array( uint8_t (&address) [IPv6AddressSize]);
 		//! returns true
 		bool isIPv6() const;
 

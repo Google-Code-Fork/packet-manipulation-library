@@ -12,19 +12,15 @@
 
 IPv6::IPv6()
 {
-	IPv6Address v6;
-	v6.getIPv6( header_.srcAddr );
-	v6.getIPv6( header_.dstAddr );
-
 	header_ = new struct IPv6Header;
-	setHeaderLength( 40 );
+	//setHeaderLength( 40 );
 }
 
 IPv6::IPv6( const uint8_t *packet, int size )
 {
 	header_ = new struct IPv6Header;
-	int headerSize = 40;
-	if ( size < headSize )
+	int headerSize = sizeof( header_ );
+	if ( size < headerSize )
 		throw std::runtime_error( "packet capture too small to make packet" );
 	*header_ = *((struct IPv6Header*)packet);
 }
@@ -122,31 +118,26 @@ void IPv6::setHopLimit( uint8_t hopLimit )
 
 //**********************************
 
-IPv6Address IPv6::sourceIPv6()
+IPv6Address IPv6::sourceIP()
 {
-	return IPv6Address( header_.srcAddr );
+	return IPv6Address( header_->srcAddr );
 }
 
-void IPv6::setSourceV6( IPv6Address v6 )
+void IPv6::setSourceIP( IPv6Address v6 )
 {
-	v6.getIPv6( header_.srcAddr );
+	v6.ipv6Array( header_->srcAddr );
 }
 
-IPv6Address IPv6::destinationIPv6()
+IPv6Address IPv6::destinationIP()
 {
-	return IPv6Address (header_.dstAddr );
+	return IPv6Address (header_->dstAddr );
 }
 
-void IPv6::setDestinationV6( IPv6Address v6 )
+void IPv6::setDestinationIP( IPv6Address v6 )
 {
-	v6.getIPv6( header_.dstAddr );
+	v6.ipv6Array( header_->dstAddr );
 }
 
 
-
-bool IPv6::isIPv6() const
-{
-	return true;
-}
 
 

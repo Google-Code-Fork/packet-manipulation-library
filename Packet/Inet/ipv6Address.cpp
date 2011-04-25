@@ -112,7 +112,7 @@ PacketBuffer IPv6Address::makePacket( ) const
 	return PacketBuffer( address_ );
 }
 
-void IPv6Address::getIPv6( uint8_t (&addressPtr)[IPv6AddressSize] )
+void IPv6Address::ipv6Array( uint8_t (&addressPtr)[IPv6AddressSize] )
 {
 	addressPtr[0] = address_[0];
 	addressPtr[1] = address_[1];

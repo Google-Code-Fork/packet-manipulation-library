@@ -27,6 +27,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 IPv4::IPv4( )
 {
@@ -216,3 +217,14 @@ int IPv4::size() const
   return sizeof( *header_ );
 }
 
+std::string ipAddressToString( const IPv4Address &ip ) 
+{
+	uint32_t address = htonl( ip );
+	const uint8_t* octet = (const uint8_t*)( &address );
+	std::stringstream ss;
+	ss << static_cast< uint16_t >( octet[0] ) << ".";
+	ss << static_cast< uint16_t >( octet[1] ) << ".";
+	ss << static_cast< uint16_t >( octet[2] ) << ".";
+	ss << static_cast< uint16_t >( octet[3] );
+	return ss.str();
+}
