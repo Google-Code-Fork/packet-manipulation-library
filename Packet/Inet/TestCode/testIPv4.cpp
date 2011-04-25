@@ -23,6 +23,7 @@ int IPv4Test::run()
 {
 	testIsIpv4();
 	testPacketCreation();
+	testIPv4String();
 	return qunit.errors();
 }
 
@@ -30,6 +31,13 @@ void IPv4Test::testIsIpv4()
 {
 	IPv4 ipv4;
 	QUNIT_IS_TRUE( ipv4.isIPv4() );
+}
+
+void IPv4Test::testIPv4String() 
+{
+	IPv4Address ip = 0xAC102A03;
+	std::string address = ipAddressToString( ip );
+	QUNIT_IS_EQUAL( address, "172.16.42.3" );
 }
 
 void IPv4Test::testPacketCreation()
@@ -104,50 +112,50 @@ void IPv4Test::testPacketCreation()
 	QUNIT_IS_TRUE( ipv4_1.dontFragment() );
 
 	//Flag - returns moreFragment flag (true|false)
-			QUNIT_IS_FALSE( ipv4_1.moreFragments() );
-			//set moreFragment flag to false
-			ipv4_1.setMoreFragments( false );
-			QUNIT_IS_FALSE( ipv4_1.moreFragments() );
-			//set moreFragment flag to true
-			ipv4_1.setMoreFragments();
-			QUNIT_IS_TRUE( ipv4_1.moreFragments() );
+	QUNIT_IS_FALSE( ipv4_1.moreFragments() );
+	//set moreFragment flag to false
+	ipv4_1.setMoreFragments( false );
+	QUNIT_IS_FALSE( ipv4_1.moreFragments() );
+	//set moreFragment flag to true
+	ipv4_1.setMoreFragments();
+	QUNIT_IS_TRUE( ipv4_1.moreFragments() );
 
-			//check fragment offset field
-			QUNIT_IS_TRUE( ipv4_1.fragmentOffset() == 0x0000 );
-			//set fragment offset field
-			ipv4_1.setFragmentOffset( 0x0006 );
-			QUNIT_IS_TRUE( ipv4_1.fragmentOffset() == 0x0006 );
+	//check fragment offset field
+	QUNIT_IS_TRUE( ipv4_1.fragmentOffset() == 0x0000 );
+	//set fragment offset field
+	ipv4_1.setFragmentOffset( 0x0006 );
+	QUNIT_IS_TRUE( ipv4_1.fragmentOffset() == 0x0006 );
 
-			//check ttl value
-			QUNIT_IS_TRUE( ipv4_1.ttl() == 128 );
-			//set ttl value
-			ipv4_1.setTtl( 0x60 );
-			QUNIT_IS_TRUE( ipv4_1.ttl() == 96 );
-			// set back to 128
-			ipv4_1.setTtl( 0x80 );
-			
-			//check protocol field
-			QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocol::TCP );
-			//set protocol field
-			ipv4_1.setProtocol( ipProtocol::ICMP );
-			QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocol::ICMP );
-			
+	//check ttl value
+	QUNIT_IS_TRUE( ipv4_1.ttl() == 128 );
+	//set ttl value
+	ipv4_1.setTtl( 0x60 );
+	QUNIT_IS_TRUE( ipv4_1.ttl() == 96 );
+	// set back to 128
+	ipv4_1.setTtl( 0x80 );
 
-			//check checksum value (both are OK!)
-			QUNIT_IS_TRUE( ipv4_1.checksum() == 0xf87b );
-			QUNIT_IS_TRUE( ipv4_1.checksum() == 63611 );
-			//set the checksum and check value
-			ipv4_1.setChecksum( 0x33c3 );
-			QUNIT_IS_TRUE( ipv4_1.checksum() == 13251 );
+	//check protocol field
+	QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocol::TCP );
+	//set protocol field
+	ipv4_1.setProtocol( ipProtocol::ICMP );
+	QUNIT_IS_EQUAL( ipv4_1.protocol(), ipProtocol::ICMP );
 
-			//correct values for source & destination IP addresses
-			uint8_t rightSourceAddress[] = {0xa3, 0xf0, 0xa8, 0xe7};
-			uint8_t rightDesinationAddress[] = {0xc1, 0x6e, 0x91, 0x2e};
-			uint32_t correctSource = 0xa3f0a8e7;
-			QUNIT_IS_TRUE( ipv4_1.sourceAddress() == correctSource);
-			uint32_t correctDestination = 0xc16e912e;
-			QUNIT_IS_TRUE( ipv4_1.destinationAddress() == correctDestination );
-		}
+
+	//check checksum value (both are OK!)
+	QUNIT_IS_TRUE( ipv4_1.checksum() == 0xf87b );
+	QUNIT_IS_TRUE( ipv4_1.checksum() == 63611 );
+	//set the checksum and check value
+	ipv4_1.setChecksum( 0x33c3 );
+	QUNIT_IS_TRUE( ipv4_1.checksum() == 13251 );
+
+	//correct values for source & destination IP addresses
+	uint8_t rightSourceAddress[] = {0xa3, 0xf0, 0xa8, 0xe7};
+	uint8_t rightDesinationAddress[] = {0xc1, 0x6e, 0x91, 0x2e};
+	uint32_t correctSource = 0xa3f0a8e7;
+	QUNIT_IS_TRUE( ipv4_1.sourceAddress() == correctSource);
+	uint32_t correctDestination = 0xc16e912e;
+	QUNIT_IS_TRUE( ipv4_1.destinationAddress() == correctDestination );
+}
 
 #ifndef GLOBAL_SCOPE
 int main()

@@ -179,7 +179,9 @@ class IPv4 : public InetData
 	  IPv4Header *header_;
 };
 
+typedef uint32_t IPv4Address;
 
+std::string ipAddressToString( const IPv4Address &ip );
 
 
 #endif 

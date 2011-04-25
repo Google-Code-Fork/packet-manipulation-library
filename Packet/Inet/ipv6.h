@@ -95,20 +95,20 @@ class IPv6 : public InetData
 		void setHopLimit( uint8_t );
 
 		//!Return the source IPv6 address in the IP header
-		IPv6Address sourceIPv6();
+		IPv6Address sourceIP();
 		//!Sets the source IPv6 address in the IP header to v6
-		void setSourceV6( IPv6Address v6 );
+		void setSourceIP( IPv6Address v6 );
 		//!Return the destination IPv6 address in the IP header
-		IPv6Address destinationIPv6();
+		IPv6Address destinationIP();
 		//!Set the destination IPv6 address in the IP header to v6
-		void setDestination( IPv6Address v6 );
+		void setDestinationIP( IPv6Address v6 );
 		//!Returns true this is IP! Overloaded from InetData so we can tell we have
 		//an IP header in the packet
-		bool isIPv6() const{return true;};
+		bool isIPv6() const {return true;}
 
 	private:
 		//!Internal data for IPv6
-		IPv6Header header_;
+		IPv6Header *header_;
 };
 
 #endif

@@ -30,6 +30,8 @@ class IPv4Test
 		void testIsIpv4();
 
 		void testPacketCreation();
+
+		void testIPv4String();
 };
 
 
