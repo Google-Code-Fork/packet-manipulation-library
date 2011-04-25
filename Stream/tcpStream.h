@@ -79,6 +79,7 @@ public:
 	void addTCPSegment( const TCPSegment& segment );
 	int size() const;
 	TCPSegment segment( const int &index ) const;
+	bool finished() const;
 
 private:
 	void initSyn( const Packet &p );
@@ -94,6 +95,7 @@ private:
 	uint32_t initialClientSequenceNumber_;
 	uint32_t initialServerSequencenumber_;
 	std::vector< TCPSegment > stream_;
+	bool finished_;
 
 };
 
