@@ -20,6 +20,7 @@
 
 
 #include "tcpStream.h"
+#include <sstream>
 
 TCPSegment::TCPSegment()
 {
