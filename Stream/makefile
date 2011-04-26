@@ -1,6 +1,6 @@
 include ../global.mk
 INCLUDE=
-OBJS=tcpStream.o
+OBJS=tcpStream.o StreamProcessor.o
 CFLAGS=-ggdb $(INCLUDE) -fPIC
 CXXFLAGS=$(CFLAGS) 
 THIS=Stream
