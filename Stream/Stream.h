@@ -30,7 +30,7 @@ class Stream
 	public:
 	Stream();
 	virtual ~Stream();
-	virtual std::string name( ) const = 0;
+	virtual std::string name( ) const;
 	virtual void processPacket( const Packet &p );
 };
 
