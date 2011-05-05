@@ -68,6 +68,12 @@ void Injector::inject( const Packet &p ) const
 
 void Injector::inject(const PacketBuffer &pb ) const
 {
+	if( handle_ == NULL )
+	{
+		std::cerr << "ERROR: Problems injecting packet" << std::endl;
+		std::cerr << "NO DEVICE SET" << std::endl;
+		exit(2);
+	}
 	int err = pcap_sendpacket(handle_, pb.buffer(), pb.size());
 	if( err )
 	{ //clean up
