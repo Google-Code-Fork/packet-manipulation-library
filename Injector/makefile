@@ -3,7 +3,7 @@ include ../global.mk
 OBJS=injector.o
 TESTOBJS=example/test.o 
 DEVICEOBJS=../Device/device.o ../Device/devicesLookup.o
-CFLAGS=-ggdb -fPIC
+CFLAGS=-Wall -ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-lpcap
 THIS=Injector
