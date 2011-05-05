@@ -228,3 +228,12 @@ std::string ipAddressToString( const IPv4Address &ip )
 	ss << static_cast< uint16_t >( octet[3] );
 	return ss.str();
 }
+
+uint32_t stringToIPAddress( const std::string &ip )
+{
+	uint32_t address;
+	int err = inet_aton( ip.c_str(), (in_addr*) &address );
+	if( err = 0 )
+		return 0;
+	return address;
+}

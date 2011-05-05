@@ -182,6 +182,6 @@ class IPv4 : public InetData
 typedef uint32_t IPv4Address;
 
 std::string ipAddressToString( const IPv4Address &ip );
-
+uint32_t stringToIPAddress( const std::string &ip );
 
 #endif 
