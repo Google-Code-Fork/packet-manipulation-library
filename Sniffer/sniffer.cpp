@@ -39,10 +39,12 @@
 const std::string Sniffer::logFile_ = "./sniffer.log";
 std::ofstream Sniffer::log_stream_(logFile_.c_str(), std::ios::out|std::ios::app);
 
+const uint32_t Sniffer::DEFAULT_SNAP_LENGTH = 65535;
 /**
 	Constructor to initialize member data and base class data
 */
-Sniffer::Sniffer():snifferData_( SnifferData( coutMutex_, logMutex_, &log_stream_ ) ), sniffing_(false)
+Sniffer::Sniffer():snifferData_( SnifferData( coutMutex_, logMutex_, &log_stream_ ) ), sniffing_(false), snapLength_(
+		DEFAULT_SNAP_LENGTH)
 {
 	filterData_ = new FilterData ( coutMutex_, logMutex_, &log_stream_ );
 	setStartRoutine(run_sniffer);
@@ -180,9 +182,9 @@ void* Sniffer::packetSniffer()
 	else
 	{
 		if( inDev_.device() == "any" )
-			pcap_ptr = pcap_open_live( "any", 65535, 1, -1, errbuf );
+			pcap_ptr = pcap_open_live( "any", snapLength_, 1, 500, errbuf );
 		else
-			pcap_ptr = pcap_open_live( (inDev_.device()).c_str(), 500, 1, 40, errbuf );
+			pcap_ptr = pcap_open_live( (inDev_.device()).c_str(), snapLength_, 1, 500, errbuf );
 	}
 
 	if ( pcap_ptr == NULL )
@@ -277,6 +279,12 @@ void Sniffer::printDevices() const
 	lookup.printAllDevices();
 } 
 
-/**
-	Converts an input ip in decimal format into human-readable string format
-*/
+void Sniffer::setSnapLength( const uint32_t &snaplen )
+{
+	snapLength_ = snaplen;
+}
+
+uint32_t Sniffer::snapLength( ) const
+{
+	return snapLength_;
+}

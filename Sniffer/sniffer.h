@@ -37,6 +37,8 @@ class Sniffer : public Thread
 		void setOutPcapFile( const std::string &file);
 		std::string outputDevice( ) const;
 		void setInputPcapFile(const std::string &file);
+		void setSnapLength( const uint32_t &length );
+		uint32_t snapLength() const;
 		std::string inputDevice() const;
 		Packet popPacket();
 		bool sniffing() const;
@@ -60,6 +62,8 @@ class Sniffer : public Thread
 		Device outDev_;
 		mutable Mutex sniffingMutex_;
 		bool sniffing_;
+		uint32_t snapLength_;
+		static const uint32_t DEFAULT_SNAP_LENGTH;
 
 };
 
