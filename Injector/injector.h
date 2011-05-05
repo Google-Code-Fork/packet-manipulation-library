@@ -43,6 +43,8 @@ class Injector
 	public:
 		//!Default constructor
 		Injector();
+		//!Copy time
+		Injector( const Injector &n );
 		//!Constructor with device name and Packet object
 		Injector(const std::string &deviceName);
 		//!Set device name
