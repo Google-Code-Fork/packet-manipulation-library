@@ -47,6 +47,8 @@ class Injector
 		Injector( const Injector &n );
 		//!Constructor with device name and Packet object
 		Injector(const std::string &deviceName);
+		//!Equality for all
+		Injector& operator=( const Injector &n );
 		//!Set device name
 		void setDevice( const std::string &deviceName);
 		//!Get device name

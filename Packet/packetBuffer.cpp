@@ -105,9 +105,7 @@ PacketBuffer& PacketBuffer::operator=( const PacketBuffer &n )
 PacketBuffer& PacketBuffer::operator+=( const PacketBuffer &n )
 {
   int newSize = size_ + n.size_;
-  std::cerr << "newSize: " << newSize << std::endl;
-  std::cerr << "size: " << size_ << std::endl;
-  std::cerr << "n.size_: " << n.size_ << std::endl;
+
   uint8_t* newBuff = new uint8_t[ newSize ];
   for( int i = 0; i < size_; ++i )
   {
