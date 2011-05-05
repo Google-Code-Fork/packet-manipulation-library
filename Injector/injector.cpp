@@ -56,6 +56,20 @@ void Injector::setDevice(const std::string &deviceName)
 	}
 }
 
+Injector::Injector( const Injector &n )
+{
+	char errbuf[PCAP_ERRBUF_SIZE];
+	dev_ = n.dev_;
+	
+	handle_ = pcap_open_live(dev_.device().c_str(), BUFSIZ, 1, 1000, errbuf);
+	if (handle_ == NULL)
+	{
+		std::cerr << "Couldn't open device " << dev_.device() << std::endl;
+		std::cerr << "ERROR: " << errbuf << std::endl;
+		exit(2);
+	}
+}
+
 std::string Injector::device() const
 {
 	return dev_.device();
