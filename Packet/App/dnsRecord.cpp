@@ -13,6 +13,15 @@ DNSRecord::DNSRecord( const DNSRecord &n ): domainName_( n.domainName_ ), dnsTyp
 	
 }
 
+DNSRecord& DNSRecord::operator=( const DNSRecord &n )
+{
+	domainName_ = n.domainName_;
+	dnsType_ = n.dnsType_;
+	dnsClass_ = n.dnsClass_;
+	timeToLive_ = n.timeToLive_;
+	data_ = n.data_;
+}
+
 std::string DNSRecord::domainName( ) const 
 {
 	return domainName_.toSTDString();

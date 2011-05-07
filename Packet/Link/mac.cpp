@@ -24,6 +24,7 @@
 
 #include <stdexcept>
 #include "mac.h"
+#include <sstream>
 
 MACAddress::MACAddress() : mac_( std::vector< uint8_t >(6,0) )
 {
@@ -110,4 +111,23 @@ void MACAddress::getMAC( uint8_t (&macPtr)[MACAddressSize] )
 bool MACAddress::isMac() const
 {
   return true;
+}
+
+std::vector< uint8_t > MACAddress::mac() const
+{
+	return mac_;
+}
+
+std::string MACAddress::macString() const
+{
+	std::stringstream stream;
+	stream << std::hex;
+	for( int i = 0; i < 6; ++i )
+	{
+		if( i < 5 )
+			stream << mac_[i] << ":";
+		else
+			stream << mac_[i];
+	}
+	return stream.str();
 }

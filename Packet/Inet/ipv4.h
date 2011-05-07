@@ -158,6 +158,8 @@ class IPv4 : public InetData
 	  uint16_t checksum() const;
 	  //!Sets the checksum field
 	  void setChecksum( uint16_t );
+		//!Calculates a valid checksum
+		void calculateChecksum();
 	  //!returns the sources ip
 	  uint32_t sourceAddress() const;
 	  //!Sets the source IP

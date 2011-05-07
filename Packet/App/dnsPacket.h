@@ -182,6 +182,7 @@ class DNSRecord
 		DNSRecord();
 		virtual ~DNSRecord();
 		DNSRecord( const DNSRecord &n );
+		DNSRecord& operator=( const DNSRecord &n );
 
 		std::string domainName() const;
 		void setDomainName( const std::string &domainName );
@@ -222,6 +223,7 @@ class DNSQuestion
 		DNSQuestion( const std::string &query, uint16_t type = dnstype::A, uint16_t dnsClass = dnsclass::internet );
 		virtual ~DNSQuestion();
 		DNSQuestion( const DNSQuestion &n );
+		DNSQuestion& operator=( const DNSQuestion &n );
 
 		std::string queryName() const;
 		void setQueryName( const std::string &name );
@@ -281,16 +283,9 @@ class DNSPacket : public AppData
 
     //These values are for the header
     uint16_t numberOfQuestions() const;
-    //void setNumberOfQuestions( const uint16_t &n );
-
     uint16_t numberOfAnswers() const;
-    //void setNumberOfAnswers( const uint16_t &n );
-
     uint16_t numberOfAuthority() const;
-    //void setNumberOfAuthority( const uint16_t &n );
-
     uint16_t numberOfAdditional() const;
-    //void setNumberOfAdditional( const uint16_t &n );
 
 
     std::vector< DNSRecord > answers() const;
@@ -329,6 +324,10 @@ class DNSPacket : public AppData
     std::string domainParser( std::vector<uint8_t>, uint16_t& );
     std::vector<uint8_t> generateEncodedDomainName( const std::string &domainName );
     std::vector<uint8_t> encodeDNSRecord( const std::vector< DNSRecord > &responses );
+
+		void formatQuestion( std::vector< uint8_t > &packet, const DNSQuestion &question ) const;
+		void formatRecord( std::vector< uint8_t > &packet, const DNSRecord &record ) const;
+		void formatURL( std::vector< uint8_t > &packet, const std::string &url ) const;
 
   private:
     DNSHeader header_;
