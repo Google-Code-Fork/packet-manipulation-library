@@ -38,7 +38,12 @@ Ethernet::Ethernet()
 
 Ethernet::Ethernet( const Ethernet& n )
 {
-	header_ = n.header_;
+	for( int i = 0; i < MACAddress::MACAddressSize; ++i )
+	{
+		header_.destination[i] = n.header_.destination[i];
+		header_.source[i] = n.header_.source[i];
+	}
+	header_.protocol = n.header_.protocol;
 	vlanTag_ = n.vlanTag_;
 }
 
@@ -82,7 +87,12 @@ Ethernet::Ethernet( const std::vector< uint8_t > &bytes )
 
 Ethernet& Ethernet::operator =( const Ethernet &n )
 {
-  header_ = n.header_;
+	for( int i = 0; i < MACAddress::MACAddressSize; ++i )
+	{
+		header_.destination[i] = n.header_.destination[i];
+		header_.source[i] = n.header_.source[i];
+	}
+	header_.protocol = n.header_.protocol;
   vlanTag_ = n.vlanTag_;
 }
 

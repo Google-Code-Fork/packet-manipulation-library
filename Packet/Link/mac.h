@@ -61,6 +61,10 @@ class MACAddress : public LinkData
     int size() const;
     //! Returns a Packetbuffer with the MAC address
     PacketBuffer makePacket() const;
+		//!returns bytes of mac address
+		std::vector< uint8_t > mac() const;
+		//!returns string of mac address
+		std::string macString() const;
     //! Places the mac address in the array mac
     void getMAC( uint8_t (&mac)[MACAddressSize]);//puts the mac address in the memory mac
     //! returns true

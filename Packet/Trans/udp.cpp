@@ -25,7 +25,7 @@
 
 #include "udp.h"
 #include <stdexcept>
-
+#include <iostream>
 UDP::UDP()
 {
 	header_ = new struct my_udp;
@@ -108,4 +108,49 @@ PacketBuffer UDP::makePacket() const
   for( int i = 0; i < UDPSize; ++i )
     packet.push_back( ptr[i] );
   return PacketBuffer( packet );
+}
+
+void UDP::calculateChecksum( const uint32_t &sourceAddress, const uint32_t
+		&destinationAddress, const std::vector< uint8_t > &data )
+{
+	setChecksum( 0x0000 );
+	uint32_t source = htonl( sourceAddress );
+	uint32_t destination = htonl( destinationAddress );
+	uint16_t protocol = htons(17);
+	uint16_t datalength = htons( sizeof(*header_) + data.size());
+
+	uint32_t sum = 0;
+
+	sum += (source >> 16) + (source & 0xFFFF);
+	sum += (destination >> 16) + (destination & 0xFFFF);
+	sum += protocol;
+	sum += datalength;
+
+	std::vector< uint8_t > header = makePacket().vector();
+	for( int i = 0; i < header.size(); i +=2 )
+	{
+		uint16_t tmp = header[i];
+		tmp <<= 8;
+		tmp |= header[i+1];
+		sum += htons(tmp);
+	}
+
+	std::vector< uint8_t > tmpData = data;
+	if( data.size() % 2 )
+		tmpData.push_back( 0x00 );
+
+	for( int i = 0; i < tmpData.size(); i += 2 )
+	{
+		uint16_t tmp = tmpData[i];
+		tmp <<= 8;
+		tmp |= tmpData[i+1];
+		sum += htons(tmp);
+	}
+
+	while( sum >> 16 )
+	{
+		sum = (sum & 0xFFFF) + (sum >> 16);
+	}
+
+	header_->checksum = ~sum;
 }

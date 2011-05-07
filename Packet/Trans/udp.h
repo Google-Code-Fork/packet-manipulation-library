@@ -76,6 +76,9 @@ class UDP : public TransData
     uint16_t checksum() const;
     //!sets the checksum (doesn't care if it is correct)
     void setChecksum( uint16_t );
+		//!Calculates and sets the checksum
+		void calculateChecksum( const uint32_t &sourceAddress, const uint32_t
+				&destinationAddress, const std::vector< uint8_t >& data );
     //!gets the length of the UDP header
     uint16_t length() const;
     //!sets the length of the UDP header

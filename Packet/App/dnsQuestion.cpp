@@ -20,6 +20,13 @@ DNSQuestion::DNSQuestion( const DNSQuestion &n )
 	dnsClass_ = n.dnsClass_;
 }
 
+DNSQuestion& DNSQuestion::operator=( const DNSQuestion &n )
+{
+	queryName_ = n.queryName_;
+	dnsType_ = n.dnsType_;
+	dnsClass_ = n.dnsClass_;
+}
+
 std::string DNSQuestion::queryName() const
 {
 	return queryName_;

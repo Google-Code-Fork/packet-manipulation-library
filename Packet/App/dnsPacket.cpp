@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <arpa/inet.h>
+#include "../../common/stringUtils.h"
 
 DNSPacket::DNSPacket()
 {
@@ -353,25 +354,75 @@ std::vector< uint8_t > DNSPacket::data() const
   packet.push_back( static_cast< uint8_t >( header_.flags >> 8 ) );
   packet.push_back( static_cast< uint8_t >( header_.flags & 0x00FF ) );
   //numberOfQuestions
-	uint16_t numQuestions = htons( static_cast< uint16_t >( questions_.size() ) );
+	uint16_t numQuestions = static_cast< uint16_t >( questions_.size() );
   packet.push_back( static_cast< uint8_t >( numQuestions >> 8 ) );
   packet.push_back( static_cast< uint8_t >( numQuestions & 0x00FF ) );
   //numberAnswers
-	uint16_t numAnswers = htons( static_cast< uint16_t >( answers_.size() ) );
+	uint16_t numAnswers = static_cast< uint16_t >( answers_.size() );
   packet.push_back( static_cast< uint8_t >( numAnswers >> 8 ) );
   packet.push_back( static_cast< uint8_t >( numAnswers & 0x00FF ) );
   //numberAuthority
-	uint16_t numAuthority = htons( static_cast< uint16_t >( authorities_.size() ) );
+	uint16_t numAuthority = static_cast< uint16_t >( authorities_.size() );
   packet.push_back( static_cast< uint8_t >( numAuthority >> 8 ) );
   packet.push_back( static_cast< uint8_t >( numAuthority & 0x00FF ) );
   //numberAdditional
-	uint16_t numAdditional = htons( static_cast< uint16_t >( additionals_.size() ) );
+	uint16_t numAdditional = static_cast< uint16_t >( additionals_.size() );
   packet.push_back( static_cast< uint8_t >( numAdditional >> 8 ) );
   packet.push_back( static_cast< uint8_t >( numAdditional & 0x00FF ) );
 	
+	for( int i = 0; i < numQuestions; ++i )
+	{
+		formatQuestion( packet, questions_[i] );
+	}
 
-	//TODO
+	for( int i = 0; i < numAnswers; ++i )
+	{
+		formatRecord( packet, answers_[i] );
+	}
+
+	for( int i = 0; i < numAuthority; ++i )
+	{
+		formatRecord( packet, authorities_[i] );
+	}
+
+	for( int i = 0; i < numAdditional; ++i )
+	{
+		formatRecord( packet, additionals_[i] );
+	}
+
 	return packet;
+}
+
+void DNSPacket::formatRecord( std::vector< uint8_t > &packet, const DNSRecord &record ) const
+{
+
+}
+
+void DNSPacket::formatQuestion( std::vector< uint8_t > &packet, const DNSQuestion &question ) const
+{
+	formatURL( packet, question.queryName() );
+
+  packet.push_back( static_cast< uint8_t >( question.type() >> 8 ) );
+  packet.push_back( static_cast< uint8_t >( question.type() & 0x00FF ) );
+  
+	packet.push_back( static_cast< uint8_t >( question.dnsClass() >> 8 ) );
+  packet.push_back( static_cast< uint8_t >( question.dnsClass() & 0x00FF ) );
+
+}
+
+void DNSPacket::formatURL( std::vector< uint8_t > &packet, const std::string &url ) const
+{
+	std::vector< std::string > stringList = split( url, '.' );
+	for( uint32_t i = 0; i < stringList.size(); ++i )
+	{
+		std::string component = stringList[i];
+		packet.push_back( static_cast<uint8_t>( component.size() ) );
+		for( uint32_t k = 0; k < component.size(); ++k )
+		{
+			packet.push_back( component[k] );
+		}
+	}
+	packet.push_back( 0x00 );
 }
 
 PacketBuffer DNSPacket::makePacket() const

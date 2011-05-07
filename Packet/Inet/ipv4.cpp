@@ -235,5 +235,27 @@ uint32_t stringToIPAddress( const std::string &ip )
 	int err = inet_aton( ip.c_str(), (in_addr*) &address );
 	if( err = 0 )
 		return 0;
-	return address;
+	return ntohl(address);
+}
+
+void IPv4::calculateChecksum() 
+{
+	setChecksum(0);
+	uint32_t sum = 0;
+	std::vector< uint8_t > bytes = makePacket().vector();
+
+	for( int i = 0; i < bytes.size(); i +=2 )
+	{
+		uint16_t tmp = bytes[i];
+		tmp <<= 8;
+		tmp |= bytes[i+1];
+		sum += tmp;
+	}
+
+	while( sum >> 16 )
+	{
+		sum = (sum & 0xFFFF) + (sum >> 16);
+	}
+
+	setChecksum(static_cast<uint16_t>( ~sum ) );
 }

@@ -1,7 +1,7 @@
 include ../../global.mk
 
 EXAMPLESOURCE=exampleCode/test.cpp
-EXAMPLEOBJS=$(EXAMPLESOURCE:%.cpp=%.o)
+EXAMPLEOBJS=$(EXAMPLESOURCE:%.cpp=%.o) ../../common/stringUtils.o
 
 CFLAGS=-ggdb -fPIC
 CXXFLAGS=$(CFLAGS)
