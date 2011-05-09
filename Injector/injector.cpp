@@ -26,12 +26,10 @@
 
 Injector::Injector(): handle_(NULL)
 {
-	std::cerr << "Naked\n";
 }
 
 Injector::Injector( const std::string &deviceName ):handle_(NULL)
 {
-	std::cerr << "Constructed" << std::endl;
 	char errbuf[PCAP_ERRBUF_SIZE];
 	dev_.setDevice(deviceName);
 	handle_ = pcap_open_live(dev_.device().c_str(), BUFSIZ, 1, 1000, errbuf);
@@ -45,7 +43,6 @@ Injector::Injector( const std::string &deviceName ):handle_(NULL)
 
 void Injector::setDevice(const std::string &deviceName)
 {
-	std::cerr << "setDevice" << std::endl;
 	char errbuf[PCAP_ERRBUF_SIZE];
 	if( handle_ )
 		pcap_close( handle_ );
@@ -62,7 +59,6 @@ void Injector::setDevice(const std::string &deviceName)
 
 Injector::Injector( const Injector &n ):handle_(NULL)
 {
-	std::cerr << "copied" << std::endl;
 	char errbuf[PCAP_ERRBUF_SIZE];
 	dev_ = n.dev_;
 	
@@ -77,7 +73,6 @@ Injector::Injector( const Injector &n ):handle_(NULL)
 
 Injector& Injector::operator=( const Injector &n )
 {
-	std::cerr << "equal" << std::endl;
 	char errbuf[PCAP_ERRBUF_SIZE];
 	dev_ = n.dev_;
 	if( handle_ )
@@ -124,7 +119,6 @@ void Injector::inject(const PacketBuffer &pb ) const
 
 Injector::~Injector()
 {
-	std::cerr << "FREEING: " << handle_ << std::endl;
 	if( handle_ )
 		pcap_close(handle_);
 }

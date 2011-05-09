@@ -1,24 +1,20 @@
-#include "../../../Test/QUnit.hpp"
-#include "../ethernet.h"
+#include "../../Test/QUnit.hpp"
+#include "../Link/ethernet.h"
 #include <iostream>
 #include <netinet/in.h>
 
-class EthernetTest 
+class PacketTest 
 {
 public:
-	EthernetTest( std::ostream &out, int verboseLevel = QUnit::verbose );
+	PacketTest( std::ostream &out, int verboseLevel = QUnit::verbose );
 
 	int run();
 
 private:
 	QUnit::UnitTest qunit;
 
-	void testIsEthernet();
-
-	void testType();
-
-	void testPacketCreation();
-
 	void testConstruction();
+
+	void testPacketCreations();
 };
 
