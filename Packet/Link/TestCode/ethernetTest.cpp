@@ -141,6 +141,27 @@ void EthernetTest::testConstruction()
 
 	QUNIT_IS_EQUAL( ethernet4.type(), 0x0800 );
 
+	ethernet4.setType( 0xABCD );
+	LinkData* link = new Ethernet;
+	*((Ethernet*)link) = ethernet4;
+
+	destinationMac = ((Ethernet*)link)->destinationMAC();
+	sourceMac = ((Ethernet*)link)->sourceMAC();
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac.mac()[0]) , 0x00 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac.mac()[1]), 0x24 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac.mac()[2]), 0xe8 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac.mac()[3]), 0xa4 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac.mac()[4]), 0x57 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(destinationMac.mac()[5]), 0x5f );
+
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac.mac()[0]), 0xa4 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac.mac()[1]), 0xba );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac.mac()[2]), 0xdb );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac.mac()[3]), 0xf9 );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac.mac()[4]), 0xfc );
+	QUNIT_IS_EQUAL( static_cast<uint16_t>(sourceMac.mac()[5]), 0x6e );
+
+	QUNIT_IS_EQUAL( ((Ethernet*)link)->type(), 0xABCD );
 
 }
 

@@ -48,14 +48,14 @@ class Link : public Encapsulateable
     Link( const Ethernet &e )
     {
       header_ = new Ethernet;
-      *header_ = e;
+      *((Ethernet*)header_) = e;
     }
 
     //! Build a Link from a MACAddress object
     Link( const MACAddress &m )
     {
       header_ = new MACAddress;
-      *header_ = m;
+      *((MACAddress*)header_) = m;
     }
 
     //!copy constructor
@@ -102,7 +102,7 @@ class Link : public Encapsulateable
       if( header_ )
 				delete header_;
       header_ = new T;
-      *header_ = e;
+      *((T*)header_) = e;
     }
 
     //!Makes a PacketBuffer of this Link
