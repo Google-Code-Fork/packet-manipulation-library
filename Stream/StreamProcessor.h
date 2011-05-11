@@ -111,7 +111,7 @@ class StreamProcessor : public Sniffer
 		std::deque< std::string > finishedStreams_;
 		mutable Mutex finishedStreamsMutex_;
 		mutable Mutex sniffingMutex_;
-		bool sniffing_;
+    bool streaming_;
 		mutable Mutex checkingTimeoutsMutex_;
 		bool checkingTimeouts_;
 		uint32_t timeout_; //in seconds

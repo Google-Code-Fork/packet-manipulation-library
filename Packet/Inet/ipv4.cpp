@@ -58,6 +58,7 @@ IPv4::IPv4( const IPv4 &n )
 IPv4& IPv4::operator =( const IPv4 &n )
 {
 	*header_ = *(n.header_);
+  return *this;
 }
 
 uint8_t IPv4::version() const
@@ -232,8 +233,8 @@ std::string ipAddressToString( const IPv4Address &ip )
 uint32_t stringToIPAddress( const std::string &ip )
 {
 	uint32_t address;
-	int err = inet_aton( ip.c_str(), (in_addr*) &address );
-	if( err = 0 )
+  int err = inet_aton( ip.c_str(), ((in_addr*) &address) );
+  if( err == 0 )
 		return 0;
 	return ntohl(address);
 }
@@ -244,7 +245,7 @@ void IPv4::calculateChecksum()
 	uint32_t sum = 0;
 	std::vector< uint8_t > bytes = makePacket().vector();
 
-	for( int i = 0; i < bytes.size(); i +=2 )
+  for( uint32_t i = 0; i < bytes.size(); i +=2 )
 	{
 		uint16_t tmp = bytes[i];
 		tmp <<= 8;

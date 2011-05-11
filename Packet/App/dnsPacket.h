@@ -326,7 +326,7 @@ class DNSPacket : public AppData
     std::vector<uint8_t> encodeDNSRecord( const std::vector< DNSRecord > &responses );
 
 		void formatQuestion( std::vector< uint8_t > &packet, const DNSQuestion &question ) const;
-		void formatRecord( std::vector< uint8_t > &packet, const DNSRecord &record ) const;
+    //void formatRecord( std::vector< uint8_t > &packet, const DNSRecord &record ) const;
 		void formatURL( std::vector< uint8_t > &packet, const std::string &url ) const;
 
   private:

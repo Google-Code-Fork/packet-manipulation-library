@@ -39,6 +39,7 @@ IPv6::IPv6( const IPv6 &n )
 IPv6& IPv6::operator = ( const IPv6 &n )
 {
 	*header_ = *(n.header_);
+  return *this;
 }
 
 uint32_t IPv6::version() const

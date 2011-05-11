@@ -126,6 +126,8 @@ ICMP& ICMP::operator= ( const ICMP &n )
 			delete orginal_;
 		orginal_ = NULL;
 	}
+
+  return *this;
 }
 
 uint8_t ICMP::type() const
@@ -260,10 +262,10 @@ Packet ICMP::orginalPacket() const
 	return pb.buildPacket<Ethernet>( orginal_->makePacket() );
 }
 
-PacketBuffer ICMP::makePacket() const
+/*PacketBuffer ICMP::makePacket() const
 {
 
-}
+}*/
 
 int ICMP::size() const
 {

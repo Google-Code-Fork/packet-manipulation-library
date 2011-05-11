@@ -148,7 +148,7 @@ TCP::TCP( const TCP &n )
   header_ = new struct my_tcp;
   *header_ = *(n.header_);
 
-	for( int i = 0; i < n.options_.size(); ++i )
+  for( uint32_t i = 0; i < n.options_.size(); ++i )
 	{
 		options_.push_back( n.options_[i].copy() );
 	}
@@ -157,6 +157,7 @@ TCP::TCP( const TCP &n )
 TCP& TCP::operator =( const TCP &n )
 {
   *header_ = *(n.header_);
+  return *this;
 }
 
 TCP::~TCP()
@@ -382,9 +383,9 @@ void TCP::setUrgentPointer( uint16_t urgentPointer )
 int TCP::size() const 
 {
   //return static_cast<int>( dataOffset() );
-	int size = 0;
+  uint32_t size = 0;
 	size += sizeof( (*header_) );
-	for( int i = 0; i < options_.size(); ++i )
+  for( uint32_t i = 0; i < options_.size(); ++i )
 	{
 		size += options_.at(i)->length();
 	}

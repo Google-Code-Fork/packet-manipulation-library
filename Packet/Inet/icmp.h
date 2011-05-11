@@ -161,7 +161,7 @@ class ICMP : public InetData
     bool isICMP() const { return true; }
 
 		//! Make a PacketBuffer
-		PacketBuffer makePacket() const;
+    //PacketBuffer makePacket() const;
 
   private:
     //!internal data

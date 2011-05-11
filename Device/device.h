@@ -57,13 +57,13 @@ class Device
 		//!Get device name
 		std::string device() const;
 		//!Get device address
-		std::string address() const;
+    //std::string address() const;
 		//!True if a loopback device
-		bool isLoopback() const;
+    //bool isLoopback() const;
 		//!AF_INET, AF_INET6, etc...
-		std::string addressFamily() const;
+    //std::string addressFamily() const;
 		//!Get device netmask
-		std::string netmask() const; 
+    //std::string netmask() const;
 		//!Returns 1 if it is a device, 0 if it is a pcap file
 		bool isDevice() const;
 		//!Returns 1 if device exists, 0 otherwise

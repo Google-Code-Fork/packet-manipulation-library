@@ -49,6 +49,11 @@ Sniffer::Sniffer():snifferData_( SnifferData( coutMutex_, logMutex_, &log_stream
 	filterData_ = new FilterData ( coutMutex_, logMutex_, &log_stream_ );
 }
 
+Sniffer::~Sniffer()
+{
+  delete filterData_;
+}
+
 /**
     Pop single packet from doubly-ended-queue containing sniffed packets
 */
@@ -67,7 +72,7 @@ void Sniffer::start()
 		return;
   sniffing_=true;
 	lock.unlock();
-	for( int i = 0; i < snifferDevices_.size(); ++ i )
+  for( uint32_t i = 0; i < snifferDevices_.size(); ++ i )
 	{
 		Thread thread;
 		thread.setStartRoutine( run_sniffer );
@@ -89,7 +94,7 @@ void Sniffer::setInputPcapFile( const std::string &pcapFile)
 
 void Sniffer::setInputPcapFiles( const std::vector< std::string > &pcaps )
 {
-	for( int i = 0; i < pcaps.size(); ++i )
+  for( uint32_t i = 0; i < pcaps.size(); ++i )
 	{
 		Device device;
 		device.setDevice( pcaps[i], 0 );
@@ -103,7 +108,7 @@ void Sniffer::setInputPcapFiles( const std::vector< std::string > &pcaps )
 std::vector< std::string > Sniffer::inputDevices( ) const
 {
 	std::vector< std::string > devices;
-	for( int i = 0; i < snifferDevices_.size(); ++i )
+  for( uint32_t i = 0; i < snifferDevices_.size(); ++i )
 	{
 		devices.push_back( snifferDevices_[i].device() );
 	}
@@ -196,6 +201,8 @@ void* run_sniffer(void* data)
 {
 	Sniffer *tempSniffer = (Sniffer*) data;
 	tempSniffer->packetSniffer();
+
+  return NULL;
 }
 
 /**
@@ -304,6 +311,7 @@ void* Sniffer::packetSniffer()
 	
 
 	snifferData_.log( "SnifferOffline Stopping!" );
+  return NULL;
 }
 
 bool Sniffer::sniffing() const 
@@ -337,7 +345,7 @@ void Sniffer::stop()
 	MutexLocker lockSniffer( sniffingMutex_ );
 	numberOfRunningThreads_ = 0;
 	sniffing_ = false;
-	for( int i = 0; i < threads_.size(); ++i )
+  for( uint32_t i = 0; i < threads_.size(); ++i )
 	{
 		threads_[i].stop();
 	}

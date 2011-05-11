@@ -94,6 +94,7 @@ Ethernet& Ethernet::operator =( const Ethernet &n )
 	}
 	header_.protocol = n.header_.protocol;
   vlanTag_ = n.vlanTag_;
+  return *this;
 }
 
 Ethernet::~Ethernet()

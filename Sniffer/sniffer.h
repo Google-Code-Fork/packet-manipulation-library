@@ -37,6 +37,7 @@ class Sniffer
 {
 	public:
 		Sniffer();
+    virtual ~Sniffer();
 		void *packetSniffer();
 		void setInputDevice( const std::string &device );
 		void setInputDevices( const std::vector< std::string > &devices );
@@ -58,8 +59,7 @@ class Sniffer
 		void restart( );
 		void printDevices() const;
 		std::vector< std::string > availableDevices() const;
-		//std::string iptos(u_long in); //?
-		~Sniffer(){ delete filterData_; }
+    //std::string iptos(u_long in); //?
 	
 	
 	private:

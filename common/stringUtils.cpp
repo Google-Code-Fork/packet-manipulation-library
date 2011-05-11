@@ -18,12 +18,13 @@
  * */
 
 #include "stringUtils.h"
+#include <stdint.h>
 
 std::vector< std::string > split( const std::string &string, const char &del )
 {
 	std::vector< std::string > stringList;
 	std::string tmpString;
-	for( int i = 0; i < string.size(); ++i )
+  for( uint32_t i = 0; i < string.size(); ++i )
 	{
 		if( string[i] != del )
 		{
