@@ -20,6 +20,8 @@ DNSRecord& DNSRecord::operator=( const DNSRecord &n )
 	dnsClass_ = n.dnsClass_;
 	timeToLive_ = n.timeToLive_;
 	data_ = n.data_;
+
+  return *this;
 }
 
 std::string DNSRecord::domainName( ) const 

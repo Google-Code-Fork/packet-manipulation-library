@@ -33,17 +33,16 @@ StreamProcessor::StreamProcessor():streaming_( false )
 
 StreamProcessor::~StreamProcessor()
 {
-	~Sniffer();
 }
 
-void StreamProcessor::start() 
+void StreamProcessor::startSniffing()
 {
 	Sniffer::start();
-	MutexLocker lock( streamingMutex_ );
+  MutexLocker lock( sniffingMutex_ );
 	streaming_ = true;
 	lock.unlock();
-	streamThread_.setStartRoutine( run_streamer );
-	streamThread_.start( this );
+  snifferThread_.setStartRoutine( run_streamer );
+  snifferThread_.start( this );
 }
 
 void* StreamProcessor::streamer( )
@@ -52,13 +51,13 @@ void* StreamProcessor::streamer( )
 	while( streaming_ )
 	{
 		Packet p = popPacket();
-		std::string streamName = buildStreamName( p );
+//		std::string streamName = buildStreamName( p );
 	}
 }
 
-void StreamProcessor::stop() 
+void StreamProcessor::stopSniffing()
 {
-	MutexLocker lock( streamingMutex_ );
+  MutexLocker lock( sniffingMutex_ );
 	streaming_ = false;
 }
 

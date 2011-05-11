@@ -261,25 +261,25 @@ std::vector< uint8_t > Arp::data( ) const
 	data.push_back( static_cast<uint8_t>( header_.opcode & 0x00FF));
 
 	std::vector< uint8_t > tmp = senderMacAddress_.vector();
-  for( int i = 0; i < tmp.size(); ++i )
+  for( uint32_t i = 0; i < tmp.size(); ++i )
 	{
 		data.push_back( tmp[i] );
 	}
 
 	tmp = senderIPAddress_.vector();
-	for( int i = 0; i < tmp.size(); ++i )
+  for( uint32_t i = 0; i < tmp.size(); ++i )
 	{
 		data.push_back( tmp[i] );
 	}
 
 	tmp = targetMacAddress_.vector();
-	for( int i = 0; i < tmp.size(); ++i )
+  for( uint32_t i = 0; i < tmp.size(); ++i )
 	{
 		data.push_back( tmp[i] );
 	}
 
 	tmp = targetIPAddress_.vector();
-	for( int i = 0; i < tmp.size(); ++i )
+  for( uint32_t i = 0; i < tmp.size(); ++i )
 	{
 		data.push_back( tmp[i] );
 	}

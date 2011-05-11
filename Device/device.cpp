@@ -21,7 +21,7 @@
 /*****************************************************************
 Last Edited:
 Apr 6, 2011  --- Jeff Scaparra
-
+May 11, 2011 --- Jeff Scaparra
 
 
 *****************************************************************/
@@ -65,6 +65,7 @@ bool Device::isValid() const
         return deviceslookup.isValid(this->device());
 }
 
+/*
 bool Device::isLoopback() const
 {
 	DevicesLookup lookup;
@@ -85,6 +86,7 @@ std::string Device::netmask() const
 {
 
 }
+*/
 
 Device::~Device()
 {

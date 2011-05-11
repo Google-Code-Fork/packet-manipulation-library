@@ -49,6 +49,7 @@ UDP::UDP( const UDP &n )
 UDP& UDP::operator =( const UDP &n )
 {
 	*header_ = *(n.header_);
+  return *this;
 }
 
 UDP::~UDP()
@@ -127,7 +128,7 @@ void UDP::calculateChecksum( const uint32_t &sourceAddress, const uint32_t
 	sum += datalength;
 
 	std::vector< uint8_t > header = makePacket().vector();
-	for( int i = 0; i < header.size(); i +=2 )
+  for( uint32_t i = 0; i < header.size(); i +=2 )
 	{
 		uint16_t tmp = header[i];
 		tmp <<= 8;
@@ -139,7 +140,7 @@ void UDP::calculateChecksum( const uint32_t &sourceAddress, const uint32_t
 	if( data.size() % 2 )
 		tmpData.push_back( 0x00 );
 
-	for( int i = 0; i < tmpData.size(); i += 2 )
+  for( uint32_t i = 0; i < tmpData.size(); i += 2 )
 	{
 		uint16_t tmp = tmpData[i];
 		tmp <<= 8;

@@ -129,7 +129,7 @@ void DNSPacket::init( std::vector<uint8_t> packet )
 			return;
 			
     //query type
-		if( index + 1 < packet.size() )
+    if( static_cast<uint32_t>( index + 1 ) < packet.size() )
 		{
 			tmp = packet.at(index);
 			tmp <<=8;
@@ -140,7 +140,7 @@ void DNSPacket::init( std::vector<uint8_t> packet )
 			return;
 
     //query class
-		if( index + 2 < packet.size() )
+    if( static_cast<uint32_t>(index + 2) < packet.size() )
 		{
 			tmp = packet.at( ++index );
 			tmp <<= 8;
@@ -151,7 +151,7 @@ void DNSPacket::init( std::vector<uint8_t> packet )
 			return;
 
     questions_.push_back( question );
-		if( index + 1 < packet.size() )
+    if( static_cast<uint32_t>(index + 1) < packet.size() )
 			++index;
 		else
 			return;
@@ -195,7 +195,7 @@ DNSRecord DNSPacket::dnsResponseParser( std::vector<uint8_t> packet, uint16_t &i
 
   //std::cerr << "domain name: " << response.domainName << std::endl;
   //dns type
-	if( index + 2 < packet.size() )
+  if( static_cast<uint32_t>(index + 2) < packet.size() )
 	{
 		tmp = packet.at(index);
 		tmp <<= 8;
@@ -209,7 +209,7 @@ DNSRecord DNSPacket::dnsResponseParser( std::vector<uint8_t> packet, uint16_t &i
 	}
 
   //dnsClass
-	if( index + 2 < packet.size() )
+  if( static_cast<uint32_t>(index + 2) < packet.size() )
 	{
 		tmp = packet.at( ++index );
 		tmp <<= 8;
@@ -223,7 +223,7 @@ DNSRecord DNSPacket::dnsResponseParser( std::vector<uint8_t> packet, uint16_t &i
 	}
 
   //timeToLive 4 bytes
-	if( index + 4 < packet.size() )
+  if( static_cast<uint32_t>(index + 4) < packet.size() )
 	{
 		tmp = packet.at( ++index );
 		tmp <<= 8;
@@ -243,7 +243,7 @@ DNSRecord DNSPacket::dnsResponseParser( std::vector<uint8_t> packet, uint16_t &i
   //resource data length
 
 	uint16_t dataLength = 0;
-	if( index + 2 < packet.size() )
+  if( static_cast<uint32_t>(index + 2) < packet.size() )
 	{
 		tmp = packet.at( ++index );
 		tmp <<= 8;
@@ -302,7 +302,7 @@ std::string DNSPacket::domainParser( std::vector<uint8_t> packet, uint16_t &inde
     //check for compression
     if( size & 0xC0 ) //compression used b/c two high bits on.
     {
-			if( index + 2 < packet.size() )
+      if( static_cast<uint32_t>( index + 2 ) < packet.size() )
 			{
 				uint16_t offset = size & 0x3F;
 				offset <<= 8;
@@ -313,7 +313,7 @@ std::string DNSPacket::domainParser( std::vector<uint8_t> packet, uint16_t &inde
       return domain;
     }
 
-		if( index + size + 1 < packet.size() )
+    if( static_cast<uint32_t>(index + size + 1) < packet.size() )
 		{
 			for( int k = 0; k < size; ++k )
 			{
@@ -332,7 +332,7 @@ std::string DNSPacket::domainParser( std::vector<uint8_t> packet, uint16_t &inde
     if( packet.at(index) != 0 )
       domain.push_back( '.' );
 		
-		if( index + 1 >= packet.size() )
+    if( static_cast<uint32_t>(index + 1) >= packet.size() )
 			return domain;
   }
   index++;
@@ -377,26 +377,28 @@ std::vector< uint8_t > DNSPacket::data() const
 
 	for( int i = 0; i < numAnswers; ++i )
 	{
-		formatRecord( packet, answers_[i] );
+//		formatRecord( packet, answers_[i] );
 	}
 
 	for( int i = 0; i < numAuthority; ++i )
 	{
-		formatRecord( packet, authorities_[i] );
+  //	formatRecord( packet, authorities_[i] );
 	}
 
 	for( int i = 0; i < numAdditional; ++i )
 	{
-		formatRecord( packet, additionals_[i] );
+    //formatRecord( packet, additionals_[i] );
 	}
 
 	return packet;
 }
 
-void DNSPacket::formatRecord( std::vector< uint8_t > &packet, const DNSRecord &record ) const
+
+/*void DNSPacket::formatRecord( std::vector< uint8_t > &packet, const DNSRecord &record ) const
 {
 
-}
+
+}*/
 
 void DNSPacket::formatQuestion( std::vector< uint8_t > &packet, const DNSQuestion &question ) const
 {
