@@ -38,11 +38,11 @@ class FilterData : public BaseData
 		void pushPacket( Packet packet );
 		Packet popPacket( );
 		int size();
-		void setPcapPointer( pcap_t* pointer );
-		pcap_t* getPcapPointer();
+		//void setPcapPointer( pcap_t* pointer );
+		//pcap_t* getPcapPointer();
 
 	private:
-		pcap_t* pcapPointer_;
+		//pcap_t* pcapPointer_;
 		std::deque< Packet > incommingPackets_;
 		Mutex incommingPacketsMutex_;
 		Semaphore semaphore_;

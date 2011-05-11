@@ -68,15 +68,15 @@ int FilterData::size()
 /**
 	Set current pcap pointer 
 */
-void FilterData::setPcapPointer( pcap_t* pointer )
-{
-	pcapPointer_ = pointer;
-}
+//void FilterData::setPcapPointer( pcap_t* pointer )
+//{
+//	pcapPointer_ = pointer;
+//}
 
 /**
 	Return current pcap pointer
 */
-pcap_t* FilterData::getPcapPointer( )
-{
-	return pcapPointer_;
-}
+//pcap_t* FilterData::getPcapPointer( )
+//{
+//	return pcapPointer_;
+//}

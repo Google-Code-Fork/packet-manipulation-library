@@ -44,10 +44,9 @@ const uint32_t Sniffer::DEFAULT_SNAP_LENGTH = 65535;
 	Constructor to initialize member data and base class data
 */
 Sniffer::Sniffer():snifferData_( SnifferData( coutMutex_, logMutex_, &log_stream_ ) ), sniffing_(false), snapLength_(
-		DEFAULT_SNAP_LENGTH)
+		DEFAULT_SNAP_LENGTH), numberOfRunningThreads_(0)
 {
 	filterData_ = new FilterData ( coutMutex_, logMutex_, &log_stream_ );
-	setStartRoutine(run_sniffer);
 }
 
 /**
@@ -64,9 +63,18 @@ Packet Sniffer::popPacket()
 void Sniffer::start()
 {
 	MutexLocker lock( sniffingMutex_ );
+	if( sniffing_ ) //Don't start more threads if already sniffing
+		return;
   sniffing_=true;
 	lock.unlock();
-	Thread::start(this);
+	for( int i = 0; i < snifferDevices_.size(); ++ i )
+	{
+		Thread thread;
+		thread.setStartRoutine( run_sniffer );
+		thread.start( this );
+		threads_.push_back( thread );
+		log( "Started sniffer " );
+	}
 }
 
 /**
@@ -74,15 +82,32 @@ void Sniffer::start()
 */
 void Sniffer::setInputPcapFile( const std::string &pcapFile)
 {
-	inDev_.setDevice( pcapFile, 0);
+	Device device;
+	device.setDevice( pcapFile, 0);
+	snifferDevices_.push_back( device );
+}
+
+void Sniffer::setInputPcapFiles( const std::vector< std::string > &pcaps )
+{
+	for( int i = 0; i < pcaps.size(); ++i )
+	{
+		Device device;
+		device.setDevice( pcaps[i], 0 );
+		snifferDevices_.push_back( device );
+	}
 }
 
 /**
 	Return input device name used for packet sniffing
 */
-std::string Sniffer::inputDevice( ) const
+std::vector< std::string > Sniffer::inputDevices( ) const
 {
-	return inDev_.device();
+	std::vector< std::string > devices;
+	for( int i = 0; i < snifferDevices_.size(); ++i )
+	{
+		devices.push_back( snifferDevices_[i].device() );
+	}
+	return devices;
 }
 
 /**
@@ -123,7 +148,18 @@ void Sniffer::log( const std::string &message )
 */
 void Sniffer::setInputDevice( const std::string &device )
 {
-	inDev_.setDevice( device , 1);
+	snifferDevices_.clear();
+	addInputDevice( device );
+}
+
+/**
+ * Adds Device to list of input devices
+ */
+void Sniffer::addInputDevice( const std::string &deviceName )
+{
+	Device device;
+	device.setDevice( deviceName , 1);
+	snifferDevices_.push_back( device );
 }
 
 /**
@@ -131,10 +167,11 @@ void Sniffer::setInputDevice( const std::string &device )
 */
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture )
 {
-	FilterData* filterData = (FilterData*)args;
+	ThreadData* threadData = (ThreadData*)args;
+	FilterData* filterData = threadData->filterData;
 	if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
 	{
-		pcap_breakloop( filterData->getPcapPointer() );
+		pcap_breakloop( threadData->pcapPointer );
 	}
 	try
 	{
@@ -169,22 +206,26 @@ void* Sniffer::packetSniffer()
 {
 	char errbuf[PCAP_ERRBUF_SIZE];
 
-	uint8_t* args = (uint8_t*)filterData_;
+	ThreadData threadData;
+	uint8_t* args = (uint8_t*)&threadData;
 
+	MutexLocker lock( threadNumMutex_ );
+	Device inDev = snifferDevices_[ numberOfRunningThreads_++ ];
+  lock.unlock();
+	
 	snifferData_.log( "SnifferOffline Started!" ); 
-	snifferData_.log( "Opening File: " + inDev_.device() );
+	snifferData_.log( "Opening File: " + inDev.device() );
 
-	// 65535 from pcap man page...
 	pcap_t* pcap_ptr;
-	//if(inPcapFile_.size())
-	if(!inDev_.isDevice())
-		pcap_ptr = pcap_open_offline( (inDev_.device()).c_str(), errbuf );
+
+	if(!inDev.isDevice())
+		pcap_ptr = pcap_open_offline( (inDev.device()).c_str(), errbuf );
 	else
 	{
-		if( inDev_.device() == "any" )
+		if( inDev.device() == "any" )
 			pcap_ptr = pcap_open_live( "any", snapLength_, 1, 500, errbuf );
 		else
-			pcap_ptr = pcap_open_live( (inDev_.device()).c_str(), snapLength_, 1, 500, errbuf );
+			pcap_ptr = pcap_open_live( (inDev.device()).c_str(), snapLength_, 1, 500, errbuf );
 	}
 
 	if ( pcap_ptr == NULL )
@@ -245,7 +286,8 @@ void* Sniffer::packetSniffer()
 	{
 		int err = -2;//this is the return value of pcap_loop if stoped with pcap_breakloop()
 
-		filterData_->setPcapPointer( pcap_ptr );
+		threadData.filterData = filterData_;
+		threadData.pcapPointer = pcap_ptr;
 
 		while( err == -2 )
 		{
@@ -256,7 +298,7 @@ void* Sniffer::packetSniffer()
 		}
 	}
 
-	MutexLocker lock( sniffingMutex_ );
+	MutexLocker lock2( sniffingMutex_ );
 	sniffing_ = false;
 	filterData_->pushPacket( Packet() );
 	
@@ -287,4 +329,22 @@ void Sniffer::setSnapLength( const uint32_t &snaplen )
 uint32_t Sniffer::snapLength( ) const
 {
 	return snapLength_;
+}
+
+void Sniffer::stop() 
+{
+	MutexLocker lockThreads( threadNumMutex_ );
+	MutexLocker lockSniffer( sniffingMutex_ );
+	numberOfRunningThreads_ = 0;
+	sniffing_ = false;
+	for( int i = 0; i < threads_.size(); ++i )
+	{
+		threads_[i].stop();
+	}
+}
+
+void Sniffer::restart()
+{
+	stop();
+	start();
 }
