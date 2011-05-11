@@ -61,7 +61,7 @@ bool Device::isDevice() const
 
 bool Device::isValid() const
 {
-        DevicesLookup::DevicesLookup deviceslookup;
+        DevicesLookup deviceslookup;
         return deviceslookup.isValid(this->device());
 }
 
