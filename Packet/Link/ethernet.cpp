@@ -72,7 +72,8 @@ Ethernet::Ethernet( const std::vector< uint8_t > &bytes )
 		buff[i] = bytes[i];
   if( size < EthernetSize )
     throw std::runtime_error( "Not enough to generate ethernet header" );
-  header_ = *((EthernetHeader*)buff);
+  //header_ = *((EthernetHeader*)buff);
+  header_ = *(reinterpret_cast<EthernetHeader*>(buff));
   if( header_.protocol == htons(ethernetProtocol::ETH_P_8021Q) )
   {
     //check to make sure the buff is big enough
