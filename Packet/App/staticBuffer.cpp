@@ -67,7 +67,7 @@ void StaticBuffer::setString( const std::string &s )
 	{
 		str_[i] = s[i];
 	}
-	str_[size_ - 1] = NULL;
+        str_[size_ - 1] = 0;
 }
 
 uint64_t StaticBuffer::memorySize() const
@@ -111,7 +111,7 @@ void StaticBuffer::setData( const std::vector< uint8_t > &b )
 	{
 		str_[i] = b[i];
 	}
-	str_[size_] = NULL;
+        str_[size_] = 0;
 }
 
 std::vector< uint8_t > StaticBuffer::toVector() const
