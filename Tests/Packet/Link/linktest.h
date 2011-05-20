@@ -2,10 +2,10 @@
 #define LINKTEST_H
 #include <QtCore/QString>
 #include <QtTest/QtTest>
-#include "../../../../Packet/Link/ethernet.h"
-#include "../../../../Packet/Link/linkData.h"
-#include "../../../../Packet/Link/mac.h"
-#include "../../../../Packet/Link/link.h"
+#include "../../../Packet/Link/ethernet.h"
+#include "../../../Packet/Link/linkData.h"
+#include "../../../Packet/Link/mac.h"
+#include "../../../Packet/Link/link.h"
 
 class LinkTest : public QObject
 {
