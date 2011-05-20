@@ -9,7 +9,7 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += Packet/Link/Ethernet/tst_ethernettest.cpp \
+SOURCES += Packet/Link/tst_ethernettest.cpp \
         main.cpp \
     ../common/threads.cpp \
     ../common/stringUtils.cpp \
@@ -44,13 +44,15 @@ SOURCES += Packet/Link/Ethernet/tst_ethernettest.cpp \
     ../Sniffer/sniffer.cpp \
     ../Sniffer/filterData.cpp \
     ../Sniffer/baseData.cpp \
-    Packet/Link/Ethernet/linktest.cpp \
-    Packet/Link/Ethernet/mactest.cpp
+    Packet/Link/linktest.cpp \
+    Packet/Link/mactest.cpp \
+    Packet/App/arptest.cpp \
+    Packet/App/rawtest.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    Packet/Link/Ethernet/tst_ethernettest.h \
+    Packet/Link/tst_ethernettest.h \
     ../common/threads.h \
     ../common/stringUtils.h \
     ../common/smartPtr.h \
@@ -96,7 +98,9 @@ HEADERS += \
     ../Sniffer/filterData.h \
     ../Sniffer/constants.h \
     ../Sniffer/baseData.h \
-    Packet/Link/Ethernet/linktest.h \
-    Packet/Link/Ethernet/mactest.h
+    Packet/Link/linktest.h \
+    Packet/Link/mactest.h \
+    Packet/App/arptest.h \
+    Packet/App/rawtest.h
 #CXXFLAGS += -I../Packet/Link -I../Packet -I../Packet/Trans -I../Packet/App -I../Packet/Inet
 LIBS += -lpcap
