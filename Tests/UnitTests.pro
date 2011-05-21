@@ -47,7 +47,9 @@ SOURCES += Packet/Link/tst_ethernettest.cpp \
     Packet/Link/linktest.cpp \
     Packet/Link/mactest.cpp \
     Packet/App/arptest.cpp \
-    Packet/App/rawtest.cpp
+    Packet/App/rawtest.cpp \
+    Packet/Trans/tcptest.cpp \
+    Packet/Trans/udptest.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
@@ -101,6 +103,8 @@ HEADERS += \
     Packet/Link/linktest.h \
     Packet/Link/mactest.h \
     Packet/App/arptest.h \
-    Packet/App/rawtest.h
+    Packet/App/rawtest.h \
+    Packet/Trans/tcptest.h \
+    Packet/Trans/udptest.h
 #CXXFLAGS += -I../Packet/Link -I../Packet -I../Packet/Trans -I../Packet/App -I../Packet/Inet
 LIBS += -lpcap

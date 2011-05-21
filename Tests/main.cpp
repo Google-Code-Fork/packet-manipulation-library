@@ -4,22 +4,34 @@
 #include "Packet/Link/mactest.h"
 #include "Packet/App/arptest.h"
 #include "Packet/App/rawtest.h"
+#include "Packet/Trans/tcptest.h"
+#include "Packet/Trans/udptest.h"
 #include <QTest>
 
 int main()
 {
+  int returnCode = 0;
+
   EthernetTest ethernetTest;
-  QTest::qExec( &ethernetTest );
+  returnCode += QTest::qExec( &ethernetTest );
 
   LinkTest linkTest;
-  QTest::qExec( &linkTest );
+  returnCode += QTest::qExec( &linkTest );
 
   MacTest macTest;
-  QTest::qExec( &macTest );
+  returnCode += QTest::qExec( &macTest );
 
   ArpTest arpTest;
-  QTest::qExec( &arpTest );
+  returnCode += QTest::qExec( &arpTest );
 
   RawTest rawTest;
-  QTest::qExec( &rawTest );
+  returnCode += QTest::qExec( &rawTest );
+
+  TcpTest tcpTest;
+  returnCode += QTest::qExec( &tcpTest );
+
+  UdpTest udpTest;
+  returnCode += QTest::qExec( &udpTest );
+
+  return returnCode;
 }
