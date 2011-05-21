@@ -52,7 +52,8 @@ SOURCES += Packet/Link/tst_ethernettest.cpp \
     Packet/Trans/udptest.cpp \
     Packet/Inet/ipv4test.cpp \
     Packet/Inet/icmptest.cpp \
-    Packet/Inet/ipv6test.cpp
+    Packet/Inet/ipv6test.cpp \
+    Packet/packettest.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
@@ -111,6 +112,7 @@ HEADERS += \
     Packet/Trans/udptest.h \
     Packet/Inet/ipv4test.h \
     Packet/Inet/icmptest.h \
-    Packet/Inet/ipv6test.h
+    Packet/Inet/ipv6test.h \
+    Packet/packettest.h
 #CXXFLAGS += -I../Packet/Link -I../Packet -I../Packet/Trans -I../Packet/App -I../Packet/Inet
 LIBS += -lpcap
