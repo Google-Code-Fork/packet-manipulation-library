@@ -6,6 +6,9 @@
 #include "Packet/App/rawtest.h"
 #include "Packet/Trans/tcptest.h"
 #include "Packet/Trans/udptest.h"
+#include "Packet/Inet/ipv4test.h"
+#include "Packet/Inet/icmptest.h"
+#include "Packet/Inet/ipv6test.h"
 #include <QTest>
 
 int main()
@@ -32,6 +35,16 @@ int main()
 
   UdpTest udpTest;
   returnCode += QTest::qExec( &udpTest );
+
+  Ipv4Test ipv4Test;
+  returnCode += QTest::qExec( &ipv4Test );
+
+  IcmpTest icmpTest;
+  returnCode += QTest::qExec( &icmpTest );
+
+  Ipv6Test ipv6Test;
+  returnCode += QTest::qExec( &ipv6Test );
+
 
   return returnCode;
 }
