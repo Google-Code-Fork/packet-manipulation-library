@@ -9,6 +9,7 @@
 #include "Packet/Inet/ipv4test.h"
 #include "Packet/Inet/icmptest.h"
 #include "Packet/Inet/ipv6test.h"
+#include "Packet/packettest.h"
 #include <QTest>
 
 int main()
@@ -45,6 +46,8 @@ int main()
   Ipv6Test ipv6Test;
   returnCode += QTest::qExec( &ipv6Test );
 
+  PacketTest packetTest;
+  returnCode += QTest::qExec( &packetTest );
 
   return returnCode;
 }

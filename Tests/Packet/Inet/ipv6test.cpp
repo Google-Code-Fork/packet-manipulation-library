@@ -19,3 +19,4 @@ void Ipv6Test::testPacketCreation()
   QEXPECT_FAIL( "", "IPv6 Needs some work", Continue );
   QCOMPARE( ipv6.version(), 6U );
 }
+

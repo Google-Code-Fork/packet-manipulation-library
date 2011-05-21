@@ -1,4 +1,7 @@
 #include "udptest.h"
+#include <QtCore/QString>
+#include <QtTest/QtTest>
+#include "../../../Packet/Trans/udp.h"
 
 UdpTest::UdpTest(QObject *parent) :
     QObject(parent)
