@@ -142,4 +142,9 @@ injector_header_files.path = /usr/local/include/PacMan/Injector/
 common_header_files.files = $$COMMON_HEADERS
 common_header_files.path = /usr/local/include/PacMan/common/
 
-INSTALLS += sniffer_header_files trans_header_files link_header_files inet_header_files app_header_files packet_header_files device_header_files injector_header_files common_header_files
+pacman_lib.files = libPacMan.so libPacMan.so.1 libPacMan.so.1.0 libPacMan.so.1.0.0
+pacman_lib.path = /usr/lib/
+
+INSTALLS += sniffer_header_files trans_header_files link_header_files inet_header_files app_header_files packet_header_files device_header_files injector_header_files common_header_files pacman_lib
+
+QMAKE_CLEAN += libPacMan.so*
