@@ -94,3 +94,7 @@ HEADERS += \
     Sniffer/baseData.h
 
 OTHER_FILES +=
+
+header_files.files =  $$HEADERS
+header_files.path = /usr/local/include/PacMan/
+INSTALLS += header_files
