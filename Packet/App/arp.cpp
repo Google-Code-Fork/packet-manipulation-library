@@ -149,7 +149,7 @@ void Arp::init( const std::vector< uint8_t > &packet )
 			buff.push_back( packet[index + i] );
 		}
 		targetIPAddress_.setBuffer( buff );
-		index += header_.protocolSize;
+    //index += header_.protocolSize; //not needed as this is the end of the arp portion
 	}
 }
 

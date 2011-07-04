@@ -18,6 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef LIBPCAP_SNIFFER_H
+#define LIBPCAP_SNIFFER_H
+
 #include "snifferData.h"
 #include "filterData.h"
 #include "../Device/device.h"
@@ -84,4 +87,4 @@ class Sniffer
 		mutable Mutex threadNumMutex_;
 
 };
-
+#endif

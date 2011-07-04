@@ -44,13 +44,22 @@ SOURCES += \
     Sniffer/snifferData.cpp \
     Sniffer/sniffer.cpp \
     Sniffer/filterData.cpp \
-    Sniffer/baseData.cpp
+    Sniffer/baseData.cpp \
+    #Stream/tcpStream.cpp \
+    #Stream/StreamProcessor.cpp \
+    common/pthreaderrors.cpp \
+    ArpAgent/arpagent.cpp \
+    ArpAgent/arpcache.cpp \
+    ArpAgent/arplistener.cpp \
+    ArpAgent/arprequestor.cpp \
+    Packet/Inet/ipv4address.cpp
 
 COMMON_HEADERS = \
     common/threads.h \
     common/stringUtils.h \
     common/smartPtr.h \
-    common/helper.h 
+    common/helper.h \
+    common/pthreaderrors.h
 
 DEVICE_HEADERS = \
     Device/devicesLookup.h \
@@ -75,6 +84,7 @@ APP_HEADERS = \
     Packet/App/app.h 
 
 INET_HEADERS = \
+    Packet/Inet/ipv4address.h \
     Packet/Inet/ipv6Address.h \
     Packet/Inet/ipv6.h \
     Packet/Inet/ipv4.h \
@@ -109,6 +119,12 @@ SNIFFER_HEADERS = \
     Sniffer/constants.h \
     Sniffer/baseData.h
 
+ARPAGENT_HEADERS = \
+    ArpAgent/arpagent.h \
+    ArpAgent/arpcache.h \
+    ArpAgent/arplistener.h \
+    ArpAgent/arprequestor.h
+
 HEADERS += \
 	  $$COMMON_HEADERS \
 		$$DEVICE_HEADERS \
@@ -118,7 +134,12 @@ HEADERS += \
 		$$INET_HEADERS \
 		$$LINK_HEADERS \
     $$TRANS_HEADERS \
-		$$SNIFFER_HEADERS
+    $$SNIFFER_HEADERS \
+    $$ARPAGENT_HEADERS \
+    #Stream/Stream.h \
+    #Stream/tcpStream.h \
+    #Stream/StreamProcessor.h \
+    common/pthreaderrors.h \
 
 
 OTHER_FILES +=
@@ -141,10 +162,12 @@ injector_header_files.files = $$INJECTOR_HEADERS
 injector_header_files.path = /usr/local/include/PacMan/Injector/
 common_header_files.files = $$COMMON_HEADERS
 common_header_files.path = /usr/local/include/PacMan/common/
-
+arpagent_header_files.files = $$ARPAGENT_HEADERS
+arpagent_header_files.path = /usr/local/include/PacMan/ArpAgent/
 pacman_lib.files = libPacMan.so libPacMan.so.1 libPacMan.so.1.0 libPacMan.so.1.0.0
 pacman_lib.path = /usr/lib/
 
-INSTALLS += sniffer_header_files trans_header_files link_header_files inet_header_files app_header_files packet_header_files device_header_files injector_header_files common_header_files pacman_lib
+INSTALLS += sniffer_header_files trans_header_files link_header_files inet_header_files app_header_files \
+ packet_header_files device_header_files injector_header_files common_header_files arpagent_header_files pacman_lib
 
 QMAKE_CLEAN += libPacMan.so*

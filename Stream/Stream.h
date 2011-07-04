@@ -24,14 +24,16 @@
 
 #include <string>
 #include "../Packet/packet.h"
+#include <time.h>
 
 class Stream
 {
 	public:
-	Stream();
-	virtual ~Stream();
-	virtual std::string name( ) const;
-	virtual void processPacket( const Packet &p );
+  Stream() {};
+  virtual ~Stream() {};
+  virtual std::string name( ) const;
+  virtual void processPacket( const Packet &p );
+  virtual time_t lastAccess() const;
 };
 
 #endif

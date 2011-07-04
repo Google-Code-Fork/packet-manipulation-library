@@ -28,6 +28,7 @@ SOURCES += Packet/Link/tst_ethernettest.cpp \
     ../Packet/App/dnsPacket.cpp \
     ../Packet/App/arp.cpp \
     ../Packet/App/app.cpp \
+    ../Packet/Inet/ipv4address.cpp \
     ../Packet/Inet/ipv6Address.cpp \
     ../Packet/Inet/ipv6.cpp \
     ../Packet/Inet/ipv4.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     ../Packet/App/arp.h \
     ../Packet/App/appData.h \
     ../Packet/App/app.h \
+    ../Packet/Inet/ipv4address.h \
     ../Packet/Inet/ipv6Address.h \
     ../Packet/Inet/ipv6.h \
     ../Packet/Inet/ipv4.h \
@@ -114,5 +116,6 @@ HEADERS += \
     Packet/Inet/icmptest.h \
     Packet/Inet/ipv6test.h \
     Packet/packettest.h
-#CXXFLAGS += -I../Packet/Link -I../Packet -I../Packet/Trans -I../Packet/App -I../Packet/Inet
-LIBS += -lpcap
+CXXFLAGS += -pthread
+LIBS += -lpcap -lpthread
+LDFLAGS += -pthread

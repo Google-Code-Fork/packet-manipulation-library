@@ -30,7 +30,9 @@
  */
 
 #include "devicesLookup.h"
-
+#include <string>
+#include <iostream>
+#include <stdio.h>
 
 DevicesLookup::DevicesLookup()
 {
@@ -68,7 +70,7 @@ pcap_if_t* DevicesLookup::operator[](const std::string &name)
 
 DevicesLookup::~DevicesLookup()
 {
-	std::cout << "Freeing the device list..." << std::endl;
+  //std::cout << "Freeing the device list..." << std::endl;
 	pcap_freealldevs(alldevs_);		/* Free the device list */
 }
 
@@ -159,4 +161,212 @@ std::string DevicesLookup::iptos(const uint32_t &in) const
 	<< "." << (unsigned int) pByte[2]
 	<< "." << (unsigned int) pByte[3] << std::flush;
 	return output.str();
+}
+
+std::string DevicesLookup::exec(const char *cmd) const
+{
+  FILE* pipe = popen( cmd, "r" );
+  if( !pipe )
+    return "Error";
+  char buffer[128];
+  std::string result = "";
+  while( !feof(pipe) )
+  {
+    if( fgets( buffer, 128, pipe ) != NULL )
+      result += buffer;
+  }
+  pclose( pipe );
+  return result;
+}
+
+std::vector< std::string > DevicesLookup::devicesAvailable() const
+{
+  std::vector< std::string > results;
+  std::string deviceName = "";
+
+  for(pcap_if_t* dev=alldevs_;dev != NULL;dev=dev->next)
+  {
+     deviceName = dev->name;
+     results.push_back( deviceName );
+  }
+  return results;
+}
+
+std::string DevicesLookup::gateway() const
+{
+  std::string cmd = "ip route | awk '/via/ {print $3}'";
+  return exec( cmd.c_str() );
+}
+
+std::string DevicesLookup::macAddress(const std::string &device) const
+{
+  std::string cmd = "ifconfig " + device + " | grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'";
+  return exec( cmd.c_str() );
+}
+
+std::string DevicesLookup::netmask(const std::string &device, const uint32_t &family) const
+{
+  std::string netmask = "";
+  pcap_if_t* dev = 0;
+  for(dev=alldevs_; dev != NULL; dev=dev->next)
+  {
+     if( dev->name == device )
+       break;
+  }
+
+  for(pcap_addr_t *addrEl=dev->addresses;addrEl != NULL;addrEl=addrEl->next)
+  {
+    if( addrEl->addr && addrEl->addr->sa_family == family )//Needed incase of a tun interface
+    {
+      switch(addrEl->addr->sa_family)
+      {
+        case AF_INET:
+          if (addrEl->netmask)
+              netmask = iptos(((struct sockaddr_in *)addrEl->netmask)->sin_addr.s_addr);
+          break;
+        case AF_INET6:
+          //TODO: add ipv6 support
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  return netmask;
+}
+
+std::vector< std::string > DevicesLookup::addressFamilies(const std::string &device) const
+{
+  std::vector< std::string > results;
+  pcap_if_t* dev = 0;
+  for(dev=alldevs_; dev != NULL; dev=dev->next)
+  {
+     if( dev->name == device )
+       break;
+  }
+
+  for(pcap_addr_t *addrEl=dev->addresses;addrEl != NULL;addrEl=addrEl->next)
+  {
+    if( addrEl->addr )//Needed incase of a tun interface
+    {
+      switch(addrEl->addr->sa_family)
+      {
+      case AF_INET:
+        results.push_back( "AF_INET" );
+        break;
+      case AF_INET6:
+        results.push_back( "AF_INET6" );
+        break;
+      case AF_UNIX: //Same as AF_LOCAL and AF_FILE
+        results.push_back( "AF_UNIX" );
+        break;
+      case AF_APPLETALK:
+        results.push_back( "AF_APPLETALK" );
+        break;
+      case AF_IPX:
+        results.push_back("AF_IPX");
+        break;
+      case AF_UNSPEC:
+        results.push_back("AF_UNSPEC");
+        break;
+      case AF_AX25:
+        results.push_back( "AF_AX25" );
+        break;
+      case AF_NETROM:
+        results.push_back( "AF_NETROM" );
+        break;
+      case AF_BRIDGE:
+        results.push_back( "AF_BRIDGE" );
+        break;
+      case AF_ATMPVC:
+        results.push_back( "AF_ATMPVC" );
+        break;
+      case AF_X25:
+        results.push_back( "AF_X25" );
+        break;
+      case AF_ROSE:
+        results.push_back( "AF_ROSE" );
+        break;
+      case AF_DECnet:
+        results.push_back( "AF_DECnet" );
+        break;
+      case AF_NETBEUI:
+        results.push_back( "AF_NETBEUI" );
+        break;
+      case AF_SECURITY:
+        results.push_back( "AF_SECURITY" );
+        break;
+      case AF_KEY:
+        results.push_back( "AF_KEY" );
+        break;
+      case AF_NETLINK: //same a AF_ROUTE
+        results.push_back( "AF_NETLINK" );
+        break;
+      case AF_PACKET:
+        results.push_back( "AF_PACKET" );
+        break;
+      case AF_ASH:
+        results.push_back( "AF_ASH" );
+        break;
+      case AF_ECONET:
+        results.push_back( "AF_ECONET" );
+        break;
+      case AF_ATMSVC:
+        results.push_back( "AF_ATMSVC" );
+        break;
+      case AF_SNA:
+        results.push_back( "AF_SNA" );
+        break;
+      case AF_IRDA:
+        results.push_back( "AF_IRDA" );
+        break;
+      case AF_PPPOX:
+        results.push_back( "AF_PPPOX" );
+        break;
+      case AF_WANPIPE:
+        results.push_back( "AF_WANPIPE" );
+        break;
+      case AF_BLUETOOTH:
+        results.push_back( "AF_BLUETOOTH" );
+        break;
+      case AF_MAX:
+        results.push_back( "AF_MAX" );
+        break;
+      default:
+        results.push_back( "UNKNOWN" );
+        break;
+      }
+    }
+  }
+
+  return results;
+}
+
+std::string DevicesLookup::address(const std::string &device, const uint32_t &family) const
+{
+  std::string address = "";
+  pcap_if_t* dev = 0;
+  for(dev=alldevs_; dev != NULL; dev=dev->next)
+  {
+    if( dev->name == device )
+      break;
+  }
+
+  for(pcap_addr_t *addrEl=dev->addresses;addrEl != NULL;addrEl=addrEl->next)
+  {
+    if( addrEl->addr && addrEl->addr->sa_family == family )//Needed incase of a tun interface
+    {
+      switch(addrEl->addr->sa_family)
+      {
+      case AF_INET:
+        if (addrEl->addr)
+          address = iptos(((struct sockaddr_in *)addrEl->addr)->sin_addr.s_addr);
+        break;
+      case AF_INET6:
+        break;
+      }
+    }
+  }
+  return address;
 }

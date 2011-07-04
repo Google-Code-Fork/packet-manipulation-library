@@ -79,7 +79,7 @@ void IPv4::setVersion( uint8_t version )
 uint8_t IPv4::headerLength() const
 {
 	uint8_t headerLength = header_->ip_vhl;
-	return ((headerLength & 0x0F ) * 4);
+  return ((headerLength & 0x0FU ) * 4U);
 }
 
 void IPv4::setHeaderLength( uint8_t headerLength )
@@ -186,9 +186,9 @@ uint32_t IPv4::sourceAddress() const
 	return ntohl(header_->ip_src.s_addr);
 }
 
-void IPv4::setSourceAddress( uint32_t ip )
+void IPv4::setSourceAddress( const IPv4Address &ip )
 {
-	header_->ip_src.s_addr = htonl(ip);
+  header_->ip_src.s_addr = htonl(ip.inAddr());
 }
 
 uint32_t IPv4::destinationAddress() const
@@ -196,9 +196,9 @@ uint32_t IPv4::destinationAddress() const
 	return ntohl(header_->ip_dst.s_addr);
 }
 
-void IPv4::setDestinationAddress( uint32_t ip )
+void IPv4::setDestinationAddress( const IPv4Address &ip )
 {
-	 header_->ip_dst.s_addr = htonl(ip);
+   header_->ip_dst.s_addr = htonl(ip.inAddr());
 }
 
 PacketBuffer IPv4::makePacket( ) const
@@ -216,27 +216,6 @@ PacketBuffer IPv4::makePacket( ) const
 int IPv4::size() const
 {
   return sizeof( *header_ );
-}
-
-std::string ipAddressToString( const IPv4Address &ip ) 
-{
-	uint32_t address = htonl( ip );
-	const uint8_t* octet = (const uint8_t*)( &address );
-	std::stringstream ss;
-	ss << static_cast< uint16_t >( octet[0] ) << ".";
-	ss << static_cast< uint16_t >( octet[1] ) << ".";
-	ss << static_cast< uint16_t >( octet[2] ) << ".";
-	ss << static_cast< uint16_t >( octet[3] );
-	return ss.str();
-}
-
-uint32_t stringToIPAddress( const std::string &ip )
-{
-	uint32_t address;
-  int err = inet_aton( ip.c_str(), ((in_addr*) &address) );
-  if( err == 0 )
-		return 0;
-	return ntohl(address);
 }
 
 void IPv4::calculateChecksum() 
