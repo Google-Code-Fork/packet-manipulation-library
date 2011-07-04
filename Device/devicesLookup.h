@@ -1,6 +1,6 @@
 /*
  * PacMan - Packet Manipulation Library 
- * Copyright © 2008  Jeff Scaparra, Gaurav Yadav, Andrie Tanusetiawan
+ * Copyright © 2011  Jeff Scaparra
  *
  * This file is a part of PacMan.
  *
@@ -22,6 +22,10 @@
  * Last Edited:
  * Apr 6, 2011 --- Jeff Scaparra
  *
+ * July 3, 2011 --- Jeff Scaparra
+ * Need to make this so that I can enumerate all of the devices from this
+ * code. For things like Mac Address and Gateway we are adding some platform
+ * dependent code.
  *
  * ********************************************************************/
 
@@ -45,6 +49,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pcap.h>
+#include <vector>
 
 
 class DevicesLookup
@@ -65,15 +70,22 @@ class DevicesLookup
 		//!Returns true if device is a loopback device
 		bool isLoopback(const std::string &device) const;
 		//!Returns the address of the device
-		std::string address(const std::string &device) const;
+    std::string address(const std::string &device, const uint32_t &family = AF_INET ) const;
 		//!Returns the address family of the device
-		std::string addressFamily( const std::string &device) const;
+    std::vector<std::string> addressFamilies( const std::string &device) const;
 		//!Returns the netmask of the device
-		std::string netmask( const std::string &device );
+    std::string netmask( const std::string &device, const uint32_t &family = AF_INET ) const; //AF_INET6 for IPv6
+    //!Returns the mac address of the device
+    std::string macAddress( const std::string &device ) const ;
+    //!Returns the gateway address for the computer
+    std::string gateway( ) const;
+    //!Returns the devices available on the system
+    std::vector< std::string > devicesAvailable() const;
 
 	private:
 		//!Converts IP to string
 		std::string iptos(const uint32_t &in) const;
+    std::string exec( const char *cmd ) const;
 
 		//!Stores all devices
 		pcap_if_t *alldevs_;

@@ -219,7 +219,7 @@ void TCPStream::addTCPSegment( const TCPSegment &segment )
 int TCPStream::size() const
 {
 	int size = 0;
-	for( int i = 0; i < stream_.size(); ++i )
+  for( uint32_t i = 0; i < stream_.size(); ++i )
 	{
 		size += stream_[i].data().size();
 	}

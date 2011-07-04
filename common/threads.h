@@ -28,6 +28,9 @@
 #ifndef WIN32
 // Unix headers
 #include <pthread.h>
+#include <errno.h>
+#include <stdexcept>
+#include "pthreaderrors.h"
 typedef void*(*StartRoutine)(void*);
 #endif
 
@@ -64,7 +67,7 @@ class Mutex
 		int trylock(); //return 0 on success
 		void unlock();
 
-	private:
+  private:
 #ifndef WIN32 //UNIX
 		pthread_mutex_t* mutex_;
 		pthread_mutexattr_t* mutexAttr_;

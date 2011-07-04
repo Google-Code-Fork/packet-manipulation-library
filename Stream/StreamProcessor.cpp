@@ -23,7 +23,8 @@
 void* run_streamer( void* data )
 {
 	StreamProcessor* processor = static_cast< StreamProcessor* >( data );
-	processor->streamer();
+  processor->streamer();
+  return NULL;
 }
 
 StreamProcessor::StreamProcessor():streaming_( false )
@@ -33,6 +34,26 @@ StreamProcessor::StreamProcessor():streaming_( false )
 
 StreamProcessor::~StreamProcessor()
 {
+}
+
+void* StreamProcessor::connectionTimeOutThread()
+{
+  while( true )
+  {
+    std::vector< std::string > itemsToDelete;
+    sleep( timeout_ );
+    MutexLocker lock( allStreamsMutex_ );
+    std::map< std::string, std::deque< Stream* > >::iterator itr;
+    for( itr = allStreams_.begin(); itr != allStreams_.end(); ++itr )
+    {
+      if( time(NULL) - itr->second.back()->lastAccess() > timeout_ )
+      {
+        itemsToDelete.push_back( itr->first );
+      }
+    }
+  }
+
+  return NULL;
 }
 
 void StreamProcessor::startSniffing()
@@ -51,8 +72,9 @@ void* StreamProcessor::streamer( )
 	while( streaming_ )
 	{
 		Packet p = popPacket();
-//		std::string streamName = buildStreamName( p );
+//std::string streamName = buildStreamName( p );
 	}
+  return NULL;
 }
 
 void StreamProcessor::stopSniffing()
@@ -82,45 +104,4 @@ std::string StreamProcessor::buildStreamName( const Packet &p ) const
 
 	}
 	return "";
-}
-		
-
-    QVector< DNSResponse > responses;
-    if( p.appSize() && p.appIs< DNS >() )
-    {
-        QString source;
-        if( p.inetSize() && p.inetIs< IPv4 >() )
-        {
-            IPv4 ip = p.getInet<IPv4>();
-            uint32_t address = htonl(ip.destinationAddress());
-            source = inet_ntoa( (*(struct in_addr*)&address));
-        }
-       /* else if( p.inetIs<IPv6>() ) //currently not working in PacMan lib
-        {
-            IPv6 ip = p.getInet<IPv6>();
-            //TODO
-
-        }*/
-        DNS dns = p.getApp<DNS>( );
-        if( dns.isResponse() ) //don't need to count responses
-        {
-            for( uint32_t i = 0; i < dns.numberOfAnswers(); ++i )
-            {
-                //TODO: Need to add DNSSEC Stuff
-                DNSResponse r;
-                QVector< DNSQuery > queries = queryBuilder(p);
-                r.setHost(source);
-                r.setTimestamp( p.timestamp().tv_sec );
-                if( queries.size() > 0)
-                  r.setQuery(queries[0]);
-                r.setName( dns.answer(i).domainName().c_str() );
-                r.setType( dnsTypeString( dns.answer(i).type() ) );
-                r.setClass( dnsClassString( dns.answer(i).dnsClass() ) );
-                r.setTTL( dns.answer(i).timeToLive() );
-                r.setRecord( dnsAnswerString( dns.answer(i).data(), dns.answer(i).type() ));
-                responses.push_back(r);
-            }
-        }
-    }
-    return responses;
 }

@@ -158,7 +158,7 @@ PacketBuffer Ethernet::makePacket() const
   int size = EthernetSize;
   if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
     size += Dot1QSize;
-  uint8_t* buff = new uint8_t[size];
+  uint8_t buff[size];
   *((EthernetHeader*)buff) = header_;
   if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
     *((VlanTag*)(buff+EthernetSize)) = vlanTag_;

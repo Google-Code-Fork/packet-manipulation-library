@@ -174,7 +174,7 @@ void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t
 {
 	ThreadData* threadData = (ThreadData*)args;
 	FilterData* filterData = threadData->filterData;
-	if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
+  if( filterData->size() >= sniff::MAX_PACKETS_QUEUED )
 	{
 		pcap_breakloop( threadData->pcapPointer );
 	}
@@ -296,12 +296,15 @@ void* Sniffer::packetSniffer()
 		threadData.filterData = filterData_;
 		threadData.pcapPointer = pcap_ptr;
 
+    struct timespec sleeptime;
+    sleeptime.tv_sec = 0;
+    sleeptime.tv_nsec = 10;
 		while( err == -2 )
 		{
 			snifferData_.log( "Sniffer processing packets" );
 			err = pcap_loop( pcap_ptr, -1, my_callback, args );
-			snifferData_.log( "Sniffer had to stop processing packets" );
-			usleep(1);
+      snifferData_.log( "Sniffer had to stop processing packets" );
+      nanosleep( &sleeptime, NULL );
 		}
 	}
 

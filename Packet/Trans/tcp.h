@@ -53,17 +53,17 @@ struct my_tcp {
   u_int32_t sequenceNumber; 
   u_int32_t ackNumber;
   u_int8_t dataOffset;
-	#define X2(tcp) ((tcp)->dataOffset & 0x0F) 
-  #define OFFSET(tcp)  (((tcp)->dataOffset & 0xF0) >> 4)
+  #define X2(tcp) ((tcp)->dataOffset & 0x0FU)
+  #define OFFSET(tcp)  (((tcp)->dataOffset & 0xF0U) >> 4U)
   u_int8_t flags;
-  #define TCP_CWR 0x80
-  #define TCP_ECE 0x40
-  #define TCP_URG 0x20
-  #define TCP_ACK 0x10
-  #define TCP_PSH 0x08
-  #define TCP_RST 0x04
-  #define TCP_SYN 0x02
-  #define TCP_FIN 0x01
+  #define TCP_CWR 0x80U
+  #define TCP_ECE 0x40U
+  #define TCP_URG 0x20U
+  #define TCP_ACK 0x10U
+  #define TCP_PSH 0x08U
+  #define TCP_RST 0x04U
+  #define TCP_SYN 0x02U
+  #define TCP_FIN 0x01U
   u_int16_t window;
   u_int16_t checksum;
   u_int16_t urgentPointer;

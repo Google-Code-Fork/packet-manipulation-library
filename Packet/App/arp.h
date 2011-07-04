@@ -29,6 +29,7 @@
 #include <stdint.h>
 #include "../packetBuffer.h"
 #include "appData.h"
+#include "../Inet/ipv4.h"
 
 typedef struct my_arp {
 	uint16_t hardwareType;

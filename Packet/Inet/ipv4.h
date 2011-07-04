@@ -37,6 +37,7 @@
 #include "inetData.h"
 #include "../encapsulateable.h"
 #include <stdint.h>
+#include "ipv4address.h"
 
 /*** Structure of an internet header, naked of options.
  *
@@ -163,11 +164,11 @@ class IPv4 : public InetData
 	  //!returns the sources ip
 	  uint32_t sourceAddress() const;
 	  //!Sets the source IP
-	  void setSourceAddress( uint32_t );
+    void setSourceAddress( const IPv4Address &ip );
 	  //!returns the destination IP.
 	  uint32_t destinationAddress()const;
 	  //!sets the destination IP.
-	  void setDestinationAddress( uint32_t );
+    void setDestinationAddress( const IPv4Address &ip );
 	  //!Returns a packet buffer suitable for use in other libraries
 	  PacketBuffer makePacket() const;
 	  //!Returns the number of bytes in the IP header
@@ -180,10 +181,5 @@ class IPv4 : public InetData
 	  //!internal data
 	  IPv4Header *header_;
 };
-
-typedef uint32_t IPv4Address;
-
-std::string ipAddressToString( const IPv4Address &ip );
-uint32_t stringToIPAddress( const std::string &ip );
 
 #endif 

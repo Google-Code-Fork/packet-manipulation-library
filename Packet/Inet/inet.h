@@ -32,6 +32,7 @@
 #include <stdexcept>
 #include "inetData.h"
 #include "ipv4.h"
+#include "ipv6.h"
 #include "../encapsulateable.h"
 
 class Inet : public Encapsulateable 
@@ -130,5 +131,5 @@ class Inet : public Encapsulateable
 };
 
 template<> bool Inet::is<IPv4>( ) const;
-
+template<> bool Inet::is<IPv6>( ) const;
 #endif

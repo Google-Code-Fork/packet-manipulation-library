@@ -207,7 +207,7 @@ void TCP::setAcknowledgementNumber( uint32_t ackNum )
 
 uint8_t TCP::dataOffset() const
 {
-  return OFFSET( header_ ) * 4;
+  return OFFSET( header_ ) * 4U;
 }
 
 void TCP::setDataOffset( uint8_t dataOffset )

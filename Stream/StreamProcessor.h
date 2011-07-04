@@ -39,6 +39,7 @@
 #define STREAM_PROCESSOR_H
 
 #include "tcpStream.h"
+#include "../Packet/packet.h"
 #include "../Sniffer/sniffer.h"
 #include <map>
 #include "Stream.h"
@@ -46,6 +47,8 @@
 #include <vector>
 /* Use much like the sniffer class except that we can get streams instead of
  * packets
+ * Doesn't allow for multiple sniffers as the packets from each sniffer would likely not overlap and the connections would be seperate.
+ * This can be solved by creating multiple streams.
  */
 
 void* run_streamer( void *data );
@@ -80,7 +83,7 @@ class StreamProcessor : public Sniffer
 		//! The number of finished streams waiting to pop
 		int numberOfFishishedStreams() const;
 		//! Returns finished streams in the order they finished
-		Stream popFinishedStream();
+    Stream popFinishedStream();
 		//! Returns all streams finished and currently in progress.
 		std::deque< Stream > findStreams( const uint32_t &ipa, const uint16_t
 				&porta, const uint32_t &ipb, const uint16_t &portb, const std::string
@@ -97,7 +100,9 @@ class StreamProcessor : public Sniffer
 		//! individual streams are for use by user processes this is not. 
 		std::string buildStreamName( const uint32_t &ipa, const uint16_t
 				&porta, const uint32_t &ipb, const uint16_t &portb, const std::string
-				&portocol = "TCP" ) const;
+        &portocol = "TCP" ) const;
+
+    std::string buildStreamName( const Packet &p ) const;
 
 		void ipv4TCPStreamer( const Packet &p );
 		void ipv4UDPStreamer( const Packet &p );
