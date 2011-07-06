@@ -38,53 +38,55 @@ typedef struct threadData
 
 class Sniffer 
 {
-	public:
-		Sniffer();
-    virtual ~Sniffer();
-		void *packetSniffer();
-		void setInputDevice( const std::string &device );
-		void setInputDevices( const std::vector< std::string > &devices );
-		void addInputDevice( const std::string &device );
-		void clearInputDevices( );
-		void setFilter( const std::string &filter);
-		void setOutPcapFile( const std::string &file);
-		std::string outputDevice( ) const;
-		void setInputPcapFile(const std::string &file);
-		void setInputPcapFiles(const std::vector< std::string > &files );
-		void setSnapLength( const uint32_t &length );
-		uint32_t snapLength() const;
-		std::vector< std::string > inputDevices() const;
-		Packet popPacket();
-		bool sniffing() const;
-		void log( const std::string &logfile );
-		void start( );
-		void stop( );
-		void restart( );
-		void printDevices() const;
-		std::vector< std::string > availableDevices() const;
-    //std::string iptos(u_long in); //?
+public:
+  Sniffer();
+  virtual ~Sniffer();
+  void setInputDevice( const std::string &device );
+  void setInputDevices( const std::vector< std::string > &devices );
+  void addInputDevice( const std::string &device );
+  void clearInputDevices( );
+  void setFilter( const std::string &filter);
+  void setOutPcapFile( const std::string &file);
+  std::string outputDevice( ) const;
+  void setInputPcapFile(const std::string &file);
+  void setInputPcapFiles(const std::vector< std::string > &files );
+  void setSnapLength( const uint32_t &length );
+  uint32_t snapLength() const;
+  std::vector< std::string > inputDevices() const;
+  Packet popPacket();
+  bool sniffing() const;
+  void log( const std::string &logfile );
+  void start( );
+  void stop( );
+  void restart( );
+  void printDevices() const;
+  std::vector< std::string > availableDevices() const;
 	
-	
-	private:
-		std::vector< Thread > threads_;
-		mutable Mutex coutMutex_;
-		mutable Mutex logMutex_;
-		std::string filter_;
-		FilterData *filterData_;
-		SnifferData snifferData_;
-		static const std::string logFile_;
-		static std::ofstream log_stream_;
-		std::vector< Device > snifferDevices_;
-		Device outDev_;
 
-		mutable Mutex sniffingMutex_;
-		bool sniffing_;
-		
-		uint32_t snapLength_;
-		static const uint32_t DEFAULT_SNAP_LENGTH;
-		
-		uint32_t numberOfRunningThreads_;
-		mutable Mutex threadNumMutex_;
+private:
+  void *packetSniffer();
 
+private:
+  std::vector< Thread > threads_;
+  mutable Mutex coutMutex_;
+  mutable Mutex logMutex_;
+  std::string filter_;
+  FilterData *filterData_;
+  SnifferData snifferData_;
+  static const std::string logFile_;
+  static std::ofstream log_stream_;
+  std::vector< Device > snifferDevices_;
+  Device outDev_;
+
+  mutable Mutex sniffingMutex_;
+  bool sniffing_;
+
+  uint32_t snapLength_;
+  static const uint32_t DEFAULT_SNAP_LENGTH;
+
+  uint32_t numberOfRunningThreads_;
+  mutable Mutex threadNumMutex_;
+
+  friend void* run_sniffer(void* data);
 };
 #endif
