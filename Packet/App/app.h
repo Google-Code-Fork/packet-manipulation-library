@@ -55,7 +55,12 @@ class App : public Encapsulateable
 		App( const DNS &dns )
 		{
 			header_ = new DNS( dns );
-		}
+    }
+
+    App( const Arp &arp )
+    {
+      header_ = new Arp( arp );
+    }
 
 		//!copy constructor
 		App( const App &n )

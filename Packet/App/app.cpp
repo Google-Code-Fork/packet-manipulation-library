@@ -38,5 +38,10 @@ template<> bool App::is<DNS>( ) const
 	return false;
 }
 
-
+template<> bool App::is<Arp>( ) const
+{
+  if( header_ )
+    return header_->isArp();
+  return false;
+}
 

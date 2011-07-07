@@ -52,6 +52,8 @@ class AppData : public Encapsulateable
 		virtual bool isDNS() const {return false;}
     //!Packet Overloads this, returns false;
     virtual bool isPacket() const { return false; }
+    //!Arp Overloads this, returns false;
+    virtual bool isArp() const { return false; }
 };
 
 #endif

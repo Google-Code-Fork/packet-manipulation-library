@@ -37,6 +37,12 @@ void ArpListener::stop()
   running_ = false;
 }
 
+bool ArpListener::isRunning() const
+{
+  MutexLocker lock( runningMutex_ );
+  return running_;
+}
+
 void ArpListener::setCache(ArpCache *cache)
 {
   cache_ = cache;
@@ -66,6 +72,7 @@ void ArpListener::listenerThread()
         MACAddress mac = MACAddress(a.senderMacAddress().vector());
         IPv4Address ip = IPv4Address(a.senderIPAddress().vector());
         cache_->addEntry( ip.toString(), mac );
+        sendAlert( ip.toString() );
       }
     }
   }
@@ -89,4 +96,38 @@ void ArpListener::setDevice(const std::string &device)
 std::string ArpListener::device() const
 {
   return device_;
+}
+
+void ArpListener::setAlert(const std::string &ip, Condition *condition, Mutex *mutex)
+{
+  MutexLocker lock( alertMutex_ );
+  std::map< std::string, std::pair< Condition*, Mutex*> >::iterator itr = alerts_.lower_bound(ip);
+
+  if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
+  { //exist
+    return;
+  }
+
+
+  alerts_[ip] = std::make_pair( condition, mutex );
+}
+
+void ArpListener::removeAlert(const std::string &ip)
+{
+  MutexLocker lock( alertMutex_ );
+  alerts_.erase( ip );
+}
+
+void ArpListener::sendAlert( const std::string &ip )
+{
+  MutexLocker lock( alertMutex_ );
+  std::map< std::string, std::pair< Condition*, Mutex*> >::iterator itr = alerts_.lower_bound(ip);
+
+  if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
+  { //exist
+    std::pair< Condition*, Mutex* > stuff = itr->second;
+    stuff.second->lock();
+    stuff.first->signal();
+    stuff.second->unlock();
+  }
 }
