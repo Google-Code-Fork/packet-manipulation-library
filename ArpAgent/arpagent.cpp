@@ -45,7 +45,9 @@ void ArpAgent::setMacAddress(const MACAddress &mac)
 
 void ArpAgent::setDeviceName(const std::string &device)
 {
-  //TODO:: needs to go to the listener and the requestor
+  // needs to go to the listener and the requestor
+  listener_.setDevice( device );
+  requestor_.setDevice( device );
 }
 
 uint ArpAgent::cacheTimeout() const
@@ -86,13 +88,37 @@ MACAddress ArpAgent::macAddress() const
 std::string ArpAgent::device() const
 {
   //TODO: grad from listener or requestor
+  return listener_.device();
 }
 
 MACAddress ArpAgent::arp(const IPv4Address &ip)
 {
-  //TODO: make this do stuff
-  //Check cache
-  //Arp Request
-  //Repeat as needed
+  if( !listener_.isRunning() )
+    listener_.start();
+
+
+  timespec sleepTime;
+  sleepTime.tv_sec = 0;
+  sleepTime.tv_nsec = arpTimeout_;
+  uint tries = 0;
+  MACAddress mac = cache_.lookup( ip.toString() );
+  Mutex responseMutex;
+  Condition responseCondition;
+  while( mac == MACAddress( std::vector< uint8_t >( 6, 0x00 ) ) && tries < arpRetryLimit_ )
+  {
+    tries++;
+    responseMutex.lock();
+    listener_.setAlert( ip.toString(), &responseCondition, &responseMutex );
+
+    requestor_.arp( ip );
+
+    bool signaled = responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
+    listener_.removeAlert( ip.toString() );
+    responseMutex.unlock();
+    mac = cache_.lookup( ip.toString() );
+
+  }
+
+  return mac;
 }
 

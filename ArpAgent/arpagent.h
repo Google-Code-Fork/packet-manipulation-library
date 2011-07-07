@@ -6,6 +6,7 @@
 #include "arpcache.h"
 #include "arplistener.h"
 #include "arprequestor.h"
+#include <time.h>
 
 class ArpAgent
 {

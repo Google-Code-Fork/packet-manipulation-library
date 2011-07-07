@@ -11,6 +11,18 @@ TEMPLATE = lib
 
 DEFINES += PACMAN_LIBRARY
 
+Release:DESTDIR = release
+Release:OBJECTS_DIR = release/.obj
+Release:MOC_DIR = release/.moc
+Release:RCC_DIR = release/.rcc
+Release:UI_DIR = release/.ui
+
+Debug:DESTDIR = debug
+Debug:OBJECTS_DIR = debug/.obj
+Debug:MOC_DIR = debug/.moc
+Debug:RCC_DIR = debug/.rcc
+Debug:UI_DIR = debug/.ui
+
 SOURCES += \
     common/threads.cpp \
     common/stringUtils.cpp \
@@ -52,7 +64,8 @@ SOURCES += \
     ArpAgent/arpcache.cpp \
     ArpAgent/arplistener.cpp \
     ArpAgent/arprequestor.cpp \
-    Packet/Inet/ipv4address.cpp
+    Packet/Inet/ipv4address.cpp \
+    common/condition.cpp
 
 COMMON_HEADERS = \
     common/threads.h \

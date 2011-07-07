@@ -46,6 +46,7 @@ void ArpRequestor::arp( const IPv4Address &dest )
   MACAddress dmac;
   dmac.setMACAddress( std::vector<uint8_t>(6, 0xFF) );//Broadcast
   ether.setSourceMAC( mac_ );
+  dmac.setMACAddress( std::vector< uint8_t >( 6, 0x00 ) );//Zero'd
 
   //ether.setType( ethernetProtocol::ETH_P_ARP  );
 
@@ -54,8 +55,12 @@ void ArpRequestor::arp( const IPv4Address &dest )
   arp.setProtocolSize( protocolsize::IP );
   arp.setProtocolType( protocoltype::IP );
   arp.setOpcode( arpopcode::request );
-  //arp.setSenderIPAddress( ip_ );
-  //arp.
+  arp.setSenderIPAddress( ip_.makePacket() );
+  arp.setSenderMacAddress( mac_.makePacket() );
+  arp.setTargetIPAddress( dest.makePacket() );
+  arp.setTargetMacAddress( dmac.makePacket() );
   p.pushBackLink( ether );
+  p.pushBackApp( arp );
+  injector_.inject( p );
 
 }
