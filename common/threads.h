@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <stdexcept>
 #include "pthreaderrors.h"
+#include <time.h>
 typedef void*(*StartRoutine)(void*);
 #endif
 
@@ -72,6 +73,25 @@ class Mutex
 		pthread_mutex_t* mutex_;
 		pthread_mutexattr_t* mutexAttr_;
 #endif
+    friend class Condition;
+};
+
+class Condition
+{
+  public:
+    Condition( );
+    virtual ~Condition();
+    Condition( const Condition& condition );
+    Condition& operator=( const Condition &c );
+    void signal( );
+    void broadcast( );
+    void wait( Mutex &mutex );
+    //!Returns true if signaled, false if timed out
+    bool timeWait( Mutex &mutex, timespec &waitTime );
+
+  private:
+    pthread_cond_t* cond_;
+    pthread_condattr_t *cond_attr_;
 };
 
 class MutexLocker
