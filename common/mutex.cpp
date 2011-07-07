@@ -1,6 +1,6 @@
 /**
  * * INAV - Interactive Network Active-traffic Visualization
- * * Copyright © 2007  Nathan Robinson, Jeff Scaparra
+ * * Copyright ï¿½ 2007  Nathan Robinson, Jeff Scaparra
  * *
  * * This file is a part of INAV.
  * *
@@ -25,72 +25,74 @@ Mutex::Mutex( MutexType type )
 {
 #ifndef WIN32 // UNIX
 
-  mutexAttr_ = new pthread_mutexattr_t;
-  //Create a default mutex attribute
-  pthread_mutexattr_init(mutexAttr_);
+	mutexAttr_ = new pthread_mutexattr_t;
+	//Create a default mutex attribute
+	pthread_mutexattr_init(mutexAttr_);
 
-  if( type == Normal )
-    pthread_mutexattr_settype(mutexAttr_, PTHREAD_MUTEX_NORMAL);
-  
-  mutex_ = new pthread_mutex_t;
-  int err = pthread_mutex_init( mutex_, mutexAttr_ );
-  //int err = pthread_mutex_init( mutex_, NULL );
-  if( err )
-    throw std::runtime_error( "Can not init mutex" );
+	if( type == Normal )
+		pthread_mutexattr_settype(mutexAttr_, PTHREAD_MUTEX_NORMAL);
+
+	mutex_ = new pthread_mutex_t;
+	int err = pthread_mutex_init( mutex_, mutexAttr_ );
+	//int err = pthread_mutex_init( mutex_, NULL );
+	if( err )
+		throw std::runtime_error( "Can not init mutex" );
 
 #endif
 }
 
 Mutex::~Mutex()
 {
-  #ifndef WIN32 // UNIX
+#ifndef WIN32 // UNIX
 
-  int err = pthread_mutex_destroy( mutex_ );
-  if ( err == EBUSY)
-    throw std::runtime_error( "Can not destroy mutex: Locked by other thread");
-  if ( err == EINVAL )
-    throw std::runtime_error( "Mutex has invalid value and cannot be destroyed" );
-  if( err )
-    throw std::runtime_error( "Can not destroy mutex" );
+	int err = pthread_mutex_destroy( mutex_ );
+	if ( err == EBUSY)
+		throw std::runtime_error( "Can not destroy mutex: Locked by other thread");
+	if ( err == EINVAL )
+		throw std::runtime_error( "Mutex has invalid value and cannot be destroyed" );
+	if( err )
+		throw std::runtime_error( "Can not destroy mutex" );
 
-  pthread_mutexattr_destroy( mutexAttr_ );
-  #endif
+	pthread_mutexattr_destroy( mutexAttr_ );
+#endif
 }
 
 Mutex::Mutex( const Mutex& mutex )
 {
-  #ifndef WIN32 //UNIX
-  mutex_ = mutex.mutex_;
-  #endif
+  throw std::runtime_error( "Mutex copy constructor: I this this will cause a double free");
+#ifndef WIN32 //UNIX
+	mutex_ = mutex.mutex_;
+#endif
 }
 
 Mutex& Mutex::operator=(const Mutex& mutex )
 {
-  #ifndef WIN32 //UNIX
-  mutex_ = mutex.mutex_;
-  #endif
-  return *this;
+  throw std::runtime_error( "Mutex copy constructor: I this this will cause a double free");
+#ifndef WIN32 //UNIX
+	mutex_ = mutex.mutex_;
+#endif
+	return *this;
 }
 
 void Mutex::lock()
 {
-  #ifndef WIN32 // UNIX
-  if( pthread_mutex_lock( mutex_ ) != 0 )
-    throw std::runtime_error( "Can't lock Mutex" );
-  #endif
+#ifndef WIN32 // UNIX
+	if( pthread_mutex_lock( mutex_ ) != 0 )
+		throw std::runtime_error( "Can't lock Mutex" );
+#endif
 }
 
 void Mutex::unlock()
 {
-  #ifndef WIN32 //UNIX
-  pthread_mutex_unlock( mutex_ );
-  #endif
+#ifndef WIN32 //UNIX
+	pthread_mutex_unlock( mutex_ );
+#endif
 }
 
 int Mutex::trylock()
 {
-  #ifndef WIN32 //UNIX
-  int val = pthread_mutex_trylock( mutex_ );
-  #endif
-  return val;
+#ifndef WIN32 //UNIX
+	int val = pthread_mutex_trylock( mutex_ );
+#endif
+	return val;
 }
