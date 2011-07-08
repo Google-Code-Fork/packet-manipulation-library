@@ -34,15 +34,15 @@ template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size
   Packet p2;
   switch( e.type() )
   {
-    case ethernetProtocol::ETH_P_IP:
+    case ethernetProtocol::k_ip:
       //std::cerr << "IP" << std::endl;
       p2 = build< IPv4 >( newbuff, newsize );
       break;
-    case ethernetProtocol::ETH_P_IPV6:
+    case ethernetProtocol::k_ipv6:
       //std::cerr << "IPv6" << std::endl;
       //placeholder
       //break;
-    case ethernetProtocol::ETH_P_ARP:
+    case ethernetProtocol::k_arp:
       //std::cerr << "ARP" << std::endl;
       //placeholder
       //break;

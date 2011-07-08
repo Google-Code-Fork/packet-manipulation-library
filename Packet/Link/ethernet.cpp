@@ -33,7 +33,7 @@ Ethernet::Ethernet()
   MACAddress mac; //zero everything out
   mac.getMAC( header_.destination);
   mac.getMAC( header_.source );
-  header_.protocol = htons(ethernetProtocol::ETH_P_IP); //default to IP
+  header_.protocol = htons(ethernetProtocol::k_ip); //default to IP
 }
 
 Ethernet::Ethernet( const Ethernet& n )
@@ -52,7 +52,7 @@ Ethernet::Ethernet( const uint8_t* buff, int size )
   if( size < EthernetSize )
     throw std::runtime_error( "Not enough to generate ethernet header" );
   header_ = *((EthernetHeader*)buff);
-  if( header_.protocol == htons(ethernetProtocol::ETH_P_8021Q) )
+  if( header_.protocol == htons(ethernetProtocol::k_8021q) )
   {
     //check to make sure the buff is big enough
     if( size < (EthernetSize + Dot1QSize) )
@@ -74,7 +74,7 @@ Ethernet::Ethernet( const std::vector< uint8_t > &bytes )
     throw std::runtime_error( "Not enough to generate ethernet header" );
   //header_ = *((EthernetHeader*)buff);
   header_ = *(reinterpret_cast<EthernetHeader*>(buff));
-  if( header_.protocol == htons(ethernetProtocol::ETH_P_8021Q) )
+  if( header_.protocol == htons(ethernetProtocol::k_8021q) )
   {
     //check to make sure the buff is big enough
     if( size < (EthernetSize + Dot1QSize) )
@@ -134,7 +134,7 @@ void Ethernet::setType( uint16_t type )
 
 uint16_t Ethernet::dot1QType( )
 {
-  if( header_.protocol != ethernetProtocol::ETH_P_8021Q )
+  if( header_.protocol != ethernetProtocol::k_8021q )
     throw std::runtime_error( "not 802.1Q" );
 
   return vlanTag_.type;
@@ -142,13 +142,13 @@ uint16_t Ethernet::dot1QType( )
 
 void Ethernet::setDot1QType( uint16_t type )
 {
-  header_.protocol = ethernetProtocol::ETH_P_8021Q; //this is the only way this is valid.
+  header_.protocol = ethernetProtocol::k_8021q; //this is the only way this is valid.
   vlanTag_.type = type;
 }
 
 int Ethernet::size() const
 {
-  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+  if( header_.protocol == ethernetProtocol::k_8021q )
     return EthernetSize + Dot1QSize;
   return EthernetSize;
 }
@@ -156,11 +156,11 @@ int Ethernet::size() const
 PacketBuffer Ethernet::makePacket() const
 {
   int size = EthernetSize;
-  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+  if( header_.protocol == ethernetProtocol::k_8021q )
     size += Dot1QSize;
   uint8_t buff[size];
   *((EthernetHeader*)buff) = header_;
-  if( header_.protocol == ethernetProtocol::ETH_P_8021Q )
+  if( header_.protocol == ethernetProtocol::k_8021q )
     *((VlanTag*)(buff+EthernetSize)) = vlanTag_;
   
   return PacketBuffer( buff, size );

@@ -155,9 +155,9 @@ std::string MACAddress::toString() const
 	for( int i = 0; i < 6; ++i )
 	{
 		if( i < 5 )
-			stream << mac_[i] << ":";
+      stream << static_cast<uint16_t>(mac_[i]) << ":";
 		else
-			stream << mac_[i];
+      stream << static_cast<uint16_t>( mac_[i] );
 	}
 	return stream.str();
 }

@@ -26,6 +26,7 @@ void ArpAgent::setCacheTimeout(const uint &seconds)
 void ArpAgent::setIPv4Address(const IPv4Address &ip)
 {
   ip_ = ip;
+  requestor_.setSourceIP( ip_ );
 }
 
 void ArpAgent::setIPv4Gateway(const IPv4Address &gateway)
@@ -41,6 +42,7 @@ void ArpAgent::setNetmask(const IPv4Address &netmask)
 void ArpAgent::setMacAddress(const MACAddress &mac)
 {
   mac_ = mac;
+  requestor_.setSourceMAC( mac_ );
 }
 
 void ArpAgent::setDeviceName(const std::string &device)
@@ -117,9 +119,10 @@ MACAddress ArpAgent::arp(const IPv4Address &ip)
 
     requestor_.arp( ip );
 
-    responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
+    bool timedout = responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
     listener_.removeAlert( ip.toString() );
     responseMutex.unlock();
+    if( !timedout )
     mac = cache_.lookup( ip.toString() );
 
   }

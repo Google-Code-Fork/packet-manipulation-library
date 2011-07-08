@@ -64,25 +64,25 @@ class Packet : public AppData
     //!Puts a link layer header on the link layer 
     template<class T> void pushBackLink( T l )
     {
-      linkLayer_.push_back( l );
+      linkLayer_.push_back( Link( l ) );
     }
 
     //!Puts a internet layer header on the inet layer
     template<class T> void pushBackInet( T i )
     {
-      inetLayer_.push_back( i );
+      inetLayer_.push_back( Inet( i ));
     }
 
     //!Puts a transport layer header on the trans laye
     template<class T > void pushBackTrans( T t )
     {
-      transLayer_.push_back( t );
+      transLayer_.push_back( Trans( t ) );
     }
 
     //!Puts application layer data on the application layer 
     template < class T > void pushBackApp( T a )
     {
-      appLayer_.push_back( a );
+      appLayer_.push_back( App( a ) );
     }
 
     //!is<some class> returns true if this is of that type 

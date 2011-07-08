@@ -1,6 +1,6 @@
 #include "arplistener.h"
 
-const std::string ArpListener::k_arp_filter = "ether protocol arp";
+const std::string ArpListener::k_arp_filter = "arp";
 
 void* run_listener(void *data)
 {

@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
   DevicesLookup deviceLookup;
   ArpAgent arpAgent;
   arpAgent.setArpRetryLimit(2);
-  arpAgent.setArpTimeout(250); //250ms
+  arpAgent.setArpTimeout(1000); //1000ms
   arpAgent.setCacheTimeout(3600); //1hr
   std::string device = parser(argc, argv, "-d" );
   if( device.size() == 0 )
@@ -43,13 +43,15 @@ int main(int argc, char *argv[])
 
   std::string scan = parser( argc, argv, "--scan" );
 
+  arpAgent.startAgent();
   MACAddress mac = arpAgent.arp( scan );
 
   std::cout << scan << " : " << mac.toString() << std::endl;
-
+  arpAgent.stopAgent();
   return 0;
 }
 
 void printHelp()
 {
+  std::cout << "INVALID ARGS" << std::endl;
 }
