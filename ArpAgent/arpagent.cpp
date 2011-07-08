@@ -1,6 +1,6 @@
 #include "arpagent.h"
 
-ArpAgent::ArpAgent()
+ArpAgent::ArpAgent():started_(false)
 {
 }
 
@@ -93,6 +93,11 @@ std::string ArpAgent::device() const
 
 MACAddress ArpAgent::arp(const IPv4Address &ip)
 {
+  MutexLocker lock( startedMutex_ );
+  if( !started_ )
+    throw std::runtime_error( "ArpAgent not started" );
+  lock.unlock();
+
   if( !listener_.isRunning() )
     listener_.start();
 
@@ -112,7 +117,7 @@ MACAddress ArpAgent::arp(const IPv4Address &ip)
 
     requestor_.arp( ip );
 
-    bool signaled = responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
+    responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
     listener_.removeAlert( ip.toString() );
     responseMutex.unlock();
     mac = cache_.lookup( ip.toString() );
@@ -122,3 +127,16 @@ MACAddress ArpAgent::arp(const IPv4Address &ip)
   return mac;
 }
 
+void ArpAgent::startAgent()
+{
+  MutexLocker lock( startedMutex_ );
+  listener_.start();
+  started_ = true;
+}
+
+void ArpAgent::stopAgent()
+{
+  MutexLocker lock( startedMutex_ );
+  listener_.stop();
+  started_ = false;
+}

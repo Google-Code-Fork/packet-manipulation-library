@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include "mac.h"
 #include <sstream>
+#include "../../common/stringUtils.h"
 
 MACAddress::MACAddress() : mac_( std::vector< uint8_t >(6,0) )
 {
@@ -40,11 +41,26 @@ MACAddress::MACAddress( uint8_t mac[MACAddressSize] ) : mac_( std::vector< uint8
   mac_[5] = mac[5];
 }
 
-MACAddress::MACAddress( std::vector< uint8_t > mac ) : mac_( std::vector< uint8_t >(6,0) )
+MACAddress::MACAddress( const std::vector< uint8_t > &mac ) : mac_( std::vector< uint8_t >(6,0) )
 {
   if( mac.size() != 6 )
     throw std::runtime_error( "Mac Address Size Incorrect" );
   mac_ = mac;
+}
+
+MACAddress::MACAddress( const std::string &macString ) : mac_( std::vector< uint8_t>( 6, 0 ) )
+{
+  std::vector< std::string > macParts = split( macString, ':' );
+  if( macParts.size() == 6 )
+  {
+    for( int i = 0; i < 6; ++i )
+    {
+      std::istringstream ss( macParts[i] );
+      uint16_t tmp = 0;
+      ss >> std::hex >> tmp;
+      mac_[i] = tmp;
+    }
+  }
 }
 
 MACAddress::MACAddress( const MACAddress &a ) 
@@ -77,6 +93,20 @@ bool MACAddress::operator==( const MACAddress &a )
 
 MACAddress::~MACAddress()
 {
+}
+void MACAddress::setMACAddress(const std::string &macString)
+{
+  std::vector< std::string > macParts = split( macString, ':' );
+  if( macParts.size() == 6 )
+  {
+    for( int i = 0; i < 6; ++i )
+    {
+      std::istringstream ss( macParts[i] );
+      uint16_t tmp = 0;
+      ss >> std::hex >> tmp;
+      mac_[i] = tmp;
+    }
+  }
 }
 
 void MACAddress::setMACAddress( std::vector< uint8_t > mac )
@@ -118,7 +148,7 @@ std::vector< uint8_t > MACAddress::mac() const
 	return mac_;
 }
 
-std::string MACAddress::macString() const
+std::string MACAddress::toString() const
 {
 	std::stringstream stream;
 	stream << std::hex;

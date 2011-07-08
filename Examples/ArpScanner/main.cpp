@@ -36,16 +36,16 @@ int main(int argc, char *argv[])
     netmask = deviceLookup.netmask(device);
   arpAgent.setNetmask(netmask);
 
-  std::string mac = parser( argc, argv, "--sourceMAC" );
-  if( mac.size() == 0 )
-    mac = deviceLookup.macAddress(device);
-  arpAgent.setMacAddress(MACAddress(mac));
+  std::string macString = parser( argc, argv, "--sourceMAC" );
+  if( macString.size() == 0 )
+    macString = deviceLookup.macAddress(device);
+  arpAgent.setMacAddress(MACAddress(macString));
 
-  std::string scan = parse( argc, argv, "--scan" );
+  std::string scan = parser( argc, argv, "--scan" );
 
   MACAddress mac = arpAgent.arp( scan );
 
-  std::coud << scan << " : " << mac.macString() << std::endl;
+  std::cout << scan << " : " << mac.toString() << std::endl;
 
   return 0;
 }

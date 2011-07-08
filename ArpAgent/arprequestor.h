@@ -4,6 +4,7 @@
 #include "../Packet/packet.h"
 #include <string>
 #include "../Injector/injector.h"
+#include "../common/threads.h"
 
 class ArpRequestor
 {
@@ -20,6 +21,7 @@ public:
   void arp( const IPv4Address &dest );
 
 private:
+  mutable Mutex injectorMutex_;
   Injector injector_;
   MACAddress mac_;
   IPv4Address ip_;

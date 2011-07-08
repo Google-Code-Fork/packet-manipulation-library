@@ -45,7 +45,9 @@ class MACAddress : public LinkData
     //! Builds a MACAddress with the bytes in mac
     MACAddress( uint8_t mac[MACAddressSize] );
     //! Builds a MACAddress with the bytes in mac
-    MACAddress( std::vector< uint8_t > mac );
+    MACAddress( const std::vector< uint8_t > &mac );
+    //! Builds a MACAddress with a string
+    MACAddress( const std::string &macString );
     //! Copy Constructor
     MACAddress( const MACAddress& a );
     //! Assignment operator
@@ -57,6 +59,8 @@ class MACAddress : public LinkData
 
     //! Sets the address base on the bytes in mac
     void setMACAddress( std::vector< uint8_t > mac );
+    //! Set mac from a string does nothing if the string is incorrectly formated
+    void setMACAddress( const std::string &macString );
     //! Returns the size of a MAC address
     int size() const;
     //! Returns a Packetbuffer with the MAC address
@@ -64,7 +68,7 @@ class MACAddress : public LinkData
 		//!returns bytes of mac address
 		std::vector< uint8_t > mac() const;
 		//!returns string of mac address
-		std::string macString() const;
+    std::string toString() const;
     //! Places the mac address in the array mac
     void getMAC( uint8_t (&mac)[MACAddressSize]);//puts the mac address in the memory mac
     //! returns true
