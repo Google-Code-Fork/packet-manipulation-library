@@ -3,9 +3,9 @@
 void EthernetTest::testType()
 {
   Ethernet ethernet;
-  QCOMPARE( ethernet.type(), ethernetProtocol::ETH_P_IP );
-  ethernet.setType( ethernetProtocol::ETH_P_ARP );
-  QCOMPARE( ethernet.type(), ethernetProtocol::ETH_P_ARP );
+  QCOMPARE( ethernet.type(), ethernetProtocol::k_ip );
+  ethernet.setType( ethernetProtocol::k_arp );
+  QCOMPARE( ethernet.type(), ethernetProtocol::k_arp );
 }
 
 void EthernetTest::testPacketCreation()
@@ -74,8 +74,8 @@ void EthernetTest::testConstruction()
    //header capture from wireshark
    Ethernet ethernet2( bytes );
    //Test that the types of each header is correct
-   QCOMPARE( ethernet1.type(), ethernetProtocol::ETH_P_IP );
-   QCOMPARE( ethernet2.type(), ethernetProtocol::ETH_P_IP );
+   QCOMPARE( ethernet1.type(), ethernetProtocol::k_ip );
+   QCOMPARE( ethernet2.type(), ethernetProtocol::k_ip );
 
    //Pulling out source Mac Addresses from headers
    MACAddress source1 = ethernet1.sourceMAC();

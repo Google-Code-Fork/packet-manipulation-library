@@ -113,7 +113,7 @@ Packet operator+( const Packet &l, const Packet &r )
 PacketBuffer Packet::makePacket() const
 {
   PacketBuffer pb;
-  std::vector< uint8_t > packet;
+  //std::vector< uint8_t > packet;
   std::vector< Link >::const_iterator litr;
   std::vector< Inet >::const_iterator iitr;
   std::vector< Trans >::const_iterator titr;

@@ -19,6 +19,8 @@ void Ipv4Test::testIPv4String()
   IPv4Address ip = 0xAC102A03;
   std::string address = ip.toString();
   QCOMPARE( address, std::string( "172.16.42.3" ) );
+  IPv4Address ip2( "172.16.42.3" );
+  QCOMPARE( ip2.toString(), std::string( "172.16.42.3" ) );
 }
 
 void Ipv4Test::testPacketCreation()

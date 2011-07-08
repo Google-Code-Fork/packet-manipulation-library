@@ -35,10 +35,10 @@ IPv4Address::IPv4Address( const uint32_t &ip ): ip_( ip )
 
 IPv4Address::IPv4Address( const std::string &ip )
 {
-  int err = inet_aton( ip.c_str(), ((in_addr*)(&ip_)));
-  if( err )
+  int valid = inet_aton( ip.c_str(), ((struct in_addr*)(&ip_)));
+  if( !valid )
     ip_ = 0;
-  ip_ = ntohl( ip_ );
+  ip_ = htonl( ip_ );
 }
 
 IPv4Address::~IPv4Address()
@@ -66,7 +66,6 @@ void IPv4Address::setIPv4Address(const std::string &ip)
   int err = inet_aton( ip.c_str(), ((in_addr*)(&ip_)));
   if( err )
     ip_ = 0;
-  ip_ = ntohl( ip_ );
 }
 
 void IPv4Address::setIPv4Address(const std::vector<uint8_t> &address)

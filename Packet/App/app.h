@@ -118,8 +118,10 @@ class App : public Encapsulateable
 		//!returns a packet buffer of the underlying datatype suitable for other
 		//libraries or code
 		PacketBuffer makePacket() const 
-		{
-			return header_->makePacket();
+    {
+      if( header_ )
+        return header_->makePacket();
+      return PacketBuffer();
 		}
 
 	private:
@@ -138,7 +140,11 @@ class App : public Encapsulateable
 			else if( n.header_->isDNS() )
 			{
 				header_ = new DNS( *((DNS*)n.header_) );
-			}
+      }
+      else if( n.header_->isArp() )
+      {
+        header_ = new Arp( *((Arp*)n.header_) );
+      }
 			else
 				header_ = NULL;
 		}
