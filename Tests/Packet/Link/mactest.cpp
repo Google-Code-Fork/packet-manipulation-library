@@ -1,4 +1,5 @@
 #include "mactest.h"
+#include <string>
 
 MacTest::MacTest(QObject *parent) :
     QObject(parent)
@@ -31,4 +32,14 @@ void MacTest::testConstruction()
   {
           QVERIFY( macaddress[i] == addressByteArray[i]);
   }
+
+  std::string mac = "ab:CE:F0:12:34:43";
+  MACAddress mac5( mac );
+  PacketBuffer pb = mac5.makePacket();
+  QVERIFY( pb.vector()[0] == 0xAB );
+  QVERIFY( pb.vector()[1] == 0xCE );
+  QVERIFY( pb.vector()[2] == 0xF0 );
+  QVERIFY( pb.vector()[3] == 0x12 );
+  QVERIFY( pb.vector()[4] == 0x34 );
+  QVERIFY( pb.vector()[5] == 0x43 );
 }

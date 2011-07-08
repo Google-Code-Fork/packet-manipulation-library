@@ -32,10 +32,14 @@ public:
   IPv4Address netmask() const;
   MACAddress macAddress() const;
   std::string device() const;
+  void startAgent();
+  void stopAgent();
 
   MACAddress arp( const IPv4Address &ip );
 
 private:
+  Mutex startedMutex_;
+  bool started_;
   MACAddress mac_;
   IPv4Address ip_;
   IPv4Address gateway_;
