@@ -15,6 +15,7 @@ public:
 private Q_SLOTS:
   void testIsArp();
   void testConstruction();
+  void testSetFunctions();
 
 };
 
