@@ -1,10 +1,62 @@
 #include "arptest.h"
+#include "../../../Packet/Link/mac.h"
 
 ArpTest::ArpTest(QObject *parent) :
     QObject(parent)
 {
 }
 
+void ArpTest::testSetFunctions()
+{
+    Arp arp2;
+
+    arp2.setHardwareSize( hardwaresize::ETHERNET );
+    arp2.setHardwareType(hardwaretype::ETHERNET);
+    arp2.setOpcode(arpopcode::request);
+    arp2.setProtocolSize( protocolsize::IP );
+    arp2.setProtocolType( protocoltype::IP );
+    arp2.setSenderIPAddress( IPv4Address("192.168.1.1").makePacket() );
+    arp2.setTargetIPAddress( IPv4Address("172.16.23.1").makePacket() );
+    arp2.setSenderMacAddress( MACAddress("DE:AD:BE:EF:DE:AD").makePacket() );
+    arp2.setTargetMacAddress( MACAddress("CA:FE:BA:BE:BA:BE").makePacket() );
+
+    //check to size of raw contents in bytes
+    QVERIFY( arp2.size() == 28 );
+
+    //check to see if arp
+    QVERIFY( arp2.isArp() );
+
+    //check to see if the hardware values are correct
+    QVERIFY( arp2.hardwareType() == hardwaretype::ETHERNET );
+
+    //check protocol
+    QVERIFY( arp2.protocolType() == protocoltype::IP );
+
+    //check hardware size
+    QVERIFY( arp2.hardwareSize() == hardwaresize::ETHERNET);
+
+    //check protocol size
+    QVERIFY( arp2.protocolSize() == protocolsize::IP );
+    arp2.setProtocolSize( protocolsize::IPv6 );
+    QVERIFY( arp2.protocolSize() == protocolsize::IPv6 );
+
+    //check opcode
+    QVERIFY( arp2.opcode() == arpopcode::request );
+
+    //check Sender MAC
+    QVERIFY( arp2.senderMacAddress().vector() ==  MACAddress("DE:AD:BE:EF:DE:AD").makePacket().vector() );
+
+    //check Sender IP
+    QVERIFY( arp2.senderIPAddress().vector() == IPv4Address("192.168.1.1").makePacket().vector() );
+
+    //check target MAC
+    QVERIFY( arp2.targetIPAddress().vector() == IPv4Address("172.16.23.1").makePacket().vector() );
+
+    //check target IP
+    QVERIFY( arp2.targetMacAddress().vector() == MACAddress("CA:FE:BA:BE:BA:BE").makePacket().vector() );
+
+
+}
 
 void ArpTest::testConstruction()
 {
