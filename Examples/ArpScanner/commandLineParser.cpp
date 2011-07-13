@@ -30,7 +30,7 @@ std::string parser(int argc, char *argv[], std::string option)
 	
 	if( commandLineOptions.size() == 0 )
 	{
-		for( int i = 0; i < argc; ++i )
+    for( int i = 1; i < argc; ++i )
 		{
 			commandLineOptions.push_back( argv[i] );
 		}

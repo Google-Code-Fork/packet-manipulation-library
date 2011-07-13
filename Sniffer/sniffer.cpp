@@ -51,6 +51,12 @@ Sniffer::Sniffer():snifferData_( SnifferData( coutMutex_, logMutex_, &log_stream
 
 Sniffer::~Sniffer()
 {
+  MutexLocker lock( sniffingMutex_ );
+  if( sniffing_ ) //This is the keep the mutexes in filterData to be locked by other threads
+  {
+    lock.unlock();
+    stop();
+  }
   delete filterData_;
 }
 
@@ -67,7 +73,7 @@ Packet Sniffer::popPacket()
 */
 void Sniffer::start()
 {
-	MutexLocker lock( sniffingMutex_ );
+  MutexLocker lock( sniffingMutex_ );
 	if( sniffing_ ) //Don't start more threads if already sniffing
 		return;
   sniffing_=true;
@@ -301,7 +307,7 @@ void* Sniffer::packetSniffer()
     sleeptime.tv_sec = 0;
     sleeptime.tv_nsec = 10;
 		while( err == -2 )
-		{
+    {
 			snifferData_.log( "Sniffer processing packets" );
 			err = pcap_loop( pcap_ptr, -1, my_callback, args );
       snifferData_.log( "Sniffer had to stop processing packets" );
@@ -314,7 +320,8 @@ void* Sniffer::packetSniffer()
 	filterData_->pushPacket( Packet() );
 	
 
-	snifferData_.log( "SnifferOffline Stopping!" );
+  numberOfRunningThreads_ --;
+  snifferData_.log( "SnifferOffline Stopping!" );
   return NULL;
 }
 

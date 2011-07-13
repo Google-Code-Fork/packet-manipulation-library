@@ -100,13 +100,9 @@ MACAddress ArpAgent::arp(const IPv4Address &ip)
     throw std::runtime_error( "ArpAgent not started" );
   lock.unlock();
 
-  if( !listener_.isRunning() )
-    listener_.start();
-
-
   timespec sleepTime;
-  sleepTime.tv_sec = 0;
-  sleepTime.tv_nsec = arpTimeout_;
+  sleepTime.tv_sec = arpTimeout_/1000;
+  sleepTime.tv_nsec = (arpTimeout_%1000) * 1000000; //to make arpTimeout_ in ms :)
   uint tries = 0;
   MACAddress mac = cache_.lookup( ip.toString() );
   Mutex responseMutex;
@@ -119,20 +115,19 @@ MACAddress ArpAgent::arp(const IPv4Address &ip)
 
     requestor_.arp( ip );
 
-    bool timedout = responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
+    bool signaled = responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
     listener_.removeAlert( ip.toString() );
     responseMutex.unlock();
-    if( !timedout )
-    mac = cache_.lookup( ip.toString() );
-
+    //if( signaled )
+      mac = cache_.lookup( ip.toString() );
   }
-
   return mac;
 }
 
 void ArpAgent::startAgent()
 {
-  MutexLocker lock( startedMutex_ );
+  MutexLocker lock( startedMutex_ );\
+  listener_.setCache( &cache_ );
   listener_.start();
   started_ = true;
 }

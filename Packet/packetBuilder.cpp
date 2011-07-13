@@ -43,14 +43,29 @@ template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size
       //placeholder
       //break;
     case ethernetProtocol::k_arp:
+      p2 = build< Arp >( newbuff, newsize );
       //std::cerr << "ARP" << std::endl;
       //placeholder
-      //break;
+      break;
     default:
       //std::cerr << "RAW" << std::endl;
       p2 = build< Raw >( newbuff, newsize );
       break;
   }
+  return p + p2;
+}
+
+template <> Packet PacketBuilder::build< Arp >( const uint8_t* buff, int size )
+{
+  Arp arp( buff, size );
+  Packet p;
+  p.pushBackApp( arp );
+  const uint8_t* newbuff = buff + p.size();
+  int newsize = size - p.size();
+  Packet p2;
+  if( newsize > 0 )
+    p2 = build< Raw >( newbuff, newsize );
+
   return p + p2;
 }
 
