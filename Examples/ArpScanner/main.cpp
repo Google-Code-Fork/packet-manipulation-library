@@ -8,10 +8,12 @@ void printHelp();
 
 int main(int argc, char *argv[])
 {
+
+  std::cout << "Main Thread euid: " << geteuid() << std::endl;
   DevicesLookup deviceLookup;
   ArpAgent arpAgent;
   arpAgent.setArpRetryLimit(2);
-  arpAgent.setArpTimeout(1000); //1000ms
+  arpAgent.setArpTimeout(15000); //1000ms
   arpAgent.setCacheTimeout(3600); //1hr
   std::string device = parser(argc, argv, "-d" );
   if( device.size() == 0 )

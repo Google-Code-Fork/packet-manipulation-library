@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by Qt Creator 2.2.81, 2011-07-08T14:37:22. -->
+<!-- Written by Qt Creator 2.2.81, 2011-07-13T01:22:29. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -36,7 +36,7 @@
    <value type="int" key="EditorConfiguration.CodeStyle.Count">1</value>
    <value type="QByteArray" key="EditorConfiguration.Codec">UTF-8</value>
    <value type="QString" key="EditorConfiguration.CurrentFallback">Global</value>
-   <value type="int" key="EditorConfiguration.IndentSize">2</value>
+   <value type="int" key="EditorConfiguration.IndentSize">4</value>
    <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
    <value type="int" key="EditorConfiguration.PaddingMode">1</value>
    <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
@@ -72,7 +72,7 @@
    </valuemap>
    <value type="int" key="EditorConfiguration.Tab.Count">2</value>
    <value type="int" key="EditorConfiguration.TabKeyBehavior">0</value>
-   <value type="int" key="EditorConfiguration.TabSize">2</value>
+   <value type="int" key="EditorConfiguration.TabSize">8</value>
    <value type="bool" key="EditorConfiguration.UseGlobal">true</value>
    <value type="int" key="EditorConfiguration.Utf8BomBehavior">1</value>
    <value type="bool" key="EditorConfiguration.addFinalNewLine">true</value>
@@ -85,7 +85,7 @@
   <variable>ProjectExplorer.Project.Target.0</variable>
   <valuemap type="QVariantMap">
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Target.DesktopTarget</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">1</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
@@ -132,12 +132,12 @@
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop Qt 4.7.3 for GCC (Qt SDK) Release</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Release</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">0</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/scap/packet-manipulation-library/Examples/ArpScannerBuild</value>
-    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId">4</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/scap/packet-manipulation-library/Examples/ArpScanner-build-desktop</value>
+    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId">2</value>
     <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
@@ -182,115 +182,15 @@
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop Qt 4.7.3 for GCC (Qt SDK) Debug</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Debug</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/scap/packet-manipulation-library/Examples/ArpScannerBuild</value>
-    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId">4</value>
-    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
-   </valuemap>
-   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
-    <value type="QString" key="ProjectExplorer.BuildCOnfiguration.ToolChain">ProjectExplorer.ToolChain.Gcc:/usr/bin/g++.x86-linux-generic-elf-64bit./usr/bin/gdb</value>
-    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">qmake</value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">false</value>
-      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
-     </valuemap>
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-     </valuemap>
-     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
-    </valuemap>
-    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-     </valuemap>
-     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
-    </valuemap>
-    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
-    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Qt in PATH Release</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
-    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">0</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/scap/packet-manipulation-library/Examples/ArpScanner/ArpScanner-build-desktop</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/scap/packet-manipulation-library/Examples/ArpScanner-build-desktop</value>
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId">2</value>
     <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
    </valuemap>
-   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.3">
-    <value type="QString" key="ProjectExplorer.BuildCOnfiguration.ToolChain">ProjectExplorer.ToolChain.Gcc:/usr/bin/g++.x86-linux-generic-elf-64bit./usr/bin/gdb</value>
-    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">qmake</value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">false</value>
-      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
-     </valuemap>
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-     </valuemap>
-     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
-    </valuemap>
-    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-     </valuemap>
-     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
-    </valuemap>
-    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
-    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Qt in PATH Debug</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
-    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/scap/packet-manipulation-library/Examples/ArpScanner/ArpScanner-build-desktop</value>
-    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId">2</value>
-    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
-   </valuemap>
-   <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">4</value>
+   <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">2</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">0</value>
@@ -369,7 +269,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration</value>
     <value type="int" key="Qt4ProjectManager.Qt4RunConfiguration.BaseEnvironmentBase">2</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">-d eth0.100 --scan 10.13.37.150</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">ArpScanner.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>

@@ -1,20 +1,29 @@
 #include "arplistener.h"
+#include <iostream>
+#include <time.h>
 
 const std::string ArpListener::k_arp_filter = "arp";
 
 void* run_listener(void *data)
 {
+  std::cout << "listener: " << geteuid() << std::endl;
   ArpListener *listener = reinterpret_cast< ArpListener* >(data);
   listener->listenerThread();
   return NULL;
 }
 
-ArpListener::ArpListener():running_(false), arpFilter_( k_arp_filter )
+ArpListener::ArpListener():running_(false), cache_(NULL), arpFilter_( k_arp_filter )
 {
 }
 
 ArpListener::~ArpListener()
 {
+  MutexLocker lock( runningMutex_ );
+  if( running_ )
+  {
+    lock.unlock();
+    stop(); //To keep the mutexes straight.
+  }
 }
 
 void ArpListener::start()
@@ -26,6 +35,10 @@ void ArpListener::start()
   lock.unlock();
   listenerThread_.setStartRoutine( run_listener );
   listenerThread_.start( this );
+  timespec sleeptime; //to ensure the sniffer threads are up
+  sleeptime.tv_sec = 3;
+  sleeptime.tv_nsec = 0;
+  nanosleep( &sleeptime, NULL );
 }
 
 void ArpListener::stop()
@@ -109,6 +122,7 @@ void ArpListener::setAlert(const std::string &ip, Condition *condition, Mutex *m
   }
 
 
+  //mutex->lock();
   alerts_[ip] = std::make_pair( condition, mutex );
 }
 
