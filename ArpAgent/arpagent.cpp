@@ -93,30 +93,33 @@ std::string ArpAgent::device() const
   return listener_.device();
 }
 
-MACAddress ArpAgent::arp(const IPv4Address &ip)
+MACAddress ArpAgent::arp( IPv4Address arpIp )
 {
   MutexLocker lock( startedMutex_ );
   if( !started_ )
     throw std::runtime_error( "ArpAgent not started" );
   lock.unlock();
 
+  if( ! isInSubnet( arpIp ) )
+    arpIp = gateway_;
+
   timespec sleepTime;
-  sleepTime.tv_sec = arpTimeout_/1000;
+  sleepTime.tv_sec = time(NULL) + arpTimeout_/1000;
   sleepTime.tv_nsec = (arpTimeout_%1000) * 1000000; //to make arpTimeout_ in ms :)
   uint tries = 0;
 
-  MACAddress mac = cache_.lookup( ip.toString() );
+  MACAddress mac = cache_.lookup( arpIp.toString() );
 
   while( mac == MACAddress( std::vector< uint8_t >( 6, 0x00 ) ) && tries < arpRetryLimit_ )
   {
     tries++;
     //listener_.setAlert( ip.toString() );
 
-    requestor_.arp( ip );
+    requestor_.arp( arpIp );
 
-    listener_.waitForResponse( ip.toString(), sleepTime );
+    listener_.waitForResponse( arpIp.toString(), sleepTime );
 
-    mac = cache_.lookup( ip.toString() );
+    mac = cache_.lookup( arpIp.toString() );
   }
   return mac;
 }

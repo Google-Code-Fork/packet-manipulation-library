@@ -35,7 +35,7 @@ public:
   void startAgent();
   void stopAgent();
 
-  MACAddress arp( const IPv4Address &ip );
+  MACAddress arp( IPv4Address ip );
 
 private:
   Mutex startedMutex_;
