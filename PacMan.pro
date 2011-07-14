@@ -72,7 +72,8 @@ COMMON_HEADERS = \
     common/stringUtils.h \
     common/smartPtr.h \
     common/helper.h \
-    common/pthreaderrors.h
+    common/pthreaderrors.h \
+    common/uncopyable.h
 
 DEVICE_HEADERS = \
     Device/devicesLookup.h \

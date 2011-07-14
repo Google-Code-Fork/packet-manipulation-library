@@ -6,7 +6,6 @@ const std::string ArpListener::k_arp_filter = "arp";
 
 void* run_listener(void *data)
 {
-  std::cout << "listener: " << geteuid() << std::endl;
   ArpListener *listener = reinterpret_cast< ArpListener* >(data);
   listener->listenerThread();
   return NULL;
@@ -45,7 +44,7 @@ void ArpListener::start()
   listenerThread_.setStartRoutine( run_listener );
   listenerThread_.start( this );
   timespec sleeptime; //to ensure the sniffer threads are up
-  sleeptime.tv_sec = 3;
+  sleeptime.tv_sec = 1;
   sleeptime.tv_nsec = 0;
   nanosleep( &sleeptime, NULL );
 }
@@ -139,7 +138,6 @@ void ArpListener::setAlert( const std::string &ip )
 
 void ArpListener::removeAlert(const std::string &ip)
 {
-  MutexLocker lock( alertMutex_ );
   //Assumes that alertMutx_ is locked
 
   std::map< std::string, std::pair<bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
