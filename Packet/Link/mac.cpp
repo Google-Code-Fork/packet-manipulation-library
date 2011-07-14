@@ -153,11 +153,18 @@ std::string MACAddress::toString() const
 	std::stringstream stream;
 	stream << std::hex;
 	for( int i = 0; i < 6; ++i )
-	{
+  {
+    std::string tmpa;
+    std::stringstream tmpb;
+    tmpb << std::hex << static_cast<uint16_t>(mac_[i] );
+    tmpa = tmpb.str();
+    if( tmpa.size() == 1 )
+      tmpa = "0" + tmpa;
+
 		if( i < 5 )
-      stream << static_cast<uint16_t>(mac_[i]) << ":";
+      stream << tmpa << ":";
 		else
-      stream << static_cast<uint16_t>( mac_[i] );
+      stream << tmpa;
 	}
 	return stream.str();
 }

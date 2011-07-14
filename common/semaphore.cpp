@@ -36,22 +36,6 @@ Semaphore::~Semaphore()
 
 }
 
-Semaphore::Semaphore( Semaphore &semaphore )
-{
-  count_mutex = semaphore.count_mutex;
-  count_condition = semaphore.count_condition;
-  num_ = semaphore.getNum();
-}
-
-Semaphore& Semaphore::operator=( Semaphore& semaphore )
-{
-  count_mutex = semaphore.count_mutex;
-  count_condition = semaphore.count_condition;
-  num_ = semaphore.getNum();
-  return *this;
-}
-
-
 void Semaphore::post()
 {
 	pthread_mutex_lock( &count_mutex );

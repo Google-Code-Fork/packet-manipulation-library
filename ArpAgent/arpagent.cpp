@@ -104,22 +104,19 @@ MACAddress ArpAgent::arp(const IPv4Address &ip)
   sleepTime.tv_sec = arpTimeout_/1000;
   sleepTime.tv_nsec = (arpTimeout_%1000) * 1000000; //to make arpTimeout_ in ms :)
   uint tries = 0;
+
   MACAddress mac = cache_.lookup( ip.toString() );
-  Mutex responseMutex;
-  Condition responseCondition;
+
   while( mac == MACAddress( std::vector< uint8_t >( 6, 0x00 ) ) && tries < arpRetryLimit_ )
   {
     tries++;
-    responseMutex.lock();
-    listener_.setAlert( ip.toString(), &responseCondition, &responseMutex );
+    //listener_.setAlert( ip.toString() );
 
     requestor_.arp( ip );
 
-    bool signaled = responseCondition.timeWait( responseMutex, sleepTime ); //keep us from waiting if there was a response
-    listener_.removeAlert( ip.toString() );
-    responseMutex.unlock();
-    //if( signaled )
-      mac = cache_.lookup( ip.toString() );
+    listener_.waitForResponse( ip.toString(), sleepTime );
+
+    mac = cache_.lookup( ip.toString() );
   }
   return mac;
 }

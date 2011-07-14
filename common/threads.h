@@ -31,17 +31,17 @@
 #include <errno.h>
 #include <stdexcept>
 #include "pthreaderrors.h"
+#include "uncopyable.h"
 #include <time.h>
 typedef void*(*StartRoutine)(void*);
 #endif
 
-class Thread
+class Thread : private Uncopyable
 {
 	public: 
 		Thread();
 		Thread(StartRoutine);
 		~Thread();
-		Thread(const Thread& thread );
 		void setStartRoutine( StartRoutine ); 
 		void start( void * dataForThread );
 		void kill( int signal );
@@ -49,7 +49,9 @@ class Thread
 		void join();
 
 	private:
-		StartRoutine startRoutine_;
+    //Not Copyable
+
+    StartRoutine startRoutine_;
 		#ifndef WIN32 // UNIX
 		pthread_t * threadID_;
 		#endif
@@ -57,13 +59,11 @@ class Thread
 
 enum MutexType{ Normal };
 
-class Mutex
+class Mutex : private Uncopyable
 {
 	public:
 		Mutex( MutexType = Normal );
 		~Mutex();
-		Mutex( const Mutex& mutex );
-		Mutex& operator=( const Mutex &m );
 		void lock();
 		int trylock(); //return 0 on success
 		void unlock();
@@ -76,25 +76,23 @@ class Mutex
     friend class Condition;
 };
 
-class Condition
+class Condition : private Uncopyable
 {
   public:
     Condition( );
     virtual ~Condition();
-    Condition( const Condition& condition );
-    Condition& operator=( const Condition &c );
     void signal( );
     void broadcast( );
     void wait( Mutex &mutex );
     //!Returns true if signaled, false if timed out
-    bool timeWait( Mutex &mutex, timespec &waitTime );
+    bool timeWait( Mutex &mutex, const timespec &waitTime );
 
   private:
     pthread_cond_t* cond_;
     pthread_condattr_t *cond_attr_;
 };
 
-class MutexLocker
+class MutexLocker : private Uncopyable
 {
   public:
     MutexLocker( Mutex & m ):m_(m), locked_(true)
@@ -126,13 +124,11 @@ class MutexLocker
 };
 
 
-class Semaphore
+class Semaphore : private Uncopyable
 {
 	public:
 		Semaphore( int num = 0 );
 		virtual ~Semaphore();
-		Semaphore( Semaphore& semaphore );
-		Semaphore& operator=( Semaphore& semaphore );
 		void post();
 		void wait();
 		int getNum();
@@ -145,13 +141,11 @@ class Semaphore
 #endif
 };
 
-class ReaderWriterLock
+class ReaderWriterLock : private Uncopyable
 {
   public:
     ReaderWriterLock();
     virtual ~ReaderWriterLock();
-    ReaderWriterLock( ReaderWriterLock& lock );
-    ReaderWriterLock& operator=( ReaderWriterLock& lock );
     void readLock();
     void readUnlock();
     void writeLock();
@@ -170,7 +164,7 @@ class ReaderWriterLock
     inline void readerWait();
 };
 
-class ReadLocker 
+class ReadLocker : private Uncopyable
 {
   public:
     ReadLocker( ReaderWriterLock & m ):m_(m), locked_(true)
@@ -201,7 +195,7 @@ class ReadLocker
     bool locked_;
 };
 
-class WriteLocker 
+class WriteLocker : private Uncopyable
 {
   public:
     WriteLocker( ReaderWriterLock & m ):m_(m), locked_(true)

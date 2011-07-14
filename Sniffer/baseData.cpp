@@ -21,30 +21,17 @@
 #include "baseData.h"
 #include <iostream>
 
-BaseData::BaseData( Mutex & coutMutex,
-Mutex & logMutex,
-std::ofstream *log ):coutMutex_(coutMutex),
-logMutex_(logMutex),
-log_(log)
+BaseData::BaseData( Mutex & coutMutex, Mutex & logMutex, std::ofstream *log ):coutMutex_(coutMutex), logMutex_(logMutex), log_(log)
 {
 }
 
-Mutex & BaseData::getCoutMutex ()
+Mutex & BaseData::coutMutex ()
 {
 	return coutMutex_;
 }
 
-void BaseData::setCoutMutex ( Mutex & coutMutex )
-{
-	coutMutex_ = coutMutex;
-}
 
-void BaseData::setLogMutex ( Mutex & logMutex )
-{
-	logMutex_ = logMutex;
-}
-
-Mutex & BaseData::getLogMutex ()
+Mutex & BaseData::logMutex ()
 {
 	return logMutex_;
 }

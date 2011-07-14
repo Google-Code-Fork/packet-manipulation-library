@@ -30,10 +30,8 @@ class BaseData
 	public:
 		BaseData( Mutex& coutMutex, Mutex& logMutex,
 				std::ofstream *log );
-		Mutex& getCoutMutex();
-		void setCoutMutex( Mutex& coutMutex );
-		void setLogMutex( Mutex& logMutex );
-		Mutex& getLogMutex ();
+    Mutex& coutMutex();
+    Mutex& logMutex ();
 		void print( std::string message );
 		void log( std::string message );
 

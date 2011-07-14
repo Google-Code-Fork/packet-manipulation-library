@@ -21,6 +21,9 @@
 #include "threads.h"
 #include <stdexcept>
 #include <errno.h>
+#include <iostream>
+#include <cstdlib>
+
 Mutex::Mutex( MutexType type )
 {
 #ifndef WIN32 // UNIX
@@ -46,32 +49,26 @@ Mutex::~Mutex()
 #ifndef WIN32 // UNIX
 
 	int err = pthread_mutex_destroy( mutex_ );
-	if ( err == EBUSY)
-		throw std::runtime_error( "Can not destroy mutex: Locked by other thread");
-	if ( err == EINVAL )
-		throw std::runtime_error( "Mutex has invalid value and cannot be destroyed" );
-	if( err )
-		throw std::runtime_error( "Can not destroy mutex" );
+  if ( err == EBUSY)
+  {
+    std::cerr <<  "Can not destroy mutex: Locked by other thread" << std::endl;
+    std::abort();
+  }
+  if ( err == EINVAL )
+  {
+    std::cerr <<  "Mutex has invalid value and cannot be destroyed" << std::endl;
+    std::abort();
+  }
+  if( err )
+  {
+    std::cerr << "Can not destroy mutex" << std::endl;
+    std::abort();
+  }
 
-	pthread_mutexattr_destroy( mutexAttr_ );
+  pthread_mutexattr_destroy( mutexAttr_ );
+  delete mutexAttr_;
+  delete mutex_;
 #endif
-}
-
-Mutex::Mutex( const Mutex& mutex )
-{
-  throw std::runtime_error( "Mutex copy constructor: I this this will cause a double free");
-#ifndef WIN32 //UNIX
-	mutex_ = mutex.mutex_;
-#endif
-}
-
-Mutex& Mutex::operator=(const Mutex& mutex )
-{
-  throw std::runtime_error( "Mutex copy constructor: I this this will cause a double free");
-#ifndef WIN32 //UNIX
-	mutex_ = mutex.mutex_;
-#endif
-	return *this;
 }
 
 void Mutex::lock()
