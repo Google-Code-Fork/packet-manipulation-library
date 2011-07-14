@@ -20,6 +20,8 @@
 
 #include "threads.h"
 #include <stdexcept>
+#include <cstdlib>
+#include <iostream>
 
 Condition::Condition( )
 {
@@ -36,25 +38,20 @@ Condition::~Condition( )
 {
   int err = pthread_cond_destroy( cond_ );
   if( err == EINVAL )
-    throw std::runtime_error( "cond argument is invalid" );
+  {
+    std::cerr << "Condition dtor(): cond argument is invalid" << std::endl;
+    std::abort();
+  }
+
   if( err == EBUSY )
-    throw std::runtime_error( "some threads are currently waiting on cond" );
+  {
+    std::cerr << "Condition dtor(): some threads are currently waiting on cond" << std::endl;
+    std::abort();
+  }
 
   pthread_condattr_destroy( cond_attr_ );
-}
-
-
-Condition::Condition( const Condition &c )
-{
-  if( &c ) //unused param c
-  throw std::runtime_error( "This will cause two objects to exist and thus dtor will free twice" );
-}
-
-Condition& Condition::operator=( const Condition &c )
-{
-  if( &c ) //unused param c
-  throw std::runtime_error( "This will cause two objects to exist and thus dtor will free twice" );
-  return *this;
+  delete cond_;
+  delete cond_attr_;
 }
 
 void Condition::signal()
@@ -80,7 +77,7 @@ void Condition::wait(Mutex &mutex)
     throw std::runtime_error( "There was not enough memory to allocate teh statically initialised condition variable." );
 }
 
-bool Condition::timeWait(Mutex &mutex, timespec &waitTime)
+bool Condition::timeWait(Mutex &mutex, const timespec &waitTime)
 {
   int err = pthread_cond_timedwait( cond_, mutex.mutex_, &waitTime );
   if( err == EINVAL )

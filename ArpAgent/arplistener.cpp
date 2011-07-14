@@ -18,12 +18,21 @@ ArpListener::ArpListener():running_(false), cache_(NULL), arpFilter_( k_arp_filt
 
 ArpListener::~ArpListener()
 {
+  MutexLocker lock2( alertMutex_ );
+  std::map< std::string, std::pair< bool, Condition* > >::iterator itr;
+  for( itr = alerts_.begin(); itr != alerts_.end(); ++itr )
+  {
+    delete itr->second.second;
+  }
+
+  //stop threads
   MutexLocker lock( runningMutex_ );
   if( running_ )
   {
-    lock.unlock();
-    stop(); //To keep the mutexes straight.
+    sniffer_.stop();
+    listenerThread_.stop();
   }
+
 }
 
 void ArpListener::start()
@@ -111,37 +120,86 @@ std::string ArpListener::device() const
   return device_;
 }
 
-void ArpListener::setAlert(const std::string &ip, Condition *condition, Mutex *mutex)
+void ArpListener::setAlert( const std::string &ip )
 {
-  MutexLocker lock( alertMutex_ );
-  std::map< std::string, std::pair< Condition*, Mutex*> >::iterator itr = alerts_.lower_bound(ip);
+
+  //Assumes that alertMutx_ is locked
+  std::map< std::string, std::pair<bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
-  { //exist
+  {
+    itr->second.first = true; //multiple request so we need to broadcast and not signal
     return;
   }
-
-
-  //mutex->lock();
-  alerts_[ip] = std::make_pair( condition, mutex );
+  else
+  {
+    alerts_[ip] = std::make_pair( false, new Condition );
+  }
 }
 
 void ArpListener::removeAlert(const std::string &ip)
 {
   MutexLocker lock( alertMutex_ );
-  alerts_.erase( ip );
+  //Assumes that alertMutx_ is locked
+
+  std::map< std::string, std::pair<bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+
+  if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
+  {
+    if( !itr->second.first ) //only one thread requested this
+    {
+      delete itr->second.second;
+      alerts_.erase( ip );
+    }
+    //else we don't know how many threads want this so do nothing
+  }
 }
 
 void ArpListener::sendAlert( const std::string &ip )
 {
   MutexLocker lock( alertMutex_ );
-  std::map< std::string, std::pair< Condition*, Mutex*> >::iterator itr = alerts_.lower_bound(ip);
+  std::map< std::string, std::pair< bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
   { //exist
-    std::pair< Condition*, Mutex* > stuff = itr->second;
-    stuff.second->lock();
-    stuff.first->signal();
-    stuff.second->unlock();
+    std::pair<bool, Condition* > stuff = itr->second;
+    if( stuff.first )
+      stuff.second->broadcast();
+    else
+      stuff.second->signal();
+    delete stuff.second;
+    alerts_.erase( ip );
   }
+}
+
+void ArpListener::waitForResponse(const std::string &ip)
+{
+  MutexLocker lock( alertMutex_ );
+  if(!( cache_->lookup(ip) == MACAddress( std::vector< uint8_t  >( 6, 0 ) ) ) )
+    return; //there is a mac in the cache
+  setAlert(ip);
+  std::map< std::string, std::pair< bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+
+  if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
+  { //exist
+    itr->second.second->wait(alertMutex_);
+  }
+  removeAlert(ip);
+  //else the alert either already happend or didn't exists
+}
+
+void ArpListener::waitForResponse(const std::string &ip, const timespec &timeout)
+{
+  MutexLocker lock( alertMutex_ );
+  if(!( cache_->lookup(ip) == MACAddress( std::vector< uint8_t  >( 6, 0 ) ) ) )
+    return; //there is a mac in the cache
+  setAlert(ip);
+  std::map< std::string, std::pair< bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+
+  if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
+  { //exist
+    itr->second.second->timeWait(alertMutex_, timeout );
+  }
+  removeAlert(ip);
+  //else the alert either already happend or didn't exists
 }

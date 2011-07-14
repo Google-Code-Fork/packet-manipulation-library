@@ -45,15 +45,6 @@ Thread::~Thread( )
 	delete threadID_;
 }
 
-Thread::Thread( const Thread & thread )
-{
-	#ifndef WIN32 //UNIX
-	if( threadID_ == NULL )
-		threadID_ = new pthread_t;
-	startRoutine_ = thread.startRoutine_;
-	threadID_ = thread.threadID_;
-	#endif
-}
 
 void Thread::setStartRoutine( StartRoutine routine)
 {
@@ -95,6 +86,6 @@ void Thread::stop()
 	if( err )
 		std::runtime_error( "Problem stopping thread !!" );
 	#endif
-	join();
+//	join();
 }
 

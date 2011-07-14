@@ -80,9 +80,9 @@ void Sniffer::start()
 	lock.unlock();
   for( uint32_t i = 0; i < snifferDevices_.size(); ++ i )
 	{
-		Thread thread;
-		thread.setStartRoutine( run_sniffer );
-		thread.start( this );
+    SmartPtr< Thread > thread = new Thread;
+    thread->setStartRoutine( run_sniffer );
+    thread->start( this );
 		threads_.push_back( thread );
 		log( "Started sniffer " );
 	}
@@ -354,12 +354,15 @@ void Sniffer::stop()
 {
 	MutexLocker lockThreads( threadNumMutex_ );
 	MutexLocker lockSniffer( sniffingMutex_ );
-	numberOfRunningThreads_ = 0;
-	sniffing_ = false;
-  for( uint32_t i = 0; i < threads_.size(); ++i )
-	{
-		threads_[i].stop();
-	}
+  if( sniffing_ )
+  {
+    numberOfRunningThreads_ = 0;
+    sniffing_ = false;
+    for( uint32_t i = 0; i < threads_.size(); ++i )
+    {
+      threads_[i]->stop();
+    }
+  }
 }
 
 void Sniffer::restart()

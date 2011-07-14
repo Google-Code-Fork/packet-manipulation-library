@@ -26,6 +26,7 @@
 #include "../Device/device.h"
 #include <string>
 #include <vector>
+#include "../common/smartPtr.h"
 
 void my_callback( uint8_t *args, const struct pcap_pkthdr* pkthdr, const uint8_t* packetCapture );
 void* run_sniffer(void* data);
@@ -67,7 +68,7 @@ private:
   void *packetSniffer();
 
 private:
-  std::vector< Thread > threads_;
+  std::vector< SmartPtr< Thread > > threads_;
   mutable Mutex coutMutex_;
   mutable Mutex logMutex_;
   std::string filter_;
