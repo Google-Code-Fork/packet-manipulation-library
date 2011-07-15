@@ -253,8 +253,9 @@ void* Sniffer::packetSniffer()
 	{
 		struct bpf_program fcode;
 		bpf_u_int32 NetMask;
-    //NetMask=0xffffff;
-    NetMask=PCAP_NETMASK_UNKNOWN;
+    NetMask=0xffffff;
+    //PCAP_NETMASK_UNKNOWN not declared on mac
+    //NetMask=PCAP_NETMASK_UNKNOWN;
 
 		//compile the filter
 		if(pcap_compile(pcap_ptr, &fcode, filter_.c_str(), 1, NetMask) < 0)

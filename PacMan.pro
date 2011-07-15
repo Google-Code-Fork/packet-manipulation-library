@@ -8,7 +8,7 @@ QT       -= core gui
 
 TARGET = PacMan
 TEMPLATE = lib
-
+LIBS += -lpcap
 DEFINES += PACMAN_LIBRARY
 
 Release:DESTDIR = release

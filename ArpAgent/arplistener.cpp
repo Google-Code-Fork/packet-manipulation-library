@@ -165,6 +165,8 @@ void ArpListener::sendAlert( const std::string &ip )
       stuff.second->broadcast();
     else
       stuff.second->signal();
+    lock.unlock();
+    lock.lock();
     delete stuff.second;
     alerts_.erase( ip );
   }

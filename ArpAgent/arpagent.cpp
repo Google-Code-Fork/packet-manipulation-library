@@ -138,3 +138,15 @@ void ArpAgent::stopAgent()
   listener_.stop();
   started_ = false;
 }
+
+bool ArpAgent::isInSubnet( const IPv4Address &arpIp ) const
+{
+  uint32_t network = arpIp.inAddr() & netmask_.inAddr();
+  return (network == network_.inAddr());
+}
+
+void ArpAgent::calculateNetworkAddress()
+{
+  IPv4Address net( ip_.inAddr() & netmask_.inAddr() );
+  network_ = net;
+}
