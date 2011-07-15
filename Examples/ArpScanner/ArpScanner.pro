@@ -9,7 +9,7 @@ QT       += core
 QT       -= gui
 
 INCLUDEPATH += /usr/local/include/PacMan
-LIBS += -lPacMan -lpcap
+LIBS += -L/usr/lib -lPacMan -lpcap
 
 TARGET = ArpScanner
 CONFIG   += console

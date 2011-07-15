@@ -63,7 +63,7 @@ pcap_if_t* DevicesLookup::operator[](const std::string &name)
 {
 	pcap_if_t *dev = alldevs_;
 
-	for(dev = alldevs_; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next);
+  for(dev = alldevs_; (dev != NULL) && !strcmp(dev->name, name.c_str()); dev = dev->next);
 
 	return dev;
 }
@@ -194,7 +194,11 @@ std::vector< std::string > DevicesLookup::devicesAvailable() const
 
 std::string DevicesLookup::gateway() const
 {
+#ifdef __APPLE__
+  std::string cmd = "netstat -nr | awk '/default/ {print $2}'";
+#elif
   std::string cmd = "ip route | awk '/via/ {print $3}'";
+#endif
   return exec( cmd.c_str() );
 }
 
@@ -270,7 +274,7 @@ std::vector< std::string > DevicesLookup::addressFamilies(const std::string &dev
       case AF_UNSPEC:
         results.push_back("AF_UNSPEC");
         break;
-      case AF_AX25:
+     /* case AF_AX25:
         results.push_back( "AF_AX25" );
         break;
       case AF_NETROM:
@@ -332,7 +336,7 @@ std::vector< std::string > DevicesLookup::addressFamilies(const std::string &dev
         break;
       case AF_MAX:
         results.push_back( "AF_MAX" );
-        break;
+        break;*/
       default:
         results.push_back( "UNKNOWN" );
         break;

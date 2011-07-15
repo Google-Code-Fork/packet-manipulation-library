@@ -38,12 +38,16 @@ public:
   MACAddress arp( IPv4Address ip );
 
 private:
+  bool isInSubnet( const IPv4Address &arpIP ) const;
+  void calculateNetworkAddress();
+
   Mutex startedMutex_;
   bool started_;
   MACAddress mac_;
   IPv4Address ip_;
   IPv4Address gateway_;
   IPv4Address netmask_;
+  IPv4Address network_;
   uint arpTimeout_;
   uint arpRetryLimit_;
   ArpCache cache_;
