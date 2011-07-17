@@ -154,7 +154,8 @@ HEADERS += \
     #Stream/tcpStream.h \
     #Stream/StreamProcessor.h \
     common/pthreaderrors.h \
-    common/uncopyable.h
+    common/uncopyable.h \
+    common/deprecated.h
 
 
 OTHER_FILES +=
@@ -186,4 +187,3 @@ INSTALLS += sniffer_header_files trans_header_files link_header_files inet_heade
  packet_header_files device_header_files injector_header_files common_header_files arpagent_header_files pacman_lib
 
 QMAKE_CLEAN += libPacMan.so*
-

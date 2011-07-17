@@ -63,7 +63,9 @@ pcap_if_t* DevicesLookup::operator[](const std::string &name)
 {
 	pcap_if_t *dev = alldevs_;
 
-  for(dev = alldevs_; (dev != NULL) && !strcmp(dev->name, name.c_str()); dev = dev->next);
+  for(dev = alldevs_; (dev != NULL) && !strcmp(dev->name, name.c_str()); dev = dev->next)
+  {
+  }
 
 	return dev;
 }
@@ -78,7 +80,9 @@ bool DevicesLookup::isValid(const std::string &name) const
 {
 	pcap_if_t *dev = alldevs_;
 
-	for(dev = alldevs_; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next);
+  for(dev = alldevs_; dev != NULL && !strcmp(dev->name, name.c_str()); dev = dev->next)
+  {
+  }
 
 	return (dev != NULL); 
 

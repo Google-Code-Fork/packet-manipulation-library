@@ -55,10 +55,20 @@ void Semaphore::wait()
 	pthread_mutex_unlock( &count_mutex );
 }
 
-int Semaphore::getNum()  
+int Semaphore::count() const
+{
+  pthread_mutex_lock( &count_mutex );
+  int tmp = num_;
+  pthread_mutex_unlock( &count_mutex );
+  return tmp;
+}
+
+int Semaphore::getNum() const
 {
 	pthread_mutex_lock( &count_mutex );
 	int tmp = num_;
 	pthread_mutex_unlock( &count_mutex );
 	return tmp;
 }
+
+
