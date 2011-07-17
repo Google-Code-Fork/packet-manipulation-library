@@ -42,7 +42,7 @@ private:
     std::string arpFilter_;
     std::string device_;
     mutable Mutex alertMutex_;
-    std::map< std::string, std::pair< bool, Condition* > > alerts_; //bool multiple requests? broadcast or signal
+    std::map< std::string, std::pair< Semaphore*, Condition* > > alerts_; //bool multiple requests? broadcast or signal
 
     static const std::string k_arp_filter;
 

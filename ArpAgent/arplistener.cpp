@@ -18,9 +18,10 @@ ArpListener::ArpListener():running_(false), cache_(NULL), arpFilter_( k_arp_filt
 ArpListener::~ArpListener()
 {
   MutexLocker lock2( alertMutex_ );
-  std::map< std::string, std::pair< bool, Condition* > >::iterator itr;
+  std::map< std::string, std::pair< Semaphore*, Condition* > >::iterator itr;
   for( itr = alerts_.begin(); itr != alerts_.end(); ++itr )
   {
+    delete itr->second.first;
     delete itr->second.second;
   }
 
@@ -123,52 +124,56 @@ void ArpListener::setAlert( const std::string &ip )
 {
 
   //Assumes that alertMutx_ is locked
-  std::map< std::string, std::pair<bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+  std::map< std::string, std::pair<Semaphore* , Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
   {
-    itr->second.first = true; //multiple request so we need to broadcast and not signal
+    itr->second.first->post(); //multiple request so we need to broadcast and not signal
     return;
   }
   else
   {
-    alerts_[ip] = std::make_pair( false, new Condition );
+    alerts_[ip] = std::make_pair( new Semaphore, new Condition );
+    alerts_[ip].first->post();
   }
 }
 
 void ArpListener::removeAlert(const std::string &ip)
 {
-  //Assumes that alertMutx_ is locked
+  //Assumes that alertMutex_ is locked
 
-  std::map< std::string, std::pair<bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+  std::map< std::string, std::pair<Semaphore*, Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
   {
-    if( !itr->second.first ) //only one thread requested this
+    itr->second.first->wait();
+    if( itr->second.first->count() == 0 ) //is the last thread using this.
     {
+      delete itr->second.first;
       delete itr->second.second;
       alerts_.erase( ip );
     }
-    //else we don't know how many threads want this so do nothing
   }
 }
 
 void ArpListener::sendAlert( const std::string &ip )
 {
   MutexLocker lock( alertMutex_ );
-  std::map< std::string, std::pair< bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+  std::map< std::string, std::pair< Semaphore*, Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
   { //exist
-    std::pair<bool, Condition* > stuff = itr->second;
-    if( stuff.first )
+    std::pair<Semaphore*, Condition* > stuff = itr->second;
+    if( stuff.first->count() > 1 )
       stuff.second->broadcast();
     else
       stuff.second->signal();
     lock.unlock();
-    lock.lock();
-    delete stuff.second;
-    alerts_.erase( ip );
+
+    //deletion MUST be done in the waitForResponse thread so that the condition
+    //isn't deleted when the waitForResponse thread is still using it.
+    //delete stuff.second;
+    //alerts_.erase( ip );
   }
 }
 
@@ -178,7 +183,7 @@ void ArpListener::waitForResponse(const std::string &ip)
   if(!( cache_->lookup(ip) == MACAddress( std::vector< uint8_t  >( 6, 0 ) ) ) )
     return; //there is a mac in the cache
   setAlert(ip);
-  std::map< std::string, std::pair< bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+  std::map< std::string, std::pair< Semaphore*, Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
   { //exist
@@ -194,7 +199,7 @@ void ArpListener::waitForResponse(const std::string &ip, const timespec &timeout
   if(!( cache_->lookup(ip) == MACAddress( std::vector< uint8_t  >( 6, 0 ) ) ) )
     return; //there is a mac in the cache
   setAlert(ip);
-  std::map< std::string, std::pair< bool, Condition* > >::iterator itr = alerts_.lower_bound(ip);
+  std::map< std::string, std::pair< Semaphore*, Condition* > >::iterator itr = alerts_.lower_bound(ip);
 
   if( itr != alerts_.end() && !(alerts_.key_comp()(ip, itr->first) ) )
   { //exist

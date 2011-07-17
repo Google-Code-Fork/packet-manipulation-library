@@ -33,6 +33,8 @@
 #include "pthreaderrors.h"
 #include "uncopyable.h"
 #include <time.h>
+#include "deprecated.h"
+
 typedef void*(*StartRoutine)(void*);
 #endif
 
@@ -131,13 +133,14 @@ class Semaphore : private Uncopyable
 		virtual ~Semaphore();
 		void post();
 		void wait();
-		int getNum();
+    DEPRECATED(int getNum() const);
+    int count() const;
 
 	private: 
 #ifndef WIN32 //UNIX
 		int num_;
-		pthread_mutex_t count_mutex;
-		pthread_cond_t count_condition;
+    mutable pthread_mutex_t count_mutex;
+    mutable pthread_cond_t count_condition;
 #endif
 };
 
