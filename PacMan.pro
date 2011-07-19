@@ -73,6 +73,7 @@ COMMON_HEADERS = \
     common/smartPtr.h \
     common/helper.h \
     common/pthreaderrors.h \
+    common/deprecated.h \
     common/uncopyable.h
 
 DEVICE_HEADERS = \
@@ -153,10 +154,6 @@ HEADERS += \
     #Stream/Stream.h \
     #Stream/tcpStream.h \
     #Stream/StreamProcessor.h \
-    common/pthreaderrors.h \
-    common/uncopyable.h \
-    common/deprecated.h
-
 
 OTHER_FILES +=
 

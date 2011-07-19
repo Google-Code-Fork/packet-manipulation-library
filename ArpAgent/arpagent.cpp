@@ -26,6 +26,7 @@ void ArpAgent::setCacheTimeout(const uint &seconds)
 void ArpAgent::setIPv4Address(const IPv4Address &ip)
 {
   ip_ = ip;
+  calculateNetworkAddress();
   requestor_.setSourceIP( ip_ );
 }
 
@@ -37,6 +38,7 @@ void ArpAgent::setIPv4Gateway(const IPv4Address &gateway)
 void ArpAgent::setNetmask(const IPv4Address &netmask)
 {
   netmask_ = netmask;
+  calculateNetworkAddress();
 }
 
 void ArpAgent::setMacAddress(const MACAddress &mac)
