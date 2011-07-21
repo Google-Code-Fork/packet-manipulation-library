@@ -65,7 +65,8 @@ SOURCES += \
     ArpAgent/arplistener.cpp \
     ArpAgent/arprequestor.cpp \
     Packet/Inet/ipv4address.cpp \
-    common/condition.cpp
+    common/condition.cpp \
+    Packet/Link/oui.cpp
 
 COMMON_HEADERS = \
     common/threads.h \
@@ -111,7 +112,8 @@ LINK_HEADERS = \
     Packet/Link/mac.h \
     Packet/Link/linkData.h \
     Packet/Link/link.h \
-    Packet/Link/ethernet.h 
+    Packet/Link/oui.h \
+    Packet/Link/ethernet.h
 
 TRANS_HEADERS = \
     Packet/Trans/wsOption.h \

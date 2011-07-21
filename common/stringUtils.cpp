@@ -26,7 +26,7 @@ std::vector< std::string > split( const std::string &string, const char &del )
 	std::string tmpString;
   for( uint32_t i = 0; i < string.size(); ++i )
 	{
-		if( string[i] != del )
+    if( string[i] != del )
 		{
 			tmpString += string[i];
 		}
@@ -40,4 +40,31 @@ std::vector< std::string > split( const std::string &string, const char &del )
 		stringList.push_back( tmpString );
 
 	return stringList;
+}
+
+
+std::string removeLeadingWhiteSpace(const std::string &string)
+{
+  std::string newString = "";
+  bool foundChar = false;
+  for( int i = 0; i < string.size(); ++i )
+  {
+    if( foundChar )
+    {
+      newString.push_back( string[i] );
+      continue;
+    }
+    switch( string[i] )
+    {
+      case ' ':
+      case '\t':
+      case '\n':
+      case '\r':
+      break;
+      default:
+       newString.push_back( string[i] );
+       foundChar = true;
+    };
+  }
+  return newString;
 }
