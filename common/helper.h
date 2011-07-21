@@ -27,19 +27,25 @@
 //FOR LEXICAL TYPE CHANGING 
 //Call with int a = ss_atoi<int>( std::string );
 template<typename RT>
-RT ss_atoi( const std::string& the_string )
+RT ss_atoi( const std::string& the_string, bool hex = false )
 {
   std::istringstream temp_ss(the_string);
   RT num;
-  temp_ss >> num;
+  if( hex )
+    temp_ss >> std::hex >> num;
+  else
+    temp_ss >> num;
   return num;
 }
 
 template< typename  RT >
-std::string ss_itoa( const RT& num )
+std::string ss_itoa( const RT& num, bool hex = false )
 {
   std::stringstream ss;
-  ss << num;
+  if( hex )
+    ss << std::hex << num;
+  else
+    ss << num;
   return ss.str();
 }
 

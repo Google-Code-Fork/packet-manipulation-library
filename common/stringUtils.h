@@ -22,4 +22,4 @@
 
 std::vector< std::string > split( const std::string &string, const char &del );
 
-
+std::string removeLeadingWhiteSpace( const std::string &string );
