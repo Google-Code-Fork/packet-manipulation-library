@@ -200,7 +200,7 @@ std::string DevicesLookup::gateway() const
 {
 #ifdef __APPLE__
   std::string cmd = "netstat -nr | awk '/default/ {print $2}'";
-#elif
+#else
   std::string cmd = "ip route | awk '/via/ {print $3}'";
 #endif
   return exec( cmd.c_str() );

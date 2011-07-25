@@ -47,7 +47,7 @@ std::string removeLeadingWhiteSpace(const std::string &string)
 {
   std::string newString = "";
   bool foundChar = false;
-  for( int i = 0; i < string.size(); ++i )
+  for( uint32_t i = 0; i < string.size(); ++i )
   {
     if( foundChar )
     {
