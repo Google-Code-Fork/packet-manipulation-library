@@ -1,4 +1,5 @@
 Required Packages:
+qmake
 
 For the library:
 libpcap-dev
@@ -11,12 +12,17 @@ texlive-latex-recommended
 texlive-latex-extra
 
 To build:
-type ./configure
-type make in the top directory:
+qmake 
+make
 
 To Install
 sudo make install
 
+Unit Test can be built and run from the Test Directory.
+
+Examples that can be compiled if and only if a version of libPacMan is installed with the header files are in the Examples Directory.
+
+**** This needs updated for documents ****
 To generate documentation type 'make docs' in the top directory
 
 Readme for the different modules of the libraries are available in their
