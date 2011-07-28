@@ -35,6 +35,7 @@
 #include"snifferData.h"
 #include"filterData.h"
 #include"constants.h"
+#include"../common/helper.h"
 
 const std::string Sniffer::logFile_ = "./sniffer.log";
 std::ofstream Sniffer::log_stream_(logFile_.c_str(), std::ios::out|std::ios::app);
@@ -77,7 +78,8 @@ void Sniffer::start()
 	if( sniffing_ ) //Don't start more threads if already sniffing
 		return;
   sniffing_=true;
-	lock.unlock();
+  filterData_->clearPackets();
+  lock.unlock();
   for( uint32_t i = 0; i < snifferDevices_.size(); ++ i )
 	{
     SmartPtr< Thread > thread = new Thread;
@@ -248,6 +250,8 @@ void* Sniffer::packetSniffer()
 		std::exit(-1);
 	}
 
+  pcap_ptrs_.push_back( pcap_ptr );
+
 
 	if (filter_.size())
 	{
@@ -312,17 +316,21 @@ void* Sniffer::packetSniffer()
 			snifferData_.log( "Sniffer processing packets" );
 			err = pcap_loop( pcap_ptr, -1, my_callback, args );
       snifferData_.log( "Sniffer had to stop processing packets" );
-      nanosleep( &sleeptime, NULL );
+      if( err == -2 )
+        nanosleep( &sleeptime, NULL );
+      if( err > 0 )
+        snifferData_.log( "Sniffer processed " + ss_itoa< int >( err ) );
 		}
 	}
 
 	MutexLocker lock2( sniffingMutex_ );
-	sniffing_ = false;
-	filterData_->pushPacket( Packet() );
-	
+  sniffing_ = false;
+  //flush out anything waiting on a packet with empty packets
+  for( int i = 0; i < 100; ++ i )
+    filterData_->pushPacket( Packet() );
 
   numberOfRunningThreads_ --;
-  snifferData_.log( "SnifferOffline Stopping!" );
+  snifferData_.log( "Sniffer Stopping!" );
   return NULL;
 }
 
@@ -355,6 +363,10 @@ void Sniffer::stop()
 {
 	MutexLocker lockThreads( threadNumMutex_ );
 	MutexLocker lockSniffer( sniffingMutex_ );
+  for( uint i = 0; i < pcap_ptrs_.size(); ++i )
+  {
+    pcap_breakloop( pcap_ptrs_[i] );
+  }
   if( sniffing_ )
   {
     numberOfRunningThreads_ = 0;
@@ -363,6 +375,9 @@ void Sniffer::stop()
     {
       threads_[i]->stop();
     }
+    //flush out anything waiting on a packet with empty packets
+    for( uint i = 0; i < 100; ++i )
+      filterData_->pushPacket( Packet() );
   }
 }
 

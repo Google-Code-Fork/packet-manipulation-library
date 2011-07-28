@@ -54,6 +54,13 @@ Packet FilterData::popPacket( )
 	return packet;
 }
 
+void FilterData::clearPackets()
+{
+  MutexLocker lock( incommingPacketsMutex_ );
+  semaphore_.setNum( 0 );
+  incommingPackets_.clear();
+}
+
 /**
 	Return number of packets currently in the queue 
 */

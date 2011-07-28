@@ -181,9 +181,9 @@ void IPv4::setChecksum( uint16_t checksum )
 	header_->ip_sum = htons( checksum );
 }
 
-uint32_t IPv4::sourceAddress() const
+IPv4Address IPv4::sourceAddress() const
 {
-	return ntohl(header_->ip_src.s_addr);
+  return IPv4Address( ntohl(header_->ip_src.s_addr) );
 }
 
 void IPv4::setSourceAddress( const IPv4Address &ip )
@@ -191,9 +191,9 @@ void IPv4::setSourceAddress( const IPv4Address &ip )
   header_->ip_src.s_addr = htonl(ip.inAddr());
 }
 
-uint32_t IPv4::destinationAddress() const
+IPv4Address IPv4::destinationAddress() const
 {
-	return ntohl(header_->ip_dst.s_addr);
+  return IPv4Address( ntohl(header_->ip_dst.s_addr) );
 }
 
 void IPv4::setDestinationAddress( const IPv4Address &ip )

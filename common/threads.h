@@ -135,6 +135,7 @@ class Semaphore : private Uncopyable
 		void wait();
     DEPRECATED(int getNum() const);
     int count() const;
+    void setNum( int num );
 
 	private: 
 #ifndef WIN32 //UNIX
