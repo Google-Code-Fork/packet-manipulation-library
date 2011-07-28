@@ -88,6 +88,7 @@ private:
   uint32_t numberOfRunningThreads_;
   mutable Mutex threadNumMutex_;
 
+  std::vector< pcap_t* > pcap_ptrs_;
   friend void* run_sniffer(void* data);
 };
 #endif

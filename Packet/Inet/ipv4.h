@@ -162,11 +162,11 @@ class IPv4 : public InetData
 		//!Calculates a valid checksum
 		void calculateChecksum();
 	  //!returns the sources ip
-	  uint32_t sourceAddress() const;
+    IPv4Address sourceAddress() const;
 	  //!Sets the source IP
     void setSourceAddress( const IPv4Address &ip );
 	  //!returns the destination IP.
-	  uint32_t destinationAddress()const;
+    IPv4Address destinationAddress()const;
 	  //!sets the destination IP.
     void setDestinationAddress( const IPv4Address &ip );
 	  //!Returns a packet buffer suitable for use in other libraries

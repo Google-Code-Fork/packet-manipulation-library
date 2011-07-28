@@ -71,4 +71,13 @@ int Semaphore::getNum() const
 	return tmp;
 }
 
+void Semaphore::setNum(int num)
+{
+  pthread_mutex_lock( &count_mutex );
+  num_ = num;
+  if( num_ > 0 )
+  pthread_cond_signal( &count_condition );
+  pthread_mutex_unlock( &count_mutex );
+}
+
 

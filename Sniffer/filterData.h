@@ -35,8 +35,9 @@ class FilterData : public BaseData
 	public:
 		FilterData( Mutex &coutMutex, Mutex &logMutex,
 				std::ofstream *log );
-		void pushPacket( Packet packet );
-		Packet popPacket( );
+    void pushPacket( Packet packet );
+    Packet popPacket( );
+    void clearPackets();
 		int size();
 		//void setPcapPointer( pcap_t* pointer );
 		//pcap_t* getPcapPointer();
