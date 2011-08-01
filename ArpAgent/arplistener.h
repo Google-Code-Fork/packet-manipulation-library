@@ -36,6 +36,8 @@ private:
 private:
     mutable Mutex runningMutex_;
     bool running_;
+    mutable Mutex stopMutex_;
+    bool stop_;
     Thread listenerThread_;
     ArpCache *cache_;
     Sniffer sniffer_;
