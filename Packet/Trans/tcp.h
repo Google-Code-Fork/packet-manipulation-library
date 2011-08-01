@@ -45,6 +45,7 @@
 #include "sackPermittedOption.h"
 #include "timeStampOption.h"
 #include "wsOption.h"
+#include "../Inet/ipv4.h"
 
 struct my_tcp {
   //!TCP datatype for use with the class TCP
@@ -165,6 +166,8 @@ class TCP : public TransData
   void setWindowSize( uint16_t ); 
   //!return the checksum
   uint16_t checksum() const;
+  //!set the checksum
+  void calculateChecksum( const IPv4 &ip, const PacketBuffer &data );
   //!set the checksum
   void setChecksum( uint16_t ); 
   //!return the urgent pointer

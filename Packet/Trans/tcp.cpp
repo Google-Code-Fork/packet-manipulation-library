@@ -418,3 +418,60 @@ void TCP::addOption( SmartPtr< TCPOption > option )
 {
 	options_.push_back(option);
 }
+
+void TCP::calculateChecksum(const IPv4 &ip, const PacketBuffer &data)
+{
+  setChecksum(0);
+  PacketBuffer pb;
+  PacketBuffer tcpSegment;
+  tcpSegment += makePacket();
+  tcpSegment += data;
+
+  std::vector< uint8_t > buff;
+  uint32_t tmpIp = ip.sourceAddress().inAddr();
+  buff.push_back( static_cast< uint8_t >( tmpIp >> 24 ) );
+  buff.push_back( static_cast< uint8_t >( (tmpIp & 0x00FF0000 ) >> 16 ) );
+  buff.push_back( static_cast< uint8_t >( ( tmpIp & 0x0000FF00 ) >> 8 ) );
+  buff.push_back( static_cast< uint8_t >( ( tmpIp & 0x000000FF ) ) );
+
+  tmpIp = ip.destinationAddress().inAddr();
+  buff.push_back( static_cast< uint8_t >( tmpIp >> 24 ) );
+  buff.push_back( static_cast< uint8_t >( (tmpIp & 0x00FF0000 ) >> 16 ) );
+  buff.push_back( static_cast< uint8_t >( ( tmpIp & 0x0000FF00 ) >> 8 ) );
+  buff.push_back( static_cast< uint8_t >( ( tmpIp & 0x000000FF ) ) );
+
+  buff.push_back( 0 );
+  buff.push_back( ip.protocol() );
+  uint16_t tmp = tcpSegment.size();
+  buff.push_back( static_cast< uint8_t >( tmp >> 8 )  );
+  buff.push_back( static_cast< uint8_t >( tmp & 0xFF ) );
+
+  pb.setBuffer(buff);
+  pb += tcpSegment;
+
+  uint32_t sum = 0;
+
+  buff = pb.vector();
+  uint i = 0;
+  for( i = 0; (i + 1) < buff.size(); i+=2 )
+  {
+    tmp = static_cast<uint16_t>(buff[i]) << 8;
+    tmp |= static_cast<uint8_t>(buff[i+1]);
+    sum += tmp;
+  }
+
+  if( i < buff.size() )
+  {
+    tmp = static_cast<uint16_t>(buff[i]) << 8;
+    sum += tmp;
+  }
+
+  sum = (sum >> 16) + (sum & 0xFFFF);
+  sum += (sum >> 16);
+
+  sum = ~sum;
+
+  setChecksum(static_cast< uint16_t>( sum ) );
+
+
+}

@@ -11,7 +11,7 @@ void* run_listener(void *data)
   return NULL;
 }
 
-ArpListener::ArpListener():running_(false), cache_(NULL), arpFilter_( k_arp_filter )
+ArpListener::ArpListener():running_(false), stop_(false), cache_(NULL), arpFilter_( k_arp_filter )
 {
 }
 
@@ -30,7 +30,7 @@ ArpListener::~ArpListener()
   if( running_ )
   {
     sniffer_.stop();
-    listenerThread_.stop();
+    listenerThread_.kill( 0 );
   }
 
 }
@@ -40,6 +40,11 @@ void ArpListener::start()
   MutexLocker lock( runningMutex_ );
   if( running_ )
     return;
+
+  MutexLocker lock2( stopMutex_ );
+  stop_ = false;
+  lock2.unlock();
+
   running_ = true;
   lock.unlock();
   listenerThread_.setStartRoutine( run_listener );
@@ -55,7 +60,11 @@ void ArpListener::stop()
   MutexLocker lock( runningMutex_ );
   if( !running_ )
     return;
-  listenerThread_.stop();
+  MutexLocker lock2( stopMutex_ );
+  stop_ = true;
+  lock2.unlock();
+  sniffer_.stop();
+  listenerThread_.join();
   running_ = false;
 }
 
@@ -97,6 +106,9 @@ void ArpListener::listenerThread()
         sendAlert( ip.toString() );
       }
     }
+    MutexLocker lock2( stopMutex_ );
+    if( stop_ )
+      break;
   }
 }
 
