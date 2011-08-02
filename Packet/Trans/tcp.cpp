@@ -167,6 +167,15 @@ TCP::TCP( const TCP &n )
 TCP& TCP::operator =( const TCP &n )
 {
   *header_ = *(n.header_);
+
+  for( uint32_t i = 0; i < n.options_.size(); ++i )
+  {
+    SmartPtr< TCPOption > option = new TCPOption();
+    option->setData( n.options_[i]->data() );
+    option->setKind( n.options_[i]->kind() );
+    option->setLength( n.options_[i]->length() );
+    options_.push_back(option);
+  }
   return *this;
 }
 
