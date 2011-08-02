@@ -30,7 +30,17 @@
 TCP::TCP()
 {
   header_ = new struct my_tcp;
+  header_->sport = 0;
+  header_->dport = 0;
+  header_->sequenceNumber = 0;
+  header_->ackNumber = 0;
+  header_->flags = 0;
+  header_->dataOffset = 0;
+  header_->window = 0;
+  header_->checksum = 0;
+  header_->urgentPointer = 0;
   setDataOffset( TCPStructSize );
+
 //  std::cerr << "TCP SIZE: " << static_cast<uint16_t>(getDataOffset()) << std::endl;
 }
 
@@ -396,21 +406,20 @@ PacketBuffer TCP::makePacket() const
 {
   std::vector< uint8_t > packet;
   int bytes = size();
-  std::cerr << "SIZE: " << bytes << std::endl;
+  //std::cerr << "SIZE: " << bytes << std::endl;
   uint8_t* ptr = (uint8_t*) header_;
   int sizeToCopy = bytes < TCPStructSize ? bytes : TCPStructSize;
   for( int i = 0; i < sizeToCopy; ++i )
   {
     packet.push_back( ptr[i] );
   }
-  for( int i = 0; i < bytes-TCPStructSize; ++i )
-    packet.push_back( 0 );
 	std::vector< SmartPtr< TCPOption > >::const_iterator itr;
 	for( itr = options_.begin(); itr != options_.end(); ++itr )
 	{
-		std::vector< uint8_t > bytes = (*itr)->packetData();
-
-	}
+    std::vector< uint8_t > bytes = (*itr)->packetData();
+    for( uint i = 0; i < bytes.size(); ++i )
+      packet.push_back( bytes[i] );
+  }
   return PacketBuffer( packet );
 }
 
