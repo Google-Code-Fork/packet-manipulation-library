@@ -48,10 +48,9 @@ class MSSOption : public TCPOption
 
 		void setMSS( const uint16_t &size )
 		{
-			uint16_t networkOrder = htons( size );
 			data_.clear();
-			data_.push_back( static_cast<uint8_t>( networkOrder >> 8 ) );
-			data_.push_back( static_cast<uint8_t>( networkOrder & 0xFF ) );
+      data_.push_back( static_cast<uint8_t>( size >> 8 ) );
+      data_.push_back( static_cast<uint8_t>( size & 0xFF ) );
 		}
 
 		uint16_t mss( ) const 

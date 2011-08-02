@@ -38,7 +38,7 @@ IPv4Address::IPv4Address( const std::string &ip )
   int valid = inet_aton( ip.c_str(), ((struct in_addr*)(&ip_)));
   if( !valid )
     ip_ = 0;
-  ip_ = htonl( ip_ );
+ // ip_ = htonl( ip_ );
 }
 
 IPv4Address::~IPv4Address()
@@ -118,7 +118,7 @@ uint32_t IPv4Address::inAddr() const
 
 std::string IPv4Address::toString() const
 {
-  uint32_t address = htonl( ip_ );
+  uint32_t address = ip_;
   const uint8_t *octet = reinterpret_cast< uint8_t* >( &address );
   std::stringstream ss;
   ss << static_cast< uint16_t >( octet[0] ) << ".";
