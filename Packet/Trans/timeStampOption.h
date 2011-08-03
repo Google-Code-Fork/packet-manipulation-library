@@ -61,7 +61,7 @@ class TimeStampOption : public TCPOption
 		value |= static_cast<uint32_t>(data_[2]) << 8;
 		value |= static_cast<uint32_t>(data_[3]);
 
-		return value;
+    return ntohl(value);
 
 	}
 
