@@ -144,7 +144,10 @@ std::string Sniffer::outputDevice( ) const
 */
 void Sniffer::setFilter(const std::string &filter)
 {
+  //filters not working on lion... :(
+#ifndef __APPLE__
 	filter_ = filter;
+#endif
 }
 
 /**
