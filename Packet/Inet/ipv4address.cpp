@@ -101,11 +101,12 @@ int IPv4Address::size() const
 
 PacketBuffer IPv4Address::makePacket() const
 {
+  uint32_t ip = ntohl( ip_ );
   std::vector< uint8_t > buff;
-  buff.push_back( static_cast< uint8_t >( ip_ >> 24 ) );
-  buff.push_back( static_cast< uint8_t >( (ip_ & 0x00FF0000) >> 16 ) );
-  buff.push_back( static_cast< uint8_t >( (ip_ & 0x0000FF00) >> 8 ) );
-  buff.push_back( static_cast< uint8_t >( ip_ & 0x000000ff) );
+  buff.push_back( static_cast< uint8_t >( ip >> 24 ) );
+  buff.push_back( static_cast< uint8_t >( (ip & 0x00FF0000) >> 16 ) );
+  buff.push_back( static_cast< uint8_t >( (ip & 0x0000FF00) >> 8 ) );
+  buff.push_back( static_cast< uint8_t >( ip & 0x000000ff) );
   PacketBuffer pb;
   pb.setBuffer(buff);
   return pb;
