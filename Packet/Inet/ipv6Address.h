@@ -34,7 +34,8 @@ class IPv6Address : public InetData
 		virtual ~IPv6Address();
 		
 		//! Sets the address base on the bytes in IPv6
-		void setIPv6Address( std::vector< uint8_t > address );
+    void setIPv6Address( const std::vector< uint8_t > &address );
+    void setIPv6Address( const std::string &ip );
 		//! Returns the size of the IPv6 address
 		int size() const;
 		//! Returns a Packetbuffer with the IPv6 address
@@ -42,7 +43,8 @@ class IPv6Address : public InetData
 		//! Places the IPv6 address in the array IPv6
 		void ipv6Array( uint8_t (&address) [IPv6AddressSize]);
 		//! returns true
-		bool isIPv6() const;
+    bool isIPv6() const;
+    std::string toString() const;
 
 	private:
 		//! Private data of IPv6Address

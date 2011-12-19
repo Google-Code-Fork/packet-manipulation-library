@@ -30,4 +30,11 @@ template<> bool Inet::is<IPv4>( ) const
 	return false;
 }
 
+template<> bool Inet::is<IPv6>() const
+{
+  if( header_ )
+    return header_->isIPv6();
+  return false;
+}
+
 
