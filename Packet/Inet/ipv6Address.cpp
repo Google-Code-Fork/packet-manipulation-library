@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include "ipv6Address.h"
 #include "inetData.h"
+#include <arpa/inet.h>
 #include "../packetBuffer.h"
 
 IPv6Address::IPv6Address() : address_( std::vector< uint8_t >(16,0) )
@@ -93,13 +94,53 @@ IPv6Address::~IPv6Address()
 {
 }
 
-void IPv6Address::setIPv6Address( std::vector< uint8_t > address )
+void IPv6Address::setIPv6Address( const std::vector< uint8_t > &address )
 {
 	if( address.size() != 16 )
 	{
 		throw std::runtime_error( "Invalid IPv6 address!" );
 	}
 	address_ = address;
+}
+
+void IPv6Address::setIPv6Address( const std::string &ip )
+{
+  unsigned char buf[sizeof(struct in6_addr)];
+  int s;
+
+  s = inet_pton(AF_INET6, ip.c_str(), buf);
+  if (s <= 0)
+  {
+      if (s == 0)
+          std::cerr <<  "IPv6 Address not in correct format \n" << std::endl;
+      else
+          std::cerr << "Error: inet_pton" << std::endl;
+  }
+
+  address_.clear();
+
+  for( int i = 0; i < 16; ++i )
+  {
+    address_.push_back( buf[i] );
+  }
+}
+
+std::string IPv6Address::toString() const
+{
+  unsigned char buf[sizeof(struct in6_addr)];
+  char str[INET6_ADDRSTRLEN];
+
+  for( int i = 0; i < 16; ++i )
+  {
+    buf[i] = address_[i];
+  }
+
+  if( NULL == inet_ntop( AF_INET6, buf, str, INET6_ADDRSTRLEN )) //error
+  {
+    std::cerr << "Error inet_ntop \n" << std::endl;
+  }
+
+  return std::string( str );
 }
 
 int IPv6Address::size() const

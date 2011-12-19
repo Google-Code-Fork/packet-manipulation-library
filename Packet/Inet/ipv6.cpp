@@ -119,22 +119,22 @@ void IPv6::setHopLimit( uint8_t hopLimit )
 
 //**********************************
 
-IPv6Address IPv6::sourceIP()
+IPv6Address IPv6::sourceAddress()
 {
 	return IPv6Address( header_->srcAddr );
 }
 
-void IPv6::setSourceIP( IPv6Address v6 )
+void IPv6::setSourceAddress( IPv6Address v6 )
 {
 	v6.ipv6Array( header_->srcAddr );
 }
 
-IPv6Address IPv6::destinationIP()
+IPv6Address IPv6::destinationAddress()
 {
 	return IPv6Address (header_->dstAddr );
 }
 
-void IPv6::setDestinationIP( IPv6Address v6 )
+void IPv6::setDestinationAddress( IPv6Address v6 )
 {
 	v6.ipv6Array( header_->dstAddr );
 }

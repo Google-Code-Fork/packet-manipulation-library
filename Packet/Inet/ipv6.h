@@ -95,13 +95,13 @@ class IPv6 : public InetData
 		void setHopLimit( uint8_t );
 
 		//!Return the source IPv6 address in the IP header
-		IPv6Address sourceIP();
+    IPv6Address sourceAddress();
 		//!Sets the source IPv6 address in the IP header to v6
-		void setSourceIP( IPv6Address v6 );
+    void setSourceAddress( IPv6Address v6 );
 		//!Return the destination IPv6 address in the IP header
-		IPv6Address destinationIP();
+    IPv6Address destinationAddress();
 		//!Set the destination IPv6 address in the IP header to v6
-		void setDestinationIP( IPv6Address v6 );
+    void setDestinationAddress( IPv6Address v6 );
 		//!Returns true this is IP! Overloaded from InetData so we can tell we have
 		//an IP header in the packet
 		bool isIPv6() const {return true;}
