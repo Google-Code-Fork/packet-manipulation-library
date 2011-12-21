@@ -48,7 +48,12 @@ class Inet : public Encapsulateable
 		Inet( const IPv4 &ip )
 		{
 			header_ = new IPv4( ip );
-		}
+    }
+
+    Inet( const IPv6 &ip )
+    {
+      header_ = new IPv6( ip );
+    }
 
 		//!copy constructor
 		Inet( const Inet &n )
@@ -105,7 +110,7 @@ class Inet : public Encapsulateable
 
 		//!Returns the size of this Inet
 		int size() const
-		{
+    {
 			return header_->size();
 		}
 
@@ -121,7 +126,11 @@ class Inet : public Encapsulateable
 			else if( n.header_->isIPv4() )
 			{
 				header_ = new IPv4( *((IPv4*)n.header_) );
-			}
+      }
+      else if( n.header_->isIPv6() )
+      {
+        header_ = new IPv6( *((IPv6*)n.header_) );
+      }
 			else
 				header_ = NULL;
 		}
