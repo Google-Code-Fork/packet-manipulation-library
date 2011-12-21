@@ -13,7 +13,7 @@ IPv6Address::IPv6Address() : address_( std::vector< uint8_t >(16,0) )
 {
 }
 
-IPv6Address::IPv6Address( uint8_t address[IPv6AddressSize] ) : address_(
+IPv6Address::IPv6Address( const uint8_t address[IPv6AddressSize] ) : address_(
 		std::vector< uint8_t >(16,0) )
 {
 	address_[0] = address[0];
@@ -34,7 +34,7 @@ IPv6Address::IPv6Address( uint8_t address[IPv6AddressSize] ) : address_(
 	address_[15] = address[15];
 }
 
-IPv6Address::IPv6Address( std::vector< uint8_t > address ) : address_(
+IPv6Address::IPv6Address( const std::vector< uint8_t > &address ) : address_(
 		std::vector< uint8_t >(16,0) )
 {
 	if( address.size() != 16 )
