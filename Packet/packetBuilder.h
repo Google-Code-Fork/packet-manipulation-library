@@ -58,5 +58,6 @@ template <> Packet PacketBuilder::build<UDP>( const  uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<TCP>( const  uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size );
+template <> Packet PacketBuilder::build<IPv6>( const uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<Arp>( const uint8_t* buff, int size );
 #endif

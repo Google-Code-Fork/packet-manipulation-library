@@ -40,8 +40,8 @@ template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size
       break;
     case ethernetProtocol::k_ipv6:
       //std::cerr << "IPv6" << std::endl;
-      //placeholder
-      //break;
+      p2 = build< IPv6 >( newbuff, newsize );
+      break;
     case ethernetProtocol::k_arp:
       p2 = build< Arp >( newbuff, newsize );
       //std::cerr << "ARP" << std::endl;
@@ -79,6 +79,30 @@ template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size )
   int newsize = size - p.size();
   
   switch( static_cast<uint16_t>( ip.protocol() ) )
+  {
+    case ipProtocol::TCP:
+      p2 = build< TCP >( newbuff, newsize );
+      break;
+    case ipProtocol::UDP:
+      p2 = build< UDP >( newbuff, newsize );
+      break;
+    default:
+      p2 = build< Raw >( newbuff, newsize );
+  }
+
+  return p + p2;
+}
+
+template <> Packet PacketBuilder::build<IPv6>( const uint8_t* buff, int size )
+{
+  IPv6 ip(buff, size );
+  Packet p;
+  p.pushBackInet( ip );
+  Packet p2;
+  const uint8_t* newbuff = buff + p.size();
+  int newsize = size - p.size();
+
+  switch( static_cast<uint16_t>( ip.nextHeader() ) )
   {
     case ipProtocol::TCP:
       p2 = build< TCP >( newbuff, newsize );

@@ -64,7 +64,7 @@ class IPv6 : public InetData
 		IPv6( const IPv6 &n );
 		//!Equality operator
 		IPv6& operator = ( const IPv6 &n );
-		//!Destructor
+    //!Destructor_
 		~IPv6();
 
 		//!Returns the Version field
