@@ -13,16 +13,19 @@
 IPv6::IPv6()
 {
 	header_ = new struct IPv6Header;
-	//setHeaderLength( 40 );
 }
 
-IPv6::IPv6( const uint8_t *packet, int size )
+IPv6::IPv6( const uint8_t *packet, const int &size )
 {
 	header_ = new struct IPv6Header;
-	int headerSize = sizeof( header_ );
-	if ( size < headerSize )
+  int headerSize = sizeof( *header_ );
+  if ( size < headerSize + (IPv6Address::IPv6AddressSize * 2) )
 		throw std::runtime_error( "packet capture too small to make packet" );
-	*header_ = *((struct IPv6Header*)packet);
+  *header_ = *((struct IPv6Header*)packet);
+  IPv6Address src( (packet+headerSize) );
+  srcAddress_ = src;
+  IPv6Address dst( (packet+headerSize+IPv6Address::IPv6AddressSize) );
+  dstAddress_ = dst;
 }
 
 IPv6::~IPv6()
@@ -42,19 +45,17 @@ IPv6& IPv6::operator = ( const IPv6 &n )
   return *this;
 }
 
-uint32_t IPv6::version() const
+uint8_t IPv6::version() const
 {
-	uint32_t version = header_->ip_vtf;
-	return ((version & 0xF0000000) >> 28);
+  uint32_t version = ntohl(header_->ip_vtf);
+  return static_cast<uint8_t>((version & 0xF0000000) >> 28);
 }
 
-void IPv6::setVersion( uint32_t version )
+void IPv6::setVersion( const uint8_t &version )
 {
-	//if version too large to fit in the field
-	if( 0 < (0xFFFFFFF0 & version) )
-		throw std::runtime_error( "Invalid IPv6 Version" );
-	header_->ip_vtf &= 0x0FFFFFFF; //Save Traffic Class and Flow Label fields
-	header_->ip_vtf |= version << 28;
+  uint32_t ver = static_cast<uint32_t>(version) << 28;
+  header_->ip_vtf &= 0x0FFFFFFF;
+  header_->ip_vtf |= ver;
 }
 
 uint32_t IPv6::trafficClass() const
@@ -63,7 +64,7 @@ uint32_t IPv6::trafficClass() const
 	return ((trafficClass & 0x0FF00000 ) >> 20);
 }
 
-void IPv6::setTrafficClass( uint32_t tClass )
+void IPv6::setTrafficClass( const uint32_t &tClass )
 {
 	//if traffic class too large to fit in the field
 	if( 0 < (0xFFFFFF00 & tClass) )
@@ -78,7 +79,7 @@ uint32_t IPv6::flowLabel() const
 	return (flowLabel & 0x000FFFFF);
 }
 
-void IPv6::setFlowLabel( uint32_t fLabel )
+void IPv6::setFlowLabel( const uint32_t &fLabel )
 {
 	//if flow label too large to fit in the field
 	if( 0 < (0xFFF00000 & fLabel) )
@@ -92,51 +93,51 @@ uint16_t IPv6::payloadLength() const
 	return ntohs( header_->ip_len );
 }
 
-void IPv6::setPayloadLength( uint16_t length )
+void IPv6::setPayloadLength( const uint16_t &length )
 {
 	header_->ip_len = htons( length );
 }
 
 uint8_t IPv6::nextHeader() const
 {
-	return ntohs( header_->ip_nh );
+  return  header_->ip_nh;
 }
 
-void IPv6::setNextHeader( uint8_t nextHeader )
+void IPv6::setNextHeader( const uint8_t &nextHeader )
 {
 	header_->ip_nh = htons( nextHeader );
 }
 
 uint8_t IPv6::hopLimit() const
 {
-	return ntohs( header_->ip_hl );
+  return header_->ip_hl;
 }
 
-void IPv6::setHopLimit( uint8_t hopLimit )
+void IPv6::setHopLimit( const uint8_t &hopLimit )
 {
-	header_->ip_hl = htons( hopLimit );
+  header_->ip_hl = hopLimit;
 }
 
 //**********************************
 
-IPv6Address IPv6::sourceAddress()
+IPv6Address IPv6::sourceAddress() const
 {
-	return IPv6Address( header_->srcAddr );
+  return srcAddress_;
 }
 
-void IPv6::setSourceAddress( IPv6Address v6 )
+void IPv6::setSourceAddress( const IPv6Address &v6 )
 {
-	v6.ipv6Array( header_->srcAddr );
+  srcAddress_ = v6;
 }
 
-IPv6Address IPv6::destinationAddress()
+IPv6Address IPv6::destinationAddress() const
 {
-	return IPv6Address (header_->dstAddr );
+  return dstAddress_;
 }
 
-void IPv6::setDestinationAddress( IPv6Address v6 )
+void IPv6::setDestinationAddress( const IPv6Address &v6 )
 {
-	v6.ipv6Array( header_->dstAddr );
+  dstAddress_ = v6;
 }
 
 
