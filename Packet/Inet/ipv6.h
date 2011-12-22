@@ -60,6 +60,10 @@ class IPv6 : public InetData
 		IPv6();
 		//!Constructs a IPv6 object from a buffer
     IPv6( const uint8_t *packet, const int &size );
+    //!Constructs a IPv6 object from a packet buffer
+    IPv6( const PacketBuffer &packet );
+    //!Constructs a IPv6 object from a vector of bytes
+    IPv6( const std::vector< uint8_t > &bytes );
 		//!Copy constructor
 		IPv6( const IPv6 &n );
 		//!Equality operator
@@ -74,9 +78,9 @@ class IPv6 : public InetData
 		//!unless they are trying to create a malformed packet.
     void setVersion( const uint8_t &version );
 		//!Returns the Traffic Class field
-		uint32_t trafficClass() const;
+    uint8_t trafficClass() const;
 		//!Sets the Traffic Class field
-    void setTrafficClass( const uint32_t &tclass );
+    void setTrafficClass( const uint8_t &tclass );
 		//!Return the Flow Label field
 		uint32_t flowLabel() const;
 		//!Sets the Flow Label field
@@ -104,7 +108,10 @@ class IPv6 : public InetData
     void setDestinationAddress( const IPv6Address &v6 );
 		//!Returns true this is IP! Overloaded from InetData so we can tell we have
 		//an IP header in the packet
-		bool isIPv6() const {return true;}
+    bool isIPv6() const {return true;}
+
+    PacketBuffer makePacket() const;
+    int size() const;
 
 	private:
 		//!Internal data for IPv6

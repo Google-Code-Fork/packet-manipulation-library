@@ -24,6 +24,8 @@ class IPv6Address : public InetData
     IPv6Address( const uint8_t address[IPv6AddressSize] );
 		//! Builds a IPv6Address with the bytes in IPv6
     IPv6Address( const std::vector< uint8_t > &address );
+    //! Builds a IPv6Address from a string
+    IPv6Address( const std::string &address );
 		//! Copy Constructor
 		IPv6Address( const IPv6Address& a );
 		//! Assignment operator

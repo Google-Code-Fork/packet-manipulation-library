@@ -41,9 +41,9 @@ class TransData : public Encapsulateable
     //!destructor
     virtual ~TransData(){}
     //!return 0
-    virtual int size() const { return 0; }
+    virtual int size() const = 0;
     //!returns empty packet buffer
-    virtual PacketBuffer makePacket( ) const { return PacketBuffer(); }
+    virtual PacketBuffer makePacket( ) const = 0;
     //!returns false (to be overloaded by TCP)
     virtual bool isTCP() const { return false; }
     //!returns false (to be overloaded by UDP)

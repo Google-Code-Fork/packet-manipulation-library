@@ -46,9 +46,9 @@ class LinkData : public Encapsulateable
     //this function
     virtual bool isMac() const { return false; }
     //!Returns an empty packet buffer
-    virtual PacketBuffer makePacket() const { return PacketBuffer(); }
+    virtual PacketBuffer makePacket() const = 0;
     //!Returns 0
-    virtual int size() const { return 0; } //should be defined by base class//{ return 0; }
+    virtual int size() const = 0;
 };
 
 

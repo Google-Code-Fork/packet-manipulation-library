@@ -28,6 +28,16 @@ IPv6::IPv6( const uint8_t *packet, const int &size )
   dstAddress_ = dst;
 }
 
+IPv6::IPv6( const PacketBuffer &packet )
+{
+  //TODO
+}
+
+IPv6::IPv6( const std::vector< uint8_t > &bytes )
+{
+  //TODO
+}
+
 IPv6::~IPv6()
 {
 	delete header_;
@@ -36,7 +46,9 @@ IPv6::~IPv6()
 IPv6::IPv6( const IPv6 &n )
 {
 	header_ = new struct IPv6Header;
-	*header_ = *(n.header_);
+  *header_ = *(n.header_);
+  srcAddress_ = n.srcAddress_;
+  dstAddress_ = n.dstAddress_;
 }
 
 IPv6& IPv6::operator = ( const IPv6 &n )
@@ -54,28 +66,30 @@ uint8_t IPv6::version() const
 void IPv6::setVersion( const uint8_t &version )
 {
   uint32_t ver = static_cast<uint32_t>(version) << 28;
-  header_->ip_vtf &= 0x0FFFFFFF;
-  header_->ip_vtf |= ver;
+  uint32_t ip_vtf = ntohl( header_->ip_vtf );
+  ip_vtf &= 0x0FFFFFFF;
+  ip_vtf |= ver;
+  header_->ip_vtf = htonl( ip_vtf );
 }
 
-uint32_t IPv6::trafficClass() const
+uint8_t IPv6::trafficClass() const
 {
-	uint32_t trafficClass = header_->ip_vtf;
-	return ((trafficClass & 0x0FF00000 ) >> 20);
+  uint32_t trafficClass = ntohl(header_->ip_vtf);
+  return static_cast<uint8_t>((trafficClass & 0x0FF00000 ) >> 20);
 }
 
-void IPv6::setTrafficClass( const uint32_t &tClass )
+void IPv6::setTrafficClass( const uint8_t &tClass )
 {
-	//if traffic class too large to fit in the field
-	if( 0 < (0xFFFFFF00 & tClass) )
-		throw std::runtime_error( "Invalid IPv6 Traffic Class size" );
-	header_->ip_vtf &= 0xF00FFFFF; //Save Version and Flow Label fields
-	header_->ip_vtf |= tClass << 20;
+  uint32_t tc = static_cast<uint32_t>( tClass ) << 20;
+  uint32_t ip_vtf = ntohl( header_->ip_vtf );
+  ip_vtf &= 0xF00FFFFF;
+  ip_vtf |= tc;
+  header_->ip_vtf = htonl( ip_vtf );
 }
 
 uint32_t IPv6::flowLabel() const
 {
-	uint32_t flowLabel = header_->ip_vtf;
+  uint32_t flowLabel = ntohl(header_->ip_vtf);
 	return (flowLabel & 0x000FFFFF);
 }
 
@@ -84,8 +98,11 @@ void IPv6::setFlowLabel( const uint32_t &fLabel )
 	//if flow label too large to fit in the field
 	if( 0 < (0xFFF00000 & fLabel) )
 		throw std::runtime_error( "Invalid IPv6 Flow Label field size" );
-	header_->ip_vtf &= 0xFFF00000;
-	header_->ip_vtf |= fLabel;
+  uint32_t fl = static_cast<uint32_t>( fLabel ) & 0x000FFFFF;
+  uint32_t ip_vtf = ntohl( header_->ip_vtf );
+  ip_vtf &= 0xFFF00000;
+  ip_vtf |= fl;
+  header_->ip_vtf = htonl( ip_vtf );
 }
 
 uint16_t IPv6::payloadLength() const
@@ -105,7 +122,7 @@ uint8_t IPv6::nextHeader() const
 
 void IPv6::setNextHeader( const uint8_t &nextHeader )
 {
-	header_->ip_nh = htons( nextHeader );
+  header_->ip_nh = nextHeader;
 }
 
 uint8_t IPv6::hopLimit() const
@@ -140,6 +157,27 @@ void IPv6::setDestinationAddress( const IPv6Address &v6 )
   dstAddress_ = v6;
 }
 
+int IPv6::size() const
+{
+  return sizeof( *header_ ) + ( 2 * IPv6Address::IPv6AddressSize );
+}
 
+PacketBuffer IPv6::makePacket() const
+{
+  PacketBuffer pb;
+  std::vector< uint8_t > tmp;
+  uint8_t* ptr = (uint8_t*) header_;
+  int size = sizeof( *header_ );
+  for( int i = 0; i < size; ++i )
+  {
+    tmp.push_back( ptr[i] );
+  }
 
+  pb += tmp;
+  pb += srcAddress_.makePacket();
+  pb += dstAddress_.makePacket();
+
+  return pb;
+
+}
 

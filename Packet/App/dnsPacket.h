@@ -246,7 +246,7 @@ class DNSPacket : public AppData
   public:
     DNSPacket( );
 		DNSPacket( const uint8_t *data, int size );
-    DNSPacket( const std::vector<uint8_t> packet );
+    DNSPacket( const std::vector<uint8_t> &packet );
     DNSPacket( const DNSPacket &n );
     DNSPacket& operator=( const DNSPacket &n );
 		DNSPacket( const PacketBuffer &packet );
@@ -314,7 +314,8 @@ class DNSPacket : public AppData
 
     std::vector<uint8_t> data( ) const;
 		PacketBuffer makePacket() const;
-		//std::vector< uint8_t > generateSafePacket( ) const;
+    int size() const { return makePacket().size(); }
+    //std::vector< uint8_t > generateSafePacket( ) const;
 		
 		bool isDNS() const {return true;}
 

@@ -47,9 +47,9 @@ class InetData : public Encapsulateable
     //!This is a stub as the IPv6 datatype doesn't exist yet
     virtual bool isIPv6() const { return false; }
     //!Pure Function
-    virtual int size() const { return 0; }
+    virtual int size() const = 0;
     //!returns an empty buffer
-    virtual PacketBuffer makePacket() const { return PacketBuffer(); }
+    virtual PacketBuffer makePacket() const = 0;
 };
 
 #endif

@@ -19,7 +19,7 @@ DNSPacket::DNSPacket( const uint8_t *data, int size )
 	init( packet );
 }
 
-DNSPacket::DNSPacket( const std::vector<uint8_t> packet )
+DNSPacket::DNSPacket( const std::vector<uint8_t> &packet )
 {
   init( packet );
 }
