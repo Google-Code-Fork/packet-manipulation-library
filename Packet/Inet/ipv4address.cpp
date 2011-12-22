@@ -29,6 +29,8 @@ IPv4Address::IPv4Address( std::vector< uint8_t > address )
   }
 }
 
+
+
 IPv4Address::IPv4Address( const uint32_t &ip ): ip_( htonl(ip) )
 {
 }

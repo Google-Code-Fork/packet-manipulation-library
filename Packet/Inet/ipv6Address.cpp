@@ -34,6 +34,11 @@ IPv6Address::IPv6Address( const uint8_t address[IPv6AddressSize] ) : address_(
 	address_[15] = address[15];
 }
 
+IPv6Address::IPv6Address( const std::string &address )
+{
+  setIPv6Address(address);
+}
+
 IPv6Address::IPv6Address( const std::vector< uint8_t > &address ) : address_(
 		std::vector< uint8_t >(16,0) )
 {
