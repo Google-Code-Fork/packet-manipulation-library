@@ -183,3 +183,32 @@ bool IPv6Address::isIPv6() const
 	return true;
 }
 
+IPv6Address IPv6Address::operator &(const IPv6Address& address) const
+{
+  std::vector< uint8_t > bytes;
+  for( int i = 0; i < IPv6AddressSize; ++i )
+  {
+    bytes.push_back( address_[i] & address.address_[i] );
+  }
+  return IPv6Address( bytes );
+}
+
+IPv6Address IPv6Address::operator |(const IPv6Address& address) const
+{
+  std::vector< uint8_t > bytes;
+  for( int i = 0; i < IPv6AddressSize; ++i )
+  {
+    bytes.push_back( address_[i] | address.address_[i] );
+  }
+  return IPv6Address( bytes );
+}
+
+IPv6Address IPv6Address::operator ^(const IPv6Address& address) const
+{
+  std::vector< uint8_t > bytes;
+  for( int i = 0; i < IPv6AddressSize; ++i )
+  {
+    bytes.push_back( address_[i] ^ address.address_[i] );
+  }
+  return IPv6Address( bytes );
+}

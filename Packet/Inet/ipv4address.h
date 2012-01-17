@@ -28,6 +28,9 @@ public:
   PacketBuffer makePacket() const;
   uint32_t inAddr() const;
   std::string toString() const;
+  IPv4Address operator&( const IPv4Address& address ) const;
+  IPv4Address operator|( const IPv4Address& address ) const;
+  IPv4Address operator^( const IPv4Address& address ) const;
 
 private:
   uint32_t ip_;
