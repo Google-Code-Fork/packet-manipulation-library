@@ -31,7 +31,11 @@ class IPv6Address : public InetData
 		//! Assignment operator
 		IPv6Address& operator=( const IPv6Address &a );
 		//! Equality operation
-		bool operator == ( const IPv6Address &a );
+    bool operator == ( const IPv6Address &a );
+    IPv6Address operator&( const IPv6Address& address ) const;
+    IPv6Address operator|( const IPv6Address& address ) const;
+    IPv6Address operator^( const IPv6Address& address ) const;
+
 		//! Destructor
 		virtual ~IPv6Address();
 		

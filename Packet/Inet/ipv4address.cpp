@@ -130,3 +130,18 @@ std::string IPv4Address::toString() const
   ss << static_cast< uint16_t >( octet[3] );
   return ss.str();
 }
+
+IPv4Address IPv4Address::operator&( const IPv4Address &address ) const
+{
+  return IPv4Address( ip_ & address.ip_ );
+}
+
+IPv4Address IPv4Address::operator|( const IPv4Address &address ) const
+{
+  return IPv4Address( ip_ | address.ip_ );
+}
+
+IPv4Address IPv4Address::operator^( const IPv4Address &address ) const
+{
+  return IPv4Address( ip_ ^ address.ip_ );
+}
