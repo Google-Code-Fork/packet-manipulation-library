@@ -46,6 +46,7 @@
 #include "timeStampOption.h"
 #include "wsOption.h"
 #include "../Inet/ipv4.h"
+#include "../Inet/ipv6.h"
 
 struct my_tcp {
   //!TCP datatype for use with the class TCP
@@ -168,6 +169,7 @@ class TCP : public TransData
   uint16_t checksum() const;
   //!set the checksum
   void calculateChecksum( const IPv4 &ip, const PacketBuffer &data );
+  void calculateChecksum( const IPv6 &ip, const PacketBuffer &data );
   //!set the checksum
   void setChecksum( uint16_t ); 
   //!return the urgent pointer

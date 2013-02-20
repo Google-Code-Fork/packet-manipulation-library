@@ -493,3 +493,61 @@ void TCP::calculateChecksum(const IPv4 &ip, const PacketBuffer &data)
 
 
 }
+
+void TCP::calculateChecksum(const IPv6 &ip, const PacketBuffer &data)
+{
+  setChecksum(0);
+  PacketBuffer pb;
+  PacketBuffer tcpSegment;
+  tcpSegment += makePacket();
+  tcpSegment += data;
+
+  std::vector< uint8_t > buff;
+  std::vector< uint8_t > tmpip = ip.sourceAddress().makePacket().vector();
+  for( unsigned int i = 0; i < tmpip.size(); ++i )
+    buff.push_back(tmpip[i]);
+
+  tmpip = ip.destinationAddress().makePacket().vector();
+  for( unsigned int i = 0; i < tmpip.size(); ++i )
+    buff.push_back(tmpip[i]);
+
+  uint32_t tmp = tcpSegment.size();
+  buff.push_back( static_cast< uint8_t >( tmp >> 24 ) );
+  buff.push_back( static_cast< uint8_t >( (tmp &0x00FF0000) >> 16 ));
+  buff.push_back( static_cast< uint8_t >( (tmp &0x0000FF00) >> 8 ));
+  buff.push_back( static_cast< uint8_t >( (tmp &0x000000FF) ));
+  buff.push_back( 0 );
+  buff.push_back( 0 );
+  buff.push_back( 0 );
+  buff.push_back( ip.nextHeader() );
+
+  pb.setBuffer(buff);
+  pb += tcpSegment;
+
+  uint32_t sum = 0;
+
+  buff = pb.vector();
+  uint i = 0;
+  for( i = 0; (i + 1) < buff.size(); i+=2 )
+  {
+    tmp = static_cast<uint16_t>(buff[i]) << 8;
+    tmp |= static_cast<uint8_t>(buff[i+1]);
+    sum += tmp;
+  }
+
+  if( i < buff.size() )
+  {
+    tmp = static_cast<uint16_t>(buff[i]) << 8;
+    sum += tmp;
+  }
+
+  sum = (sum >> 16) + (sum & 0xFFFF);
+  sum += (sum >> 16);
+
+  sum = ~sum;
+
+  setChecksum(static_cast< uint16_t>( sum ) );
+
+
+}
+
