@@ -157,6 +157,26 @@ int Packet::appSize() const
   return appLayer_.size();
 }
 
+void Packet::clearLink()
+{
+    linkLayer_.clear();
+}
+
+void Packet::clearInet()
+{
+    inetLayer_.clear();
+}
+
+void Packet::clearTrans()
+{
+    transLayer_.clear();
+}
+
+void Packet::clearApp()
+{
+    appLayer_.clear();
+}
+
 void Packet::setTimestamp( const struct timeval &time  )
 {
 	timeStamp_ = time;

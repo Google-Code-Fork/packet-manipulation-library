@@ -166,6 +166,35 @@ class Packet : public AppData
       return l.get<T>();
     }
 
+    template < class T > void setLink( const T& link, const int index = 0 )
+    {
+        if( index < linkLayer_.size() )
+            linkLayer_[index] = link;
+    }
+
+    template < class T > void setInet(const T& inet, const int index = 0 )
+    {
+        if( index < inetLayer_.size() )
+            inetLayer_[index] = inet;
+    }
+
+    template < class T > void setTrans( const T& trans, const int index = 0 )
+    {
+        if( index < transLayer_.size() )
+            transLayer_[index] = trans;
+    }
+
+    template < class T > void setApp( const T& app, const int index = 0 )
+    {
+        if( index < appLayer_.size() )
+            appLayer_[index] = app;
+    }
+
+    void clearLink();
+    void clearInet();
+    void clearTrans();
+    void clearApp();
+
     //!returns true... overloaded from App
     bool isPacket() const
     {
