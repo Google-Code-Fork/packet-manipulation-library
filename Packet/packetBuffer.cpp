@@ -122,6 +122,24 @@ PacketBuffer& PacketBuffer::operator+=( const PacketBuffer &n )
   return *this;
 }
 
+PacketBuffer PacketBuffer::operator+( const PacketBuffer &n )
+{
+  PacketBuffer result;
+  result.size_ = size_ + n.size_;
+  result.buff_ = new uint8_t [ result.size_ ];
+  for( int i = 0; i < size_; ++i )
+  {
+    result.buff_[i] = buff_[i];
+  }
+  for( int i = 0; i < n.size_; ++i )
+  {
+    result.buff_[size_ + i ] = n.buff_[i];
+  }
+
+  return result;
+
+}
+
 void PacketBuffer::setBuffer( std::vector< uint8_t > buff )
 {
   if( buff_ )
