@@ -224,8 +224,6 @@ int ICMP::headerLength() const
 	return size();
 }
 
-
-
 uint16_t ICMP::identifier() const
 {
 	if( request_ == NULL )
@@ -262,10 +260,32 @@ Packet ICMP::orginalPacket() const
 	return pb.buildPacket<Ethernet>( orginal_->makePacket() );
 }
 
-/*PacketBuffer ICMP::makePacket() const
+PacketBuffer ICMP::makePacket() const
 {
+  std::vector< uint8_t > packet;
+  if( header_ != NULL )
+  {
+    int size = sizeof( *header_ );
+    uint8_t* ptr = (uint8_t*) (header_);
+    for( int i = 0; i < size; ++i )
+    {
+      packet.push_back( ptr[i] );
+    }
+  }
+  if( request_ != NULL )
+  {
+    int size = sizeof( *request_ );
+    uint8_t* ptr = (uint8_t*)(request_);
+    for( int i = 0; i < size ; ++i )
+    {
+      packet.push_back( ptr[i] );
+    }
+  }
+  if( type() == 11 )
+    return PacketBuffer( packet ) + (orginalPacket().makePacket());
 
-}*/
+  return PacketBuffer( packet );
+}
 
 int ICMP::size() const
 {

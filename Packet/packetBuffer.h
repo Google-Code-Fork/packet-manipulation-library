@@ -51,6 +51,8 @@ class PacketBuffer
     PacketBuffer& operator=( const PacketBuffer &n );
     //!Allows concatenation of Packetbuffers
     PacketBuffer& operator+=( const PacketBuffer &n );
+    //!Add buffers
+    PacketBuffer operator+( const PacketBuffer &n );
     //!sets the buffer to the contents of buff
     void setBuffer( std::vector< uint8_t > buff );
     //!sets the buffer to the contents of buff

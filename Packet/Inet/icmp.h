@@ -150,9 +150,6 @@ class ICMP : public InetData
     /*!Returns a Packet object with the orginal content of the the exceeded
     packet.*/
     Packet orginalPacket() const;
-
-    //!Returns a PacketBuffer for use with other libraries and code
-    PacketBuffer packet() const;
     
 		//!Returns the size in bytes of the ICMP header
     int size() const;
@@ -161,7 +158,7 @@ class ICMP : public InetData
     bool isICMP() const { return true; }
 
 		//! Make a PacketBuffer
-    //PacketBuffer makePacket() const;
+    PacketBuffer makePacket() const;
 
   private:
     //!internal data
