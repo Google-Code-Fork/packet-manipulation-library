@@ -31,3 +31,20 @@ void RawTest::testIsRaw()
   Raw raw;
   QVERIFY( raw.isRaw() );
 }
+
+void RawTest::testData()
+{
+  
+  std::vector< uint8_t > data;
+  data.push_back( 'a' );
+  data.push_back( 'b' );
+  data.push_back( 'c' );
+
+  Raw raw;
+  raw.setData( data );
+  QVERIFY( raw.size() == 3 );
+  QVERIFY(raw.data()[0] == 'a');
+  QVERIFY(raw.data()[1] == 'b');
+  QVERIFY(raw.data()[2] == 'c');
+
+}
