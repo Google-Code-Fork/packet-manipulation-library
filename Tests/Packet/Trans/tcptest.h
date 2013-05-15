@@ -18,6 +18,7 @@ public:
 
 private Q_SLOTS:
   void testConstruction();
+  void testConstruction2();
   void testOptions();
 };
 

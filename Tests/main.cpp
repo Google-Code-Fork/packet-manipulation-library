@@ -46,6 +46,7 @@ int main()
   Ipv6Test ipv6Test;
   returnCode += QTest::qExec( &ipv6Test );
 
+  //this test should go last as it relies on the above working.
   PacketTest packetTest;
   returnCode += QTest::qExec( &packetTest );
 

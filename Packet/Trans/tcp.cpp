@@ -54,8 +54,8 @@ TCP::TCP( const uint8_t *packet, int size )
 
 	int optionSize = OFFSET( header_ ) - 5; //5 is the minimum size for tcp with NO options
 	optionSize *= 4; //in bytes
-	optionSize = optionSize + TCPStructSize - size < optionSize ? 
-																		size - TCPStructSize : optionSize;
+	// BUG? optionSize = optionSize + TCPStructSize - size < optionSize ?  size - TCPStructSize : optionSize;
+	optionSize = size - (optionSize + TCPStructSize) > optionSize ? optionSize : size - TCPStructSize;
 
 	for( int i = 0; i < optionSize;  )
 	{

@@ -53,7 +53,8 @@ class Packet : public AppData
     //!This is NOT concatentation. This operator takes all the layers of n and
     //attaches them to the current packet. This makes this more of a merge but
     //it a very useful operation in packet construction. To see a use case look
-    //at the PacketBuilder code in packetBuilder.cpp
+    //at the PacketBuilder code in packetBuilder.cpp. For concatenation push back a
+    //packet to the application layer.
     Packet& operator+=( const Packet &n );
 
     //!Returns a PacketBuffer with the contents of the packet

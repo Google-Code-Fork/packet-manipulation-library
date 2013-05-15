@@ -15,6 +15,7 @@ public:
 private Q_SLOTS:
   void testIsRaw();
   void testConstruction();
+  void testData();
 
 };
 

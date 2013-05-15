@@ -59,4 +59,41 @@ void PacketTest::testPacketCreations()
   QCOMPARE( static_cast<uint16_t>(data[12]), static_cast<uint16_t>( 0x08 ));
   QCOMPARE( static_cast<uint16_t>(data[13]), static_cast<uint16_t>( 0x00 ));
 
+
+  uint8_t inetBits[] = { 0x45, 0x00, 0x00, 0x34, 0xcd, 0x96, 0x40, 0x00, 0x40, 0x06, 0x43, 0x70, 0x0a, 0x0d, 0x25, 0x45,
+  0xd0, 0x55, 0x2a, 0x16 };
+
+  IPv4 ip( inetBits, 20 );
+
+  uint8_t tcpBits[] = { 0xaf, 0x5a, 0x00, 0x50, 0xf4, 0x90, 0x12, 0x9e, 0xb8, 0xb7, 0x65, 0xe2, 0x80, 0x10, 0x00, 0x56,
+  0xda, 0x81, 0x00, 0x00, 0x01, 0x01, 0x08, 0x0a, 0x00, 0x69, 0xcf, 0xc2, 0xc7, 0xdc, 0x04, 0xac };
+
+  TCP tcp( tcpBits, 32 );
+
+  uint8_t rawBits[] = {0x11, 0xAA, 0xFF};
+  Raw raw( rawBits, 3 );
+
+  Packet packet;
+  packet.pushBackLink( ethernet1 );
+  packet.pushBackInet( ip );
+  packet.pushBackTrans( tcp );
+  packet.pushBackApp( raw );
+
+  Ethernet ethCopy = packet.getLink<Ethernet>();
+  IPv4 ipCopy = packet.getInet<IPv4>();
+  TCP tcpCopy = packet.getTrans<TCP>();
+  Raw rawCopy = packet.getApp<Raw>();
+
+  QCOMPARE( ethCopy.size(), 14 );
+  QCOMPARE( ipCopy.size(), 20 );
+  QCOMPARE( tcpCopy.size(), 32 );
+  QCOMPARE( rawCopy.size(), 3 );
+  QCOMPARE( packet.linkSize(), 1 );
+  QCOMPARE( packet.inetSize(), 1 );
+  QCOMPARE( packet.transSize(), 1 );
+  QCOMPARE( packet.appSize(), 1 );
+  QCOMPARE( packet.size(),  (14 + 20 + 32 + 3) );
+  QCOMPARE( packet.makePacket().size(), (14 + 20 + 32 + 3) );
+
+
 }
