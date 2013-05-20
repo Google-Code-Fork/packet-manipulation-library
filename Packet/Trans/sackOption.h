@@ -30,15 +30,11 @@ class SACKOption : public TCPOption
 				return;
 			}
 
-			if( size >= length_ )
-			{
-				const uint32_t* words = reinterpret_cast<const uint32_t*>(bytes+2); 
-				int sackNum = (length_ - 2) / 8;
-				for( int i = 0; i < sackNum*2; i+=2 )
-				{
-					addAck( words[i], words[i + 1] );
-				}
-			}
+            if( size >= length_ )
+            {
+              for( int i = 2; i < length_; ++i )
+                data_.push_back( bytes[i] );
+            }
 			else //if I can't figure out the sacks then put none
 			{
 				length_ = 2;

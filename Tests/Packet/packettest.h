@@ -16,6 +16,7 @@ public:
 private Q_SLOTS:
   void testConstruction();
   void testPacketCreations();
+  void testPacketBuilding();
 };
 
 #endif // PACKETTEST_H

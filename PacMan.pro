@@ -8,6 +8,7 @@ QT       -= core gui
 
 TARGET = PacMan
 TEMPLATE = lib
+CONFIG += dll
 LIBS += -lpcap
 DEFINES += PACMAN_LIBRARY
 
