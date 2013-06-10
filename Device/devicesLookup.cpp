@@ -34,11 +34,13 @@
 #include <iostream>
 #include <stdio.h>
 
+pcap_if_t* DevicesLookup::alldevs_ = NULL;
+
 DevicesLookup::DevicesLookup()
 {
 	char errbuf[PCAP_ERRBUF_SIZE+1];
 	/* Retrieve the device list */
-	if(pcap_findalldevs(&alldevs_, errbuf) == -1)
+	if( (alldevs_ == NULL) && (pcap_findalldevs(&alldevs_, errbuf) == -1))
 	{
 		std::cerr << "Error in pcap_findalldevs: " << errbuf << std::endl;
 		exit(1);
@@ -70,10 +72,26 @@ pcap_if_t* DevicesLookup::operator[](const std::string &name)
 	return dev;
 }
 
+void DevicesLookup::refresh()
+{
+    pcap_freealldevs(alldevs_);		/* Free the device list */
+
+	char errbuf[PCAP_ERRBUF_SIZE+1];
+	/* Retrieve the device list */
+	if( (alldevs_ == NULL) && (pcap_findalldevs(&alldevs_, errbuf) == -1))
+	{
+		std::cerr << "Error in pcap_findalldevs: " << errbuf << std::endl;
+		exit(1);
+	}
+}
+
 DevicesLookup::~DevicesLookup()
 {
+    //DO NOT FREE THE LIST SINCE IT IS NOW STATIC. It will be needed on follow up calls to deviceslookup.
+
+
   //std::cout << "Freeing the device list..." << std::endl;
-	pcap_freealldevs(alldevs_);		/* Free the device list */
+  //	pcap_freealldevs(alldevs_);		/* Free the device list */
 }
 
 bool DevicesLookup::isValid(const std::string &name) const
