@@ -82,13 +82,16 @@ class DevicesLookup
     //!Returns the devices available on the system
     std::vector< std::string > devicesAvailable() const;
 
+    //!Refreshes the list of devices
+    void refresh();
+
 	private:
 		//!Converts IP to string
 		std::string iptos(const uint32_t &in) const;
     std::string exec( const char *cmd ) const;
 
 		//!Stores all devices
-		pcap_if_t *alldevs_;
+		static pcap_if_t *alldevs_;
 };
 
 #endif
