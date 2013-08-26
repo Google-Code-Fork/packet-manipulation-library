@@ -31,6 +31,8 @@
 #include "packet.h"
 #include "Link/ethernet.h"
 #include "Inet/ipv4.h"
+#include "Inet/icmp.h"
+#include "Inet/ipv6.h"
 #include "Trans/tcp.h"
 #include "Trans/udp.h"
 #include "App/raw.h"
@@ -49,6 +51,8 @@ class PacketBuilder
     template <class T> Packet buildPacket( PacketBuffer pb ) { return build< T >( pb.buffer(), pb.size() ); }
     //!Builds Packet from a buffer and a size
     template <class K> Packet build( const uint8_t* buff, int size );
+    //!Builds a response packet based on an incomming packet. (Switches mac addresses, ip address, ports, sequence, etc... )
+    template <class K> Packet buildResponse( const Packet &p );
 };
 
 //template specialization must go outside of class def
@@ -60,4 +64,13 @@ template <> Packet PacketBuilder::build<Ethernet>( const uint8_t* buff, int size
 template <> Packet PacketBuilder::build<IPv4>( const uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<IPv6>( const uint8_t* buff, int size );
 template <> Packet PacketBuilder::build<Arp>( const uint8_t* buff, int size );
+
+template <> Packet PacketBuilder::buildResponse< DNS >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< TCP >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< UDP >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< Ethernet >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< IPv4 >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< ICMP >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< Arp >( const Packet &p );
+template <> Packet PacketBuilder::buildResponse< IPv6 >( const Packet &p );
 #endif

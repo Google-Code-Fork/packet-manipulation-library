@@ -109,10 +109,11 @@ class TCP : public TransData
   uint8_t dataOffset() const;
   //!set the data offset
   void setDataOffset( uint8_t );
-	//!returns reserved data after the dataoffset in tcp header
-	uint8_t x2() const;
-	//!sets the reserved data after the dataoffset in the tcp header
-	void setX2( uint8_t x2 );
+  //!returns reserved data after the dataoffset in tcp header
+  uint8_t x2() const;
+  //!sets the reserved data after the dataoffset in the tcp header
+  void setX2( uint8_t x2 );
+  bool flags( const uint8_t &mask ) const;
   //!return the flage (true|false)
   bool CWR_Flag() const;
   //!set the flag (true|false)
