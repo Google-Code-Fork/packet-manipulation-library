@@ -27,8 +27,8 @@ class TimeStampOption : public TCPOption
 	  //initialize 8 bytes worth of data
 		if( size >= TIME_STAMP_SIZE )
 		{
-			setTSVAL( *(reinterpret_cast<const uint32_t* >( bytes + 2 ) ) );
-			setTSecr( *(reinterpret_cast<const uint32_t* >( bytes + 6 ) ) );
+			setTSVAL( ntohl(*(reinterpret_cast<const uint32_t* >( bytes + 2 ) )) );
+			setTSecr( ntohl(*(reinterpret_cast<const uint32_t* >( bytes + 6 ) )) );
 		}
 	}
 
@@ -61,7 +61,7 @@ class TimeStampOption : public TCPOption
 		value |= static_cast<uint32_t>(data_[2]) << 8;
 		value |= static_cast<uint32_t>(data_[3]);
 
-    return ntohl(value);
+		return (value);
 
 	}
 
@@ -81,7 +81,7 @@ class TimeStampOption : public TCPOption
 		value |= static_cast<uint32_t>(data_[6]) << 8;
 		value |= static_cast<uint32_t>(data_[7]);
 
-		return value;
+		return (value);
 	}
 };
 

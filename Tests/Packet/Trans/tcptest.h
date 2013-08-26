@@ -6,6 +6,7 @@
 #include <QtTest/QtTest>
 #include "../../../Packet/Trans/tcp.h"
 #include "../../../Packet/Trans/tcpOptions.h"
+#include "../../../Packet/Trans/timeStampOption.h"
 #include "../../../Packet/Trans/mssOption.h"
 #include "../../../Packet/Trans/noopOption.h"
 #include "../../../Packet/Trans/sackPermittedOption.h"

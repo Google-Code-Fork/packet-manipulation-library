@@ -231,9 +231,9 @@ void TcpTest::testOptions()
   TCP tcp_3A( tcp_3 );
 
   //check size
-  QVERIFY( tcp_3.size() == 24 );
+  QCOMPARE( tcp_3.size(), 24 );
   //check size of copy
-  QVERIFY( tcp_3A.size() == 24 );
+  QCOMPARE( tcp_3A.size(), 24 );
   //compare sizes
   QCOMPARE( tcp_3.size(), tcp_3A.size() );
 
@@ -246,42 +246,53 @@ void TcpTest::testOptions()
   //add Maximum Segment Size option
   SmartPtr< TCPOption > mssOption = new MSSOption();
   tcp_3.addOption( mssOption );
-  QVERIFY( tcp_3.size() == 24 );
+  QCOMPARE( tcp_3.size(), 24 );
 
   //add NOP Option
   tcp_3.clearOptions();
   SmartPtr< TCPOption > noopOption = new NOOPOption();
   tcp_3.addOption( noopOption );
-  QVERIFY( tcp_3.size() == 21 );
+  QCOMPARE( tcp_3.size(), 21 );
 
   //add Sack Permitted option
   tcp_3.clearOptions();
   SmartPtr< TCPOption > sackPermittedOption = new SACKPremittedOption();
   tcp_3.addOption( sackPermittedOption );
-  QVERIFY( tcp_3.size() == 22 );
+  QCOMPARE( tcp_3.size(), 22 );
 
   //add Time Stamp option
   tcp_3.clearOptions();
   SmartPtr< TCPOption > timeStampOption = new TimeStampOption();
   tcp_3.addOption( timeStampOption );
-  QVERIFY( tcp_3.size() == 30 );
+  QCOMPARE( tcp_3.size(),  30 );
 
   //add WSOPT - Window Scale option
   tcp_3.clearOptions();
   SmartPtr< TCPOption > wsOption = new WSOption();
   tcp_3.addOption( wsOption );
-  QVERIFY( tcp_3.size() == 23 );
+  QCOMPARE( tcp_3.size(), 23 );
 
   //add Sack option
   //method 1
   tcp_3.clearOptions();
   SmartPtr< TCPOption > sackOption = new SACKOption();
   tcp_3.addOption( sackOption );
-  QVERIFY( tcp_3.size() == 22 );
+  QCOMPARE( tcp_3.size(), 22 );
 
   //add eolOption
   tcp_3.clearOptions();
   SmartPtr< TCPOption > eolOption = new EOLOption();
   tcp_3.addOption( eolOption );
   QVERIFY( tcp_3.size() != tcp_3A.size() );
+
+  uint8_t timeStampBits[] = { 0x08, 0x0A, 0x00, 0x07, 0x6A, 0xAD, 0xD9, 0xEA, 0x13, 0x9B }; //TSval 486061 TSecr 3655996315
+  int timeStampSize = 10;
+
+  TimeStampOption timestamp(timeStampBits, timeStampSize);
+  QCOMPARE( timestamp.tsecr(), 0xd9ea139bU );
+  QCOMPARE( timestamp.tsval(), 0x00076AADU );
+  timestamp.setTSecr( 0xDEADBEEF );
+  timestamp.setTSVAL( 0xCAFE1337 );
+  QCOMPARE( timestamp.tsecr(), 0xDEADBEEFU );
+  QCOMPARE( timestamp.tsval(), 0xCAFE1337U );
 }
