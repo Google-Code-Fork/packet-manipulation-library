@@ -551,3 +551,9 @@ void TCP::calculateChecksum(const IPv6 &ip, const PacketBuffer &data)
 
 }
 
+bool TCP::flags(const uint8_t &mask) const
+{
+  if( header_->flags == mask )
+    return true;
+  return false;
+}
